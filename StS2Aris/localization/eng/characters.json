@@ -1,0 +1,16 @@
+{
+  "STS2ARIS-ST_S2_ARIS.aromaPrinciple": "Lore",
+  "STS2ARIS-ST_S2_ARIS.banter.alive.endTurnPing": "Co-op hurry up end turn ping message",
+  "STS2ARIS-ST_S2_ARIS.banter.dead.endTurnPing": "...",
+  "STS2ARIS-ST_S2_ARIS.cardsModifierDescription": "__ cards will now appear in rewards and shops.",
+  "STS2ARIS-ST_S2_ARIS.cardsModifierTitle": "__ Cards",
+  "STS2ARIS-ST_S2_ARIS.description": "Character Selection\nScreen Description",
+  "STS2ARIS-ST_S2_ARIS.eventDeathPrevention": "Co-op survival line",
+  "STS2ARIS-ST_S2_ARIS.goldMonologue": "Line spoken when obtaining a large amount of gold",
+  "STS2ARIS-ST_S2_ARIS.possessiveAdjective": "his/her/its",
+  "STS2ARIS-ST_S2_ARIS.pronounObject": "him/her/it",
+  "STS2ARIS-ST_S2_ARIS.pronounPossessive": "his/hers/its",
+  "STS2ARIS-ST_S2_ARIS.pronounSubject": "he/she/it",
+  "STS2ARIS-ST_S2_ARIS.title": "The StS2Aris",
+  "STS2ARIS-ST_S2_ARIS.titleObject": "The StS2Aris"
+}
