@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3]
 
-[ext_resource type="Script" path="res://StS2ArisCode/UI/ArisNSelectionReticle.cs" id="1_lc2fa"]
-[ext_resource type="Texture2D" path="res://images/ui/combat/combat_reticle.png" id="2_75ika"]
+[ext_resource type="Script" uid="uid://d0hdgwwi1ay2v" path="res://StS2ArisCode/UI/ArisNSelectionReticle.cs" id="1_lc2fa"]
+[ext_resource type="Texture2D" uid="uid://bs5hil0pskrof" path="res://StS2Aris/images/charui/combat_reticle.png" id="2_75ika"]
 
 [node name="SelectionReticle" type="Control"]
 layout_mode = 3

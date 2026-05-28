@@ -8,8 +8,8 @@ public class StS2ArisCardPool : CustomCardPoolModel
 {
     public override string Title => StS2Aris.CharacterId; //This is not a display name.
 
-    public override string BigEnergyIconPath => "charui/big_energy.png".ImagePath();
-    public override string TextEnergyIconPath => "charui/text_energy.png".ImagePath();
+    public override string BigEnergyIconPath => "charui/aris_energy.png".ImagePath();
+    public override string TextEnergyIconPath => "charui/aris_text_energy.png".ImagePath();
 
 
     /* These HSV values will determine the color of your card back.

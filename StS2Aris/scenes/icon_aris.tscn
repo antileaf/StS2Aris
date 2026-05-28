@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://nk1s2bh35r4g"]
 
-[ext_resource type="Texture2D" uid="uid://dwxl2mbqo0wmc" path="res://StS2Hoshino/images/charui/character_icon_aris.png" id="1_46gm0"]
+[ext_resource type="Texture2D" uid="uid://ds2fmawnq33ck" path="res://StS2Aris/images/charui/character_icon_aris.png" id="1_46gm0"]
 
 [node name="IconAris" type="TextureRect"]
 anchors_preset = 15

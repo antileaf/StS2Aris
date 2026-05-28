@@ -8,6 +8,6 @@ public class StS2ArisRelicPool : CustomRelicPoolModel
 {
     public override Color LabOutlineColor => StS2Aris.Color;
 
-    public override string BigEnergyIconPath => "charui/aris_big_energy.png".ImagePath();
+    public override string BigEnergyIconPath => "charui/aris_energy.png".ImagePath();
     public override string TextEnergyIconPath => "charui/aris_text_energy.png".ImagePath();
 }
