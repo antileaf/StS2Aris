@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3 uid="uid://nk1s2bh35r4g"]
+
+[ext_resource type="Texture2D" uid="uid://dwxl2mbqo0wmc" path="res://StS2Hoshino/images/charui/character_icon_aris.png" id="1_46gm0"]
+
+[node name="IconAris" type="TextureRect"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("1_46gm0")
+expand_mode = 1
+stretch_mode = 5

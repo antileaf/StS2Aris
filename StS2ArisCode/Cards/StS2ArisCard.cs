@@ -5,6 +5,7 @@ using Godot;
 using StS2Aris.StS2ArisCode.Character;
 using StS2Aris.StS2ArisCode.Extensions;
 using MegaCrit.Sts2.Core.Entities.Cards;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 
 namespace StS2Aris.StS2ArisCode.Cards;
 
@@ -12,6 +13,16 @@ namespace StS2Aris.StS2ArisCode.Cards;
 public abstract class StS2ArisCard(int cost, CardType type, CardRarity rarity, TargetType target) :
     CustomCardModel(cost, type, rarity, target)
 {
+    protected virtual Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
+    {
+        return Task.CompletedTask;
+    }
+
+    protected sealed override Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
+    {
+        return OnArisPlay(choiceContext, play);
+    }
+
     public override string CustomPortraitPath
     {
         get
@@ -29,4 +40,5 @@ public abstract class StS2ArisCard(int cost, CardType type, CardRarity rarity, T
             return ResourceLoader.Exists(path) ? path : (Type==CardType.Attack?"temp_attack.png":
                 (Type==CardType.Power?"temp_power.png":"temp_skill.png")).CardImagePath();
         }
-    }}
+    }
+}

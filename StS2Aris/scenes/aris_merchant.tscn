@@ -1,0 +1,19 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" uid="uid://d056rjm4b7bch" path="res://StS2ArisCode/UI/ArisNMerchantCharacter.cs" id="1_oiiaq"]
+[ext_resource type="SpineAtlasResource" path="res://StS2Aris/images/charui/Aris.atlas" id="2_atlas"]
+[ext_resource type="SpineSkeletonFileResource" path="res://StS2Aris/images/charui/Aris.skel" id="3_skel"]
+
+[sub_resource type="SpineSkeletonDataResource" id="SpineSkeletonDataResource_merchant"]
+atlas_res = ExtResource("2_atlas")
+skeleton_file_res = ExtResource("3_skel")
+
+[node name="ArisMechant" type="Node2D"]
+script = ExtResource("1_oiiaq")
+
+[node name="SpineSprite" type="SpineSprite" parent="."]
+position = Vector2(0, -4)
+scale = Vector2(1.5974998, 1.5974998)
+skeleton_data_res = SubResource("SpineSkeletonDataResource_merchant")
+preview_animation = "relaxed_loop"
+preview_skin = "Default"

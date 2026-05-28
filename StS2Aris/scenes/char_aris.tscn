@@ -1,0 +1,32 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="SpineAtlasResource" path="res://StS2Aris/images/charui/Aris.atlas" id="1_3s33c"]
+[ext_resource type="SpineSkeletonFileResource" path="res://StS2Aris/images/charui/Aris.skel" id="2_k877r"]
+
+[sub_resource type="SpineSkeletonDataResource" id="SpineSkeletonDataResource_cm7q7"]
+atlas_res = ExtResource("1_3s33c")
+skeleton_file_res = ExtResource("2_k877r")
+
+[node name="Oddmelt" type="Node2D"]
+
+[node name="Bounds" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_left = -103.0
+offset_top = -341.0
+offset_right = 108.0
+offset_bottom = 2.0
+
+[node name="CenterPos" type="Marker2D" parent="."]
+position = Vector2(3, -117)
+
+[node name="IntentPos" type="Marker2D" parent="."]
+position = Vector2(4, -234)
+
+[node name="Visuals" type="SpineSprite" parent="."]
+skeleton_data_res = SubResource("SpineSkeletonDataResource_cm7q7")
+preview_skin = "Default"
+preview_animation = "-- Empty --"
+preview_frame = false
+preview_time = 0.0
+position = Vector2(9, -4)

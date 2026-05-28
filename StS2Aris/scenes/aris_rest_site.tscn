@@ -1,0 +1,50 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" uid="uid://b8vkhxntpkqxv" path="res://StS2ArisCode/UI/ArisNRestSiteCharacter.cs" id="2_aris"]
+[ext_resource type="Texture2D" uid="uid://xo58xtpk1kj5" path="res://StS2Aris/images/charui/sitting.png" id="2_rhpke"]
+[ext_resource type="PackedScene" path="res://StS2Aris/scenes/selection_reticle.tscn" id="3_aris"]
+
+[node name="ArisRestSite" type="Node2D"]
+position = Vector2(-2, 42)
+scale = Vector2(0.760006, 0.760006)
+script = ExtResource("2_aris")
+
+[node name="ArisSprite" type="Sprite2D" parent="."]
+position = Vector2(102.63077, -7.894676)
+texture = ExtResource("2_rhpke")
+
+[node name="ControlRoot" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+
+[node name="SelectionReticle" parent="ControlRoot" instance=ExtResource("3_aris")]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = -125.36861
+offset_top = -347.36847
+offset_right = 294.6314
+offset_bottom = 322.63153
+
+[node name="Hitbox" type="Control" parent="ControlRoot"]
+unique_name_in_owner = true
+anchors_preset = 0
+offset_left = -155.26193
+offset_top = -355.26035
+offset_right = 265.73807
+offset_bottom = 327.73965
+
+[node name="ThoughtBubbleRight" type="Control" parent="ControlRoot"]
+unique_name_in_owner = true
+anchors_preset = 0
+offset_left = 209.209
+offset_top = -317.103
+offset_right = 209.209
+offset_bottom = -317.103
+
+[node name="ThoughtBubbleLeft" type="Control" parent="ControlRoot"]
+unique_name_in_owner = true
+anchors_preset = 0
+offset_left = -73.6836
+offset_top = -324.997
+offset_right = -73.6836
+offset_bottom = -324.997
