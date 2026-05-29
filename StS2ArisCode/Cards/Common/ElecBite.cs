@@ -14,28 +14,39 @@ using StS2Aris.StS2ArisCode.Powers;
 
 namespace StS2Aris.StS2ArisCode.Cards;
 [Pool(typeof(StS2ArisCardPool))]
-public class EnergyCharge() : StS2ArisCard(0, CardType.Skill, CardRarity.Basic, TargetType.Self)
+public class ElecBite() : StS2ArisCard(2, CardType.Skill, CardRarity.Common, TargetType.AnyEnemy)
 {
-    protected override IEnumerable<IHoverTip> ExtraHoverTips => [HoverTipFactory.FromKeyword(ArisKeywords.Charge)];
+    public override IEnumerable<CardKeyword> CanonicalKeywords =>
+    [
+        CardKeyword.Retain
+    ];
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new BlockVar(4, ValueProp.Move),
-        new PowerVar<ChargePower>(1m)
+        new PowerVar<ShockPower>(5m)
     ];
 
+    protected override IEnumerable<IHoverTip> ExtraHoverTips =>
+    [
+        HoverTipFactory.FromKeyword(ArisKeywords.Shock)
+        
+    ];
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
         await CreatureCmd.TriggerAnim(base.Owner.Creature, "Cast", base.Owner.Character.CastAnimDelay);
-        await CommonActions.CardBlock(this, play);
-        await PowerCmd.Apply<ChargePower>(choiceContext, Owner.Creature, DynamicVars["ChargePower"].IntValue, Owner.Creature, this);
+        if (play.Target != null)
+        {
+            VfxCmd.PlayOnCreatureCenter(play.Target, "vfx/vfx_bite");
+            await PowerCmd.Apply<ShockPower>(choiceContext, play.Target, base.DynamicVars["ShockPower"].BaseValue,
+                base.Owner.Creature, this);
+        }
     }
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Block.UpgradeValueBy(2m);
-        DynamicVars["ChargePower"].UpgradeValueBy(1m);
+        DynamicVars["ShockPower"].UpgradeValueBy(2m);
     }
 }
+
 
 
 

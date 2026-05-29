@@ -7,7 +7,7 @@
 atlas_res = ExtResource("1_3s33e")
 skeleton_file_res = ExtResource("2_k877d")
 
-[node name="Oddmelt" type="Node2D"]
+[node name="Aris" type="Node2D"]
 
 [node name="Bounds" type="Control" parent="."]
 layout_mode = 3

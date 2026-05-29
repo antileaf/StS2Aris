@@ -114,7 +114,7 @@
     "STS2ARIS-THUNDER.title":  "번개",
     "STS2ARIS-THUNDER.description":  "피해를 {Damage:diff()} 줍니다. [gold]과부하[/gold]: [gold]전력[/gold]을 {ChargePower:diff()} 얻습니다.",
     "STS2ARIS-TRANSFORMER.title":  "변압기",
-    "STS2ARIS-TRANSFORMER.description":  "적에게 [gold]감전[/gold]을 {Magic:diff()} 겁니다. 해당 적의 [gold]감전[/gold]은 모든 적에게 피해를 줍니다.",
+    "STS2ARIS-TRANSFORMER.description":  "[gold]감전[/gold]을 {Magic:diff()} 부여합니다. 해당 적의 [gold]감전[/gold]은 모든 적에게 피해를 줍니다.",
     "STS2ARIS-ROGUE.title":  "도적의 단검",
     "STS2ARIS-ROGUE.description":  "[gold]장비[/gold]: 도적\n[gold]클래스체인지[/gold]: 적 전체에 [gold]약화[/gold], [gold]감전[/gold]을 {Magic:diff()} 부여합니다.\n[gold]직업 효과[/gold]: 비용이 0인 카드 사용시 무작위 적에 [gold]감전[/gold]을 1 부여합니다.",
     "STS2ARIS-IDOL_RIBBON.title":  "아이돌 리본",
@@ -128,7 +128,7 @@
     "STS2ARIS-ITEM_COPY_BUG.title":  "아이템 복사 버그",
     "STS2ARIS-ITEM_COPY_BUG.description":  "[gold]손[/gold]에 있는 [gold]보상[/gold] 카드를 제외한 카드를 전부 복사해 가져옵니다.",
     "STS2ARIS-B_F_STRIKE.title":  "BF 타격",
-    "STS2ARIS-B_F_STRIKE.description":  "피해를 {Damage:diff()} 만큼 {Magic:diff()} 번 줍니다.",
+    "STS2ARIS-B_F_STRIKE.description":  "피해를 {Damage:diff()}만큼 {Magic:diff()}번 줍니다.",
     "STS2ARIS-BALANCE_BROKEN.title":  "밸런스 붕괴",
     "STS2ARIS-BALANCE_BROKEN.description":  "적 전체에 피해를 {Damage:diff()} 줍니다.\n이 카드에 소모한 [gold]전력[/gold]만큼 피해가 {Magic:diff()} 증가합니다.",
     "STS2ARIS-ENERGY_DISCHARGE.title":  "에너지 방전",
@@ -168,5 +168,7 @@
     "STS2ARIS-CUSTOM_GAME_CARD.title":  "밀레니엄 퀘스트",
     "STS2ARIS-CUSTOM_GAME_CARD.description":  "피해를 {Damage:diff()} 줍니다.\n(아직은 그림뿐이지만 더 발전할 수 있을 것 같네요!)",
     "STS2ARIS-FAKE_ID_CARD.title":  "가짜 신분증",
-    "STS2ARIS-FAKE_ID_CARD.description":  "현재 장착한 [gold]장비[/gold]의 [gold]클래스체인지[/gold] 효과를 발동합니다.\n[gold]직업[/gold]을 잃고 해당 [gold]장비[/gold]를 버립니다."
+    "STS2ARIS-FAKE_ID_CARD.description":  "현재 장착한 [gold]장비[/gold]의 [gold]클래스체인지[/gold] 효과를 발동합니다.\n[gold]직업[/gold]을 잃고 해당 [gold]장비[/gold]를 버립니다.",
+    "STS2ARIS-ELEC_BITE.title":  "짜릿 물기",
+    "STS2ARIS-ELEC_BITE.description":  "[gold]감전[/gold]을 {ShockPower:diff()} 부여합니다."
 }

@@ -1,6 +1,8 @@
-﻿using BaseLib.Abstracts;
+using BaseLib.Abstracts;
 using StS2Aris.StS2ArisCode.Extensions;
 using Godot;
+using MegaCrit.Sts2.Core.Assets;
+using MegaCrit.Sts2.Core.Entities.Cards;
 
 namespace StS2Aris.StS2ArisCode.Character;
 
@@ -20,12 +22,16 @@ public class StS2ArisCardPool : CustomCardPoolModel
     public override float S => 1f; //Saturation
     public override float V => 1f; //Brightness
 
-    //Alternatively, leave these values at 1 and provide a custom frame image.
-    /*public override Texture2D CustomFrame(CustomCardModel card)
+    public override Texture2D? CustomFrame(CustomCardModel card)
     {
-        //This will attempt to load StS2Aris/images/cards/frame.png
-        return PreloadManager.Cache.GetTexture2D("cards/frame.png".ImagePath());
-    }*/
+        return card.Type switch
+        {
+            CardType.Attack => PreloadManager.Cache.GetTexture2D("cards/frame_attack.png".ImagePath()),
+            CardType.Power => PreloadManager.Cache.GetTexture2D("cards/frame_power.png".ImagePath()),
+            CardType.Skill => PreloadManager.Cache.GetTexture2D("cards/frame_skill.png".ImagePath()),
+            _ => base.CustomFrame(card)
+        };
+    }
 
     //Color of small card icons
     public override Color DeckEntryCardColor => new("ffffff");
