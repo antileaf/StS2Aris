@@ -16,6 +16,14 @@ namespace StS2Aris.StS2ArisCode.Cards;
 [Pool(typeof(StS2ArisCardPool))]
 public class Mask() : StS2ArisCard(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
 {
+    protected override IEnumerable<IHoverTip> ExtraHoverTips =>
+    [
+        HoverTipFactory.FromKeyword(ArisKeywords.Equipment),
+        HoverTipFactory.FromKeyword(ArisKeywords.ClassChange),
+        HoverTipFactory.FromKeyword(ArisKeywords.Job),
+        HoverTipFactory.FromPower<EndTurnBlockPower>()
+    ];
+
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new BlockVar(9, ValueProp.Move),

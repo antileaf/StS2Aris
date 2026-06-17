@@ -19,8 +19,8 @@ public class CursedWeapon() : StS2ArisCard(1, CardType.Attack, CardRarity.Uncomm
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new DamageVar(8, ValueProp.Move),
-        new DynamicVar("Magic", 2m),
-        new PowerVar<ShockPower>(2m)
+        new HpLossVar(2),
+        new DynamicVar("Increase", 4m)
     ];
 
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
@@ -32,7 +32,7 @@ public class CursedWeapon() : StS2ArisCard(1, CardType.Attack, CardRarity.Uncomm
     protected override void OnUpgrade()
     {
         DynamicVars.Damage.UpgradeValueBy(3m);
-        DynamicVars["ShockPower"].UpgradeValueBy(1m);
+        DynamicVars["Increase"].UpgradeValueBy(1m);
     }
 }
 

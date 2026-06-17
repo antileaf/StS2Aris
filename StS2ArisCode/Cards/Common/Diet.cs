@@ -16,26 +16,27 @@ namespace StS2Aris.StS2ArisCode.Cards;
 [Pool(typeof(StS2ArisCardPool))]
 public class Diet() : StS2ArisCard(0, CardType.Skill, CardRarity.Common, TargetType.Self)
 {
+    protected override IEnumerable<IHoverTip> ExtraHoverTips =>
+    [
+        HoverTipFactory.FromKeyword(ArisKeywords.Quest),
+        HoverTipFactory.FromKeyword(ArisKeywords.Reward),
+        HoverTipFactory.FromKeyword(CardKeyword.Exhaust)
+    ];
+
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new BlockVar(5, ValueProp.Move),
-        new DynamicVar("Magic", 1m),
-        new PowerVar<ChargePower>(1m)
+        new DynamicVar("Magic", 1m)
     ];
 
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block.BaseValue, ValueProp.Move, play);
+        await Task.CompletedTask;
     }
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 
     protected override void OnUpgrade()
     {
-        DynamicVars["ChargePower"].UpgradeValueBy(1m);
+        DynamicVars["Magic"].UpgradeValueBy(1m);
     }
 }
-
-
-
-

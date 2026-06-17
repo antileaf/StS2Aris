@@ -16,18 +16,26 @@ namespace StS2Aris.StS2ArisCode.Cards;
 [Pool(typeof(StS2ArisCardPool))]
 public class ThresholdBreak() : StS2ArisCard(0, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
 {
+    protected override IEnumerable<IHoverTip> ExtraHoverTips => [HoverTipFactory.FromKeyword(ArisKeywords.Charge)];
+
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new BlockVar(5, ValueProp.Move),
-        new DynamicVar("Magic", 5m)
+        new HpLossVar(5),
+        new PowerVar<ChargePower>(2m)
     ];
 
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block.BaseValue, ValueProp.Move, play);
+        await CreatureCmd.Damage(choiceContext, Owner.Creature, DynamicVars.HpLoss.BaseValue, ValueProp.Unblockable | ValueProp.Unpowered | ValueProp.Move, this);
+        await PowerCmd.Apply<ChargePower>(choiceContext, Owner.Creature, DynamicVars["ChargePower"].IntValue, Owner.Creature, this);
     }
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
+
+    protected override void OnUpgrade()
+    {
+        DynamicVars["ChargePower"].UpgradeValueBy(1m);
+    }
 }
 
 

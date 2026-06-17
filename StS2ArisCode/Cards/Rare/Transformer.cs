@@ -16,23 +16,24 @@ namespace StS2Aris.StS2ArisCode.Cards;
 [Pool(typeof(StS2ArisCardPool))]
 public class Transformer() : StS2ArisCard(2, CardType.Skill, CardRarity.Rare, TargetType.AnyEnemy)
 {
+    protected override IEnumerable<IHoverTip> ExtraHoverTips => [HoverTipFactory.FromKeyword(ArisKeywords.Shock)];
+
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new BlockVar(5, ValueProp.Move),
-        new DynamicVar("Magic", 7m),
-        new PowerVar<ChargePower>(7m)
+        new DynamicVar("Magic", 7m)
     ];
 
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block.BaseValue, ValueProp.Move, play);
+        ArgumentNullException.ThrowIfNull(play.Target);
+        await PowerCmd.Apply<ShockPower>(choiceContext, play.Target, DynamicVars["Magic"].IntValue, Owner.Creature, this);
     }
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 
     protected override void OnUpgrade()
     {
-        DynamicVars["ChargePower"].UpgradeValueBy(2m);
+        DynamicVars["Magic"].UpgradeValueBy(2m);
     }
 }
 

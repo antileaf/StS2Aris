@@ -16,6 +16,12 @@ namespace StS2Aris.StS2ArisCode.Cards;
 [Pool(typeof(StS2ArisCardPool))]
 public class RaidAddiction() : StS2ArisCard(2, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy)
 {
+    protected override IEnumerable<IHoverTip> ExtraHoverTips =>
+    [
+        HoverTipFactory.FromKeyword(ArisKeywords.Quest),
+        HoverTipFactory.FromKeyword(ArisKeywords.Reward)
+    ];
+
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new DamageVar(16, ValueProp.Move)

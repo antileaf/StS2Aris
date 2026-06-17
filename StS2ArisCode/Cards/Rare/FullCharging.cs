@@ -16,6 +16,12 @@ namespace StS2Aris.StS2ArisCode.Cards;
 [Pool(typeof(StS2ArisCardPool))]
 public class FullCharging() : StS2ArisCard(-1, CardType.Skill, CardRarity.Rare, TargetType.Self)
 {
+    protected override IEnumerable<IHoverTip> ExtraHoverTips =>
+    [
+        HoverTipFactory.FromKeyword(ArisKeywords.Output),
+        HoverTipFactory.FromKeyword(ArisKeywords.Charge)
+    ];
+
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new BlockVar(5, ValueProp.Move)

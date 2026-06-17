@@ -16,6 +16,8 @@ namespace StS2Aris.StS2ArisCode.Cards;
 [Pool(typeof(StS2ArisCardPool))]
 public class EquipHotkey() : StS2ArisCard(0, CardType.Skill, CardRarity.Rare, TargetType.Self)
 {
+    protected override IEnumerable<IHoverTip> ExtraHoverTips => [HoverTipFactory.FromKeyword(ArisKeywords.Equipment)];
+
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new BlockVar(5, ValueProp.Move)

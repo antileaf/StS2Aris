@@ -16,6 +16,8 @@ namespace StS2Aris.StS2ArisCode.Cards;
 [Pool(typeof(StS2ArisCardPool))]
 public class StraightStrike() : StS2ArisCard(0, CardType.Attack, CardRarity.Uncommon, TargetType.AllEnemies)
 {
+    protected override IEnumerable<IHoverTip> ExtraHoverTips => [HoverTipFactory.FromKeyword(ArisKeywords.ClassChange)];
+
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new DamageVar(4, ValueProp.Move)

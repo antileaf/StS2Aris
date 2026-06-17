@@ -18,21 +18,19 @@ public class CreatedApotheosis() : StS2ArisCard(1, CardType.Skill, CardRarity.Ra
 {
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new BlockVar(5, ValueProp.Move),
-        new DynamicVar("Magic", 5m),
-        new PowerVar<ChargePower>(5m)
+        new DynamicVar("Magic", 5m)
     ];
 
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block.BaseValue, ValueProp.Move, play);
+        await Task.CompletedTask;
     }
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 
     protected override void OnUpgrade()
     {
-        DynamicVars["ChargePower"].UpgradeValueBy(3m);
+        DynamicVars["Magic"].UpgradeValueBy(3m);
     }
 }
 

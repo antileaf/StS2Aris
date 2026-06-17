@@ -16,6 +16,8 @@ namespace StS2Aris.StS2ArisCode.Cards;
 [Pool(typeof(StS2ArisCardPool))]
 public class MomoiAppear() : StS2ArisCard(0, CardType.Skill, CardRarity.Rare, TargetType.Self)
 {
+    protected override IEnumerable<IHoverTip> ExtraHoverTips => [HoverTipFactory.FromKeyword(CardKeyword.Exhaust)];
+
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new BlockVar(5, ValueProp.Move)

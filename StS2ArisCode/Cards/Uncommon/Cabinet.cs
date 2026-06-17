@@ -19,8 +19,7 @@ public class Cabinet() : StS2ArisCard(2, CardType.Skill, CardRarity.Uncommon, Ta
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new BlockVar(12, ValueProp.Move),
-        new DynamicVar("Magic", 3m),
-        new PowerVar<ChargePower>(3m)
+        new DynamicVar("Magic", 3m)
     ];
 
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
@@ -31,7 +30,7 @@ public class Cabinet() : StS2ArisCard(2, CardType.Skill, CardRarity.Uncommon, Ta
     protected override void OnUpgrade()
     {
         DynamicVars.Block.UpgradeValueBy(3m);
-        DynamicVars["ChargePower"].UpgradeValueBy(1m);
+        DynamicVars["Magic"].UpgradeValueBy(1m);
     }
 }
 

@@ -16,7 +16,12 @@ namespace StS2Aris.StS2ArisCode.Cards;
 [Pool(typeof(StS2ArisCardPool))]
 public class SuperNova() : StS2ArisCard(2, CardType.Attack, CardRarity.Basic, TargetType.AllEnemies)
 {
-    protected override IEnumerable<IHoverTip> ExtraHoverTips => [HoverTipFactory.FromKeyword(ArisKeywords.Equipment)];
+    protected override IEnumerable<IHoverTip> ExtraHoverTips =>
+    [
+        HoverTipFactory.FromKeyword(ArisKeywords.Equipment),
+        HoverTipFactory.FromKeyword(ArisKeywords.ClassChange),
+        HoverTipFactory.FromKeyword(ArisKeywords.Job)
+    ];
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new DamageVar(8, ValueProp.Move),

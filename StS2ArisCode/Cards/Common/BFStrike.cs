@@ -19,8 +19,7 @@ public class BFStrike() : StS2ArisCard(2, CardType.Attack, CardRarity.Common, Ta
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new DamageVar(3, ValueProp.Move),
-        new DynamicVar("Magic", 4m),
-        new PowerVar<ChargePower>(4m)
+        new DynamicVar("Magic", 4m)
     ];
 
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
@@ -31,10 +30,9 @@ public class BFStrike() : StS2ArisCard(2, CardType.Attack, CardRarity.Common, Ta
 
     protected override void OnUpgrade()
     {
-        DynamicVars["ChargePower"].UpgradeValueBy(1m);
+        DynamicVars["Magic"].UpgradeValueBy(1m);
     }
 }
-
 
 
 

@@ -16,6 +16,8 @@ namespace StS2Aris.StS2ArisCode.Cards;
 [Pool(typeof(StS2ArisCardPool))]
 public class Superconductor() : StS2ArisCard(0, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
 {
+    protected override IEnumerable<IHoverTip> ExtraHoverTips => [HoverTipFactory.FromKeyword(ArisKeywords.Overload)];
+
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new DamageVar(5, ValueProp.Move),
@@ -33,7 +35,6 @@ public class Superconductor() : StS2ArisCard(0, CardType.Attack, CardRarity.Comm
         DynamicVars.Damage.UpgradeValueBy(3m);
     }
 }
-
 
 
 

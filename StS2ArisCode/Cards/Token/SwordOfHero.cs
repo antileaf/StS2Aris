@@ -17,6 +17,16 @@ namespace StS2Aris.StS2ArisCode.Cards;
 [Pool(typeof(TokenCardPool))]
 public class SwordOfHero() : StS2ArisCard(1, CardType.Attack, CardRarity.Token, TargetType.AnyEnemy)
 {
+    protected override IEnumerable<IHoverTip> ExtraHoverTips =>
+    [
+        HoverTipFactory.FromKeyword(ArisKeywords.Output),
+        HoverTipFactory.FromKeyword(ArisKeywords.Reward),
+        HoverTipFactory.FromKeyword(ArisKeywords.Equipment),
+        HoverTipFactory.FromKeyword(ArisKeywords.ClassChange),
+        HoverTipFactory.FromKeyword(ArisKeywords.Job),
+        HoverTipFactory.FromKeyword(ArisKeywords.Charge)
+    ];
+
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new DamageVar(6, ValueProp.Move),

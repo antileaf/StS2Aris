@@ -17,11 +17,18 @@ namespace StS2Aris.StS2ArisCode.Cards;
 [Pool(typeof(TokenCardPool))]
 public class RaidersLeader() : StS2ArisCard(2, CardType.Attack, CardRarity.Token, TargetType.AnyEnemy)
 {
+    protected override IEnumerable<IHoverTip> ExtraHoverTips =>
+    [
+        HoverTipFactory.FromKeyword(ArisKeywords.Reward),
+        HoverTipFactory.FromKeyword(ArisKeywords.Shock),
+        HoverTipFactory.FromPower<VulnerablePower>(),
+        HoverTipFactory.FromPower<WeakPower>()
+    ];
+
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new DamageVar(21, ValueProp.Move),
-        new DynamicVar("Magic", 2m),
-        new PowerVar<ChargePower>(2m)
+        new DynamicVar("Magic", 2m)
     ];
 
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
@@ -33,7 +40,7 @@ public class RaidersLeader() : StS2ArisCard(2, CardType.Attack, CardRarity.Token
     protected override void OnUpgrade()
     {
         DynamicVars.Damage.UpgradeValueBy(5m);
-        DynamicVars["ChargePower"].UpgradeValueBy(1m);
+        DynamicVars["Magic"].UpgradeValueBy(1m);
     }
 }
 

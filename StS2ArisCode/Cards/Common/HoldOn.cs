@@ -16,15 +16,23 @@ namespace StS2Aris.StS2ArisCode.Cards;
 [Pool(typeof(StS2ArisCardPool))]
 public class HoldOn() : StS2ArisCard(1, CardType.Skill, CardRarity.Common, TargetType.Self)
 {
+    protected override IEnumerable<IHoverTip> ExtraHoverTips => [HoverTipFactory.FromPower<EndTurnBlockPower>()];
+
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new BlockVar(5, ValueProp.Move),
-        new DynamicVar("Magic", 1m)
+        new HpLossVar(3),
+        new DynamicVar("Repair", 14m)
     ];
 
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block.BaseValue, ValueProp.Move, play);
+        await CreatureCmd.Damage(choiceContext, Owner.Creature, DynamicVars.HpLoss.BaseValue, ValueProp.Unblockable | ValueProp.Unpowered | ValueProp.Move, this);
+        await PowerCmd.Apply<EndTurnBlockPower>(choiceContext, Owner.Creature, DynamicVars["Repair"].IntValue, Owner.Creature, this);
+    }
+
+    protected override void OnUpgrade()
+    {
+        DynamicVars["Repair"].UpgradeValueBy(5m);
     }
 }
 

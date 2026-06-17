@@ -16,21 +16,25 @@ namespace StS2Aris.StS2ArisCode.Cards;
 [Pool(typeof(StS2ArisCardPool))]
 public class HailingLight() : StS2ArisCard(1, CardType.Skill, CardRarity.Common, TargetType.Self)
 {
+    protected override IEnumerable<IHoverTip> ExtraHoverTips =>
+    [
+        HoverTipFactory.FromKeyword(ArisKeywords.Output),
+        HoverTipFactory.FromKeyword(ArisKeywords.Charge)
+    ];
+
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new BlockVar(5, ValueProp.Move),
-        new DynamicVar("Magic", 2m),
-        new PowerVar<ChargePower>(2m)
+        new DynamicVar("Magic", 2m)
     ];
 
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block.BaseValue, ValueProp.Move, play);
+        await PowerCmd.Apply<ChargePower>(choiceContext, Owner.Creature, DynamicVars["Magic"].IntValue, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()
     {
-        DynamicVars["ChargePower"].UpgradeValueBy(1m);
+        DynamicVars["Magic"].UpgradeValueBy(1m);
     }
 }
 

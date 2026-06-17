@@ -16,6 +16,8 @@ namespace StS2Aris.StS2ArisCode.Cards;
 [Pool(typeof(StS2ArisCardPool))]
 public class DoubleCharge() : StS2ArisCard(0, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
 {
+    protected override IEnumerable<IHoverTip> ExtraHoverTips => [HoverTipFactory.FromKeyword(ArisKeywords.Charge)];
+
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new BlockVar(5, ValueProp.Move)

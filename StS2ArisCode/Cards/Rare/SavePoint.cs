@@ -18,8 +18,7 @@ public class SavePoint() : StS2ArisCard(2, CardType.Power, CardRarity.Rare, Targ
 {
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new DynamicVar("Magic", 20m),
-        new PowerVar<ChargePower>(20m)
+        new DynamicVar("Magic", 20m)
     ];
 
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
@@ -29,7 +28,7 @@ public class SavePoint() : StS2ArisCard(2, CardType.Power, CardRarity.Rare, Targ
 
     protected override void OnUpgrade()
     {
-        DynamicVars["ChargePower"].UpgradeValueBy(10m);
+        DynamicVars["Magic"].UpgradeValueBy(10m);
     }
 }
 

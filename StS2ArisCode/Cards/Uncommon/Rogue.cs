@@ -16,21 +16,28 @@ namespace StS2Aris.StS2ArisCode.Cards;
 [Pool(typeof(StS2ArisCardPool))]
 public class Rogue() : StS2ArisCard(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
 {
+    protected override IEnumerable<IHoverTip> ExtraHoverTips =>
+    [
+        HoverTipFactory.FromKeyword(ArisKeywords.Equipment),
+        HoverTipFactory.FromKeyword(ArisKeywords.ClassChange),
+        HoverTipFactory.FromKeyword(ArisKeywords.Job),
+        HoverTipFactory.FromKeyword(ArisKeywords.Shock),
+        HoverTipFactory.FromPower<WeakPower>()
+    ];
+
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new BlockVar(5, ValueProp.Move),
-        new DynamicVar("Magic", 1m),
-        new PowerVar<ChargePower>(1m)
+        new DynamicVar("Magic", 1m)
     ];
 
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block.BaseValue, ValueProp.Move, play);
+        await Task.CompletedTask;
     }
 
     protected override void OnUpgrade()
     {
-        DynamicVars["ChargePower"].UpgradeValueBy(1m);
+        DynamicVars["Magic"].UpgradeValueBy(1m);
     }
 }
 

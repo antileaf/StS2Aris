@@ -16,6 +16,12 @@ namespace StS2Aris.StS2ArisCode.Cards;
 [Pool(typeof(StS2ArisCardPool))]
 public class ElixirSyndrome() : StS2ArisCard(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
 {
+    protected override IEnumerable<IHoverTip> ExtraHoverTips =>
+    [
+        HoverTipFactory.FromKeyword(ArisKeywords.Quest),
+        HoverTipFactory.FromKeyword(ArisKeywords.Reward)
+    ];
+
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new BlockVar(7, ValueProp.Move)

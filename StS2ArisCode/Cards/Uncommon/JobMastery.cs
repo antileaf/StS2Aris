@@ -16,10 +16,15 @@ namespace StS2Aris.StS2ArisCode.Cards;
 [Pool(typeof(StS2ArisCardPool))]
 public class JobMastery() : StS2ArisCard(1, CardType.Power, CardRarity.Uncommon, TargetType.Self)
 {
+    protected override IEnumerable<IHoverTip> ExtraHoverTips =>
+    [
+        HoverTipFactory.FromKeyword(ArisKeywords.Job),
+        HoverTipFactory.FromKeyword(ArisKeywords.ClassChange)
+    ];
+
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new DynamicVar("Magic", 6m),
-        new PowerVar<ChargePower>(6m)
+        new DynamicVar("Magic", 6m)
     ];
 
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
@@ -29,7 +34,7 @@ public class JobMastery() : StS2ArisCard(1, CardType.Power, CardRarity.Uncommon,
 
     protected override void OnUpgrade()
     {
-        DynamicVars["ChargePower"].UpgradeValueBy(3m);
+        DynamicVars["Magic"].UpgradeValueBy(3m);
     }
 }
 

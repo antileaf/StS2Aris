@@ -17,6 +17,7 @@ namespace StS2Aris.StS2ArisCode.Cards;
 public class ArisForm() : StS2ArisCard(3, CardType.Power, CardRarity.Rare, TargetType.Self)
 {
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Ethereal];
+    protected override IEnumerable<IHoverTip> ExtraHoverTips => [HoverTipFactory.FromKeyword(CardKeyword.Ethereal)];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [

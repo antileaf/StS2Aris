@@ -16,6 +16,12 @@ namespace StS2Aris.StS2ArisCode.Cards;
 [Pool(typeof(StS2ArisCardPool))]
 public class DailyQuest() : StS2ArisCard(1, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy)
 {
+    protected override IEnumerable<IHoverTip> ExtraHoverTips =>
+    [
+        HoverTipFactory.FromKeyword(ArisKeywords.Quest),
+        HoverTipFactory.FromKeyword(ArisKeywords.Reward)
+    ];
+
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new DamageVar(9, ValueProp.Move),

@@ -16,6 +16,12 @@ namespace StS2Aris.StS2ArisCode.Cards;
 [Pool(typeof(StS2ArisCardPool))]
 public class SteelBody() : StS2ArisCard(2, CardType.Skill, CardRarity.Common, TargetType.Self)
 {
+    protected override IEnumerable<IHoverTip> ExtraHoverTips =>
+    [
+        HoverTipFactory.FromKeyword(ArisKeywords.Overload),
+        HoverTipFactory.FromKeyword(ArisKeywords.Charge)
+    ];
+
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new BlockVar(11, ValueProp.Move)

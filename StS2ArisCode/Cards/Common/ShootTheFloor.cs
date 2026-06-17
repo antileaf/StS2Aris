@@ -19,7 +19,7 @@ public class ShootTheFloor() : StS2ArisCard(1, CardType.Attack, CardRarity.Commo
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new DamageVar(13, ValueProp.Move),
-        new HpLossVar(2)
+        new HpLossVar(3)
     ];
 
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)

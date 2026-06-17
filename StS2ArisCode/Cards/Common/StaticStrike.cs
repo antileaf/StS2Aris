@@ -16,6 +16,8 @@ namespace StS2Aris.StS2ArisCode.Cards;
 [Pool(typeof(StS2ArisCardPool))]
 public class StaticStrike() : StS2ArisCard(1, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
 {
+    protected override IEnumerable<IHoverTip> ExtraHoverTips => [HoverTipFactory.FromKeyword(ArisKeywords.Shock)];
+
     protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(8, ValueProp.Move)];
 
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
@@ -29,5 +31,4 @@ public class StaticStrike() : StS2ArisCard(1, CardType.Attack, CardRarity.Common
         await CardPileCmd.Add(shock, PileType.Hand);
     }
 }
-
 

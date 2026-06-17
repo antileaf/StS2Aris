@@ -16,10 +16,15 @@ namespace StS2Aris.StS2ArisCode.Cards;
 [Pool(typeof(StS2ArisCardPool))]
 public class AwakeningSupernova() : StS2ArisCard(1, CardType.Power, CardRarity.Uncommon, TargetType.Self)
 {
+    protected override IEnumerable<IHoverTip> ExtraHoverTips =>
+    [
+        HoverTipFactory.FromKeyword(ArisKeywords.Charge),
+        HoverTipFactory.FromPower<StrengthPower>()
+    ];
+
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new DynamicVar("Magic", 2m),
-        new PowerVar<ChargePower>(2m)
+        new DynamicVar("Magic", 2m)
     ];
 
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
@@ -29,7 +34,7 @@ public class AwakeningSupernova() : StS2ArisCard(1, CardType.Power, CardRarity.U
 
     protected override void OnUpgrade()
     {
-        DynamicVars["ChargePower"].UpgradeValueBy(1m);
+        DynamicVars["Magic"].UpgradeValueBy(1m);
     }
 }
 

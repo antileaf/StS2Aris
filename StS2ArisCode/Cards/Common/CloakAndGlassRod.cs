@@ -16,11 +16,12 @@ namespace StS2Aris.StS2ArisCode.Cards;
 [Pool(typeof(StS2ArisCardPool))]
 public class CloakAndGlassRod() : StS2ArisCard(1, CardType.Skill, CardRarity.Common, TargetType.Self)
 {
+    protected override IEnumerable<IHoverTip> ExtraHoverTips => [HoverTipFactory.FromKeyword(ArisKeywords.Shock)];
+
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new BlockVar(7, ValueProp.Move),
-        new DynamicVar("Magic", 1m),
-        new PowerVar<ChargePower>(1m)
+        new DynamicVar("Magic", 1m)
     ];
 
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
@@ -30,7 +31,7 @@ public class CloakAndGlassRod() : StS2ArisCard(1, CardType.Skill, CardRarity.Com
 
     protected override void OnUpgrade()
     {
-        DynamicVars["ChargePower"].UpgradeValueBy(1m);
+        DynamicVars["Magic"].UpgradeValueBy(1m);
     }
 }
 

@@ -16,6 +16,12 @@ namespace StS2Aris.StS2ArisCode.Cards;
 [Pool(typeof(StS2ArisCardPool))]
 public class Thunder() : StS2ArisCard(3, CardType.Attack, CardRarity.Rare, TargetType.AnyEnemy)
 {
+    protected override IEnumerable<IHoverTip> ExtraHoverTips =>
+    [
+        HoverTipFactory.FromKeyword(ArisKeywords.Overload),
+        HoverTipFactory.FromKeyword(ArisKeywords.Charge)
+    ];
+
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new DamageVar(16, ValueProp.Move),

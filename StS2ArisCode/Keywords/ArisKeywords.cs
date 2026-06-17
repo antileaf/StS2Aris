@@ -22,6 +22,9 @@ public static class ArisKeywords
     public static CardKeyword Equipment;
 
     [CustomEnum] [KeywordProperties(AutoKeywordPosition.After)]
+    public static CardKeyword ClassChange;
+
+    [CustomEnum] [KeywordProperties(AutoKeywordPosition.After)]
     public static CardKeyword Job;
 
     [CustomEnum] [KeywordProperties(AutoKeywordPosition.After)]

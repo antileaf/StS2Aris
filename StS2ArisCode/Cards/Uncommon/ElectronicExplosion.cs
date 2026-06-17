@@ -16,6 +16,8 @@ namespace StS2Aris.StS2ArisCode.Cards;
 [Pool(typeof(StS2ArisCardPool))]
 public class ElectronicExplosion() : StS2ArisCard(1, CardType.Attack, CardRarity.Uncommon, TargetType.AllEnemies)
 {
+    protected override IEnumerable<IHoverTip> ExtraHoverTips => [HoverTipFactory.FromKeyword(ArisKeywords.Overload)];
+
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new DamageVar(4, ValueProp.Move),

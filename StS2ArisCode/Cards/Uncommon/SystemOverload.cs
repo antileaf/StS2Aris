@@ -16,10 +16,15 @@ namespace StS2Aris.StS2ArisCode.Cards;
 [Pool(typeof(StS2ArisCardPool))]
 public class SystemOverload() : StS2ArisCard(0, CardType.Power, CardRarity.Uncommon, TargetType.Self)
 {
+    protected override IEnumerable<IHoverTip> ExtraHoverTips =>
+    [
+        HoverTipFactory.FromKeyword(ArisKeywords.Overload),
+        HoverTipFactory.FromKeyword(CardKeyword.Exhaust)
+    ];
+
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new DynamicVar("Magic", 4m),
-        new PowerVar<ChargePower>(4m)
+        new DynamicVar("Magic", 4m)
     ];
 
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
@@ -29,7 +34,7 @@ public class SystemOverload() : StS2ArisCard(0, CardType.Power, CardRarity.Uncom
 
     protected override void OnUpgrade()
     {
-        DynamicVars["ChargePower"].UpgradeValueBy(2m);
+        DynamicVars["Magic"].UpgradeValueBy(2m);
     }
 }
 

@@ -16,25 +16,26 @@ namespace StS2Aris.StS2ArisCode.Cards;
 [Pool(typeof(StS2ArisCardPool))]
 public class WeakeningCurse() : StS2ArisCard(1, CardType.Skill, CardRarity.Rare, TargetType.AnyEnemy)
 {
+    protected override IEnumerable<IHoverTip> ExtraHoverTips => [HoverTipFactory.FromPower<StrengthPower>()];
+
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new BlockVar(5, ValueProp.Move),
         new DynamicVar("Magic", 9m),
-        new PowerVar<ChargePower>(9m),
-        new PowerVar<ShockPower>(9m)
+        new DynamicVar("ReturnTurns", 3m)
     ];
 
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block.BaseValue, ValueProp.Move, play);
+        ArgumentNullException.ThrowIfNull(play.Target);
+        await PowerCmd.Apply<StrengthPower>(choiceContext, play.Target, -DynamicVars["Magic"].IntValue, Owner.Creature, this);
     }
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 
     protected override void OnUpgrade()
     {
-        DynamicVars["ChargePower"].UpgradeValueBy(3m);
-        DynamicVars["ShockPower"].UpgradeValueBy(1m);
+        DynamicVars["Magic"].UpgradeValueBy(3m);
+        DynamicVars["ReturnTurns"].UpgradeValueBy(1m);
     }
 }
 

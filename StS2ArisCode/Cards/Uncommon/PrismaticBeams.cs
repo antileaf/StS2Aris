@@ -16,11 +16,17 @@ namespace StS2Aris.StS2ArisCode.Cards;
 [Pool(typeof(StS2ArisCardPool))]
 public class PrismaticBeams() : StS2ArisCard(1, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy)
 {
+    protected override IEnumerable<IHoverTip> ExtraHoverTips =>
+    [
+        HoverTipFactory.FromKeyword(ArisKeywords.Overload),
+        HoverTipFactory.FromKeyword(CardKeyword.Ethereal),
+        HoverTipFactory.FromKeyword(CardKeyword.Exhaust)
+    ];
+
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new DamageVar(7, ValueProp.Move),
-        new DynamicVar("Magic", 3m),
-        new PowerVar<ChargePower>(3m)
+        new DynamicVar("Magic", 3m)
     ];
 
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
@@ -32,7 +38,7 @@ public class PrismaticBeams() : StS2ArisCard(1, CardType.Attack, CardRarity.Unco
     protected override void OnUpgrade()
     {
         DynamicVars.Damage.UpgradeValueBy(2m);
-        DynamicVars["ChargePower"].UpgradeValueBy(1m);
+        DynamicVars["Magic"].UpgradeValueBy(1m);
     }
 }
 

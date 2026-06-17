@@ -17,6 +17,12 @@ namespace StS2Aris.StS2ArisCode.Cards;
 [Pool(typeof(TokenCardPool))]
 public class ChooseArmoursmith() : StS2ArisCard(-2, CardType.Skill, CardRarity.Token, TargetType.Self)
 {
+    protected override IEnumerable<IHoverTip> ExtraHoverTips =>
+    [
+        HoverTipFactory.FromKeyword(ArisKeywords.Equipment),
+        HoverTipFactory.FromPower<DexterityPower>()
+    ];
+
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new BlockVar(5, ValueProp.Move),

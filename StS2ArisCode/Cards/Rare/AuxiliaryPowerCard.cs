@@ -16,7 +16,7 @@ namespace StS2Aris.StS2ArisCode.Cards;
 [Pool(typeof(StS2ArisCardPool))]
 public class AuxiliaryPowerCard() : StS2ArisCard(1, CardType.Power, CardRarity.Rare, TargetType.Self)
 {
-    
+    protected override IEnumerable<IHoverTip> ExtraHoverTips => [HoverTipFactory.FromKeyword(ArisKeywords.Charge)];
 
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
