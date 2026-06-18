@@ -6,6 +6,7 @@ using StS2Aris.StS2ArisCode.Mechanics;
 
 namespace StS2Aris.StS2ArisCode.Patches;
 
+[HarmonyPatch]
 public static class ArisChargeResourcePatches
 {
     [HarmonyPatch(typeof(PlayerCombatState), nameof(PlayerCombatState.HasEnoughResourcesFor))]

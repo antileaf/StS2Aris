@@ -17,20 +17,18 @@ using StS2Aris.StS2ArisCode.Keywords;
 namespace StS2Aris.StS2ArisCode.Cards;
 
 [Pool(typeof(StS2ArisCardPool))]
-public class SuperNova() : StS2ArisCard(2, CardType.Attack, CardRarity.Basic, TargetType.AllEnemies), IOverload
+public class AtrahasisSuperNova() : StS2ArisCard(1, CardType.Attack, CardRarity.Ancient, TargetType.AllEnemies), IOverload
 {
     protected override IEnumerable<IHoverTip> ExtraHoverTips =>
     [
-        HoverTipFactory.FromKeyword(ArisKeywords.Equipment),
-        HoverTipFactory.FromKeyword(ArisKeywords.ClassChange),
         HoverTipFactory.FromKeyword(ArisKeywords.Overload),
         HoverTipFactory.FromPower<StrengthPower>()
     ];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new DamageVar(8, ValueProp.Move),
-        new PowerVar<StrengthPower>(3m)
+        new DamageVar(16, ValueProp.Move),
+        new PowerVar<StrengthPower>(5m)
     ];
 
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
@@ -44,12 +42,26 @@ public class SuperNova() : StS2ArisCard(2, CardType.Attack, CardRarity.Basic, Ta
             .WithAttackerAnim("Cast", 0.5f)
             .BeforeDamage(async () =>
             {
-                var targets = CombatState.HittableEnemies.ToList();
-                var vfx = NSweepingBeamVfx.Create(Owner.Creature, targets);
-                if (vfx != null)
+                var enemies = CombatState.Enemies.Where(e => e.IsAlive).ToList();
+                if (enemies.Count == 0)
                 {
-                    NCombatRoom.Instance?.CombatVfxContainer.AddChildSafely(vfx);
+                    return;
+                }
+
+                var beam = NHyperbeamVfx.Create(Owner.Creature, enemies.Last());
+                if (beam != null)
+                {
+                    NCombatRoom.Instance?.CombatVfxContainer.AddChildSafely(beam);
                     await Cmd.Wait(0.5f);
+                }
+
+                foreach (var enemy in enemies)
+                {
+                    var impact = NHyperbeamImpactVfx.Create(Owner.Creature, enemy);
+                    if (impact != null)
+                    {
+                        NCombatRoom.Instance?.CombatVfxContainer.AddChildSafely(impact);
+                    }
                 }
             })
             .Execute(choiceContext);
@@ -62,7 +74,6 @@ public class SuperNova() : StS2ArisCard(2, CardType.Attack, CardRarity.Basic, Ta
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(2m);
-        DynamicVars["StrengthPower"].UpgradeValueBy(1m);
+        DynamicVars["StrengthPower"].UpgradeValueBy(2m);
     }
 }

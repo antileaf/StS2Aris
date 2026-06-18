@@ -1,4 +1,5 @@
 ﻿using BaseLib.Utils;
+using MegaCrit.Sts2.Core.CardSelection;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
@@ -9,12 +10,13 @@ using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.ValueProps;
 using StS2Aris.StS2ArisCode.Character;
+using StS2Aris.StS2ArisCode.CardModels;
 using StS2Aris.StS2ArisCode.Keywords;
 using StS2Aris.StS2ArisCode.Powers;
 
 namespace StS2Aris.StS2ArisCode.Cards;
 [Pool(typeof(StS2ArisCardPool))]
-public class Superconductor() : StS2ArisCard(0, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
+public class Superconductor() : StS2ArisCard(0, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy), IOverload
 {
     protected override IEnumerable<IHoverTip> ExtraHoverTips => [HoverTipFactory.FromKeyword(ArisKeywords.Overload)];
 
@@ -26,8 +28,17 @@ public class Superconductor() : StS2ArisCard(0, CardType.Attack, CardRarity.Comm
 
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        ArgumentNullException.ThrowIfNull(play.Target);
+        if (play.Target == null)
+            return;
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this).Targeting(play.Target).Execute(choiceContext);
+    }
+
+    public async Task OnOverload(PlayerChoiceContext choiceContext, CardPlay play)
+    {
+        int amount = DynamicVars["Magic"].IntValue;
+        await CardPileCmd.Draw(choiceContext, amount, Owner);
+        var selected = await CardSelectCmd.FromHandForDiscard(choiceContext, Owner, new CardSelectorPrefs(CardSelectorPrefs.DiscardSelectionPrompt, amount), null, this);
+        await CardCmd.Discard(choiceContext, selected);
     }
 
     protected override void OnUpgrade()
@@ -35,6 +46,4 @@ public class Superconductor() : StS2ArisCard(0, CardType.Attack, CardRarity.Comm
         DynamicVars.Damage.UpgradeValueBy(3m);
     }
 }
-
-
 

@@ -9,13 +9,14 @@ using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.ValueProps;
 using StS2Aris.StS2ArisCode.Character;
+using StS2Aris.StS2ArisCode.CardModels;
 using StS2Aris.StS2ArisCode.Keywords;
 using StS2Aris.StS2ArisCode.Powers;
 using StS2Aris.StS2ArisCode.Utils;
 
 namespace StS2Aris.StS2ArisCode.Cards;
 [Pool(typeof(StS2ArisCardPool))]
-public class Thunder() : StS2ArisCard(3, CardType.Attack, CardRarity.Rare, TargetType.AnyEnemy)
+public class Thunder() : StS2ArisCard(3, CardType.Attack, CardRarity.Rare, TargetType.AnyEnemy), IOverload
 {
     protected override IEnumerable<IHoverTip> ExtraHoverTips =>
     [
@@ -31,8 +32,13 @@ public class Thunder() : StS2ArisCard(3, CardType.Attack, CardRarity.Rare, Targe
 
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        ArgumentNullException.ThrowIfNull(play.Target);
+        if (play.Target == null)
+            return;
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this).Targeting(play.Target).Execute(choiceContext);
+    }
+
+    public async Task OnOverload(PlayerChoiceContext choiceContext, CardPlay play)
+    {
         await PowerCmd.Apply<ChargePower>(choiceContext, Owner.Creature, DynamicVars["ChargePower"].IntValue, Owner.Creature, this);
     }
 

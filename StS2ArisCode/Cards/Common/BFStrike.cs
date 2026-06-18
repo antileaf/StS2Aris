@@ -16,6 +16,8 @@ namespace StS2Aris.StS2ArisCode.Cards;
 [Pool(typeof(StS2ArisCardPool))]
 public class BFStrike() : StS2ArisCard(2, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
 {
+    protected override HashSet<CardTag> CanonicalTags => [CardTag.Strike];
+
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new DamageVar(4, ValueProp.Move),
@@ -33,6 +35,5 @@ public class BFStrike() : StS2ArisCard(2, CardType.Attack, CardRarity.Common, Ta
         DynamicVars["Magic"].UpgradeValueBy(1m);
     }
 }
-
 
 

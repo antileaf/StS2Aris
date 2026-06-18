@@ -16,6 +16,8 @@ namespace StS2Aris.StS2ArisCode.Cards;
 [Pool(typeof(StS2ArisCardPool))]
 public class GiantSwingStrike() : StS2ArisCard(1, CardType.Attack, CardRarity.Common, TargetType.AllEnemies)
 {
+    protected override HashSet<CardTag> CanonicalTags => [CardTag.Strike];
+
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new DamageVar(7, ValueProp.Move),
@@ -34,6 +36,5 @@ public class GiantSwingStrike() : StS2ArisCard(1, CardType.Attack, CardRarity.Co
         DynamicVars.Block.UpgradeValueBy(1m);
     }
 }
-
 
 

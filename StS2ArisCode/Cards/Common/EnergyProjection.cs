@@ -8,30 +8,38 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.ValueProps;
+using StS2Aris.StS2ArisCode.CardModels;
 using StS2Aris.StS2ArisCode.Character;
 using StS2Aris.StS2ArisCode.Keywords;
+using StS2Aris.StS2ArisCode.Mechanics;
 using StS2Aris.StS2ArisCode.Powers;
 
 namespace StS2Aris.StS2ArisCode.Cards;
 [Pool(typeof(StS2ArisCardPool))]
-public class EnergyProjection() : StS2ArisCard(1, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
+public class EnergyProjection() : StS2ArisCard(1, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy), IOverload
 {
     protected override IEnumerable<IHoverTip> ExtraHoverTips => [HoverTipFactory.FromKeyword(ArisKeywords.Overload)];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new DamageVar(7, ValueProp.Move)
+        ..MakeCalculatedDamage(7, (card, _) => ArisCharge.IsOverloadState(card.Owner) ? card.DynamicVars.CalculationBase.BaseValue : 0m)
     ];
 
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        ArgumentNullException.ThrowIfNull(play.Target);
-        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this).Targeting(play.Target).Execute(choiceContext);
+        if (play.Target == null)
+            return;
+        await DamageCmd.Attack(DynamicVars.CalculatedDamage).FromCard(this).Targeting(play.Target).Execute(choiceContext);
+    }
+
+    public Task OnOverload(PlayerChoiceContext choiceContext, CardPlay play)
+    {
+        return Task.CompletedTask;
     }
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(2m);
+        DynamicVars.CalculationBase.UpgradeValueBy(2m);
     }
 }
 

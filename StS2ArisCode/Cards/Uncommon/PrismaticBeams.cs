@@ -9,12 +9,13 @@ using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.ValueProps;
 using StS2Aris.StS2ArisCode.Character;
+using StS2Aris.StS2ArisCode.CardModels;
 using StS2Aris.StS2ArisCode.Keywords;
 using StS2Aris.StS2ArisCode.Powers;
 
 namespace StS2Aris.StS2ArisCode.Cards;
 [Pool(typeof(StS2ArisCardPool))]
-public class PrismaticBeams() : StS2ArisCard(1, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy)
+public class PrismaticBeams() : StS2ArisCard(1, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy), IOverload
 {
     protected override IEnumerable<IHoverTip> ExtraHoverTips =>
     [
@@ -31,8 +32,18 @@ public class PrismaticBeams() : StS2ArisCard(1, CardType.Attack, CardRarity.Unco
 
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        ArgumentNullException.ThrowIfNull(play.Target);
+        if (play.Target == null)
+            return;
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this).Targeting(play.Target).Execute(choiceContext);
+    }
+
+    public async Task OnOverload(PlayerChoiceContext choiceContext, CardPlay play)
+    {
+        var beam = (PrismaticBeams)MutableClone();
+        beam.Owner = Owner;
+        beam.DynamicVars.Damage.BaseValue = DynamicVars.Damage.BaseValue + DynamicVars["Magic"].BaseValue;
+        beam.ExhaustOnNextPlay = true;
+        await CardPileCmd.Add(beam, PileType.Hand);
     }
 
     protected override void OnUpgrade()

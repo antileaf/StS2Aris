@@ -10,6 +10,7 @@ using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.ValueProps;
 using StS2Aris.StS2ArisCode.Character;
 using StS2Aris.StS2ArisCode.Keywords;
+using StS2Aris.StS2ArisCode.Mechanics;
 using StS2Aris.StS2ArisCode.Powers;
 
 namespace StS2Aris.StS2ArisCode.Cards;
@@ -26,8 +27,16 @@ public class ElectronicExplosion() : StS2ArisCard(1, CardType.Attack, CardRarity
 
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        if (CombatState != null)
-            await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this).TargetingAllOpponents(CombatState).Execute(choiceContext);
+        if (CombatState == null)
+        {
+            return;
+        }
+
+        int hits = IsUpgraded ? DynamicVars["Magic"].IntValue : ArisCharge.OverloadsThisCombat;
+        for (int i = 0; i < hits; i++)
+        {
+            await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this).TargetingRandomOpponents(CombatState, true).Execute(choiceContext);
+        }
     }
 
     protected override void OnUpgrade()

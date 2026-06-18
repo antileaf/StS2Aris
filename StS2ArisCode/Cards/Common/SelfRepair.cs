@@ -9,17 +9,23 @@ using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.ValueProps;
 using StS2Aris.StS2ArisCode.Character;
+using StS2Aris.StS2ArisCode.CardModels;
 using StS2Aris.StS2ArisCode.Keywords;
 using StS2Aris.StS2ArisCode.Powers;
 
 namespace StS2Aris.StS2ArisCode.Cards;
 [Pool(typeof(StS2ArisCardPool))]
-public class SelfRepair() : StS2ArisCard(1, CardType.Skill, CardRarity.Common, TargetType.Self)
+public class SelfRepair() : StS2ArisCard(1, CardType.Skill, CardRarity.Common, TargetType.Self), IOverload
 {
     protected override IEnumerable<IHoverTip> ExtraHoverTips => [HoverTipFactory.FromKeyword(ArisKeywords.Overload)];
     protected override IEnumerable<DynamicVar> CanonicalVars => [new BlockVar(6, ValueProp.Move)];
 
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
+    {
+        await CommonActions.CardBlock(this, play);
+    }
+
+    public async Task OnOverload(PlayerChoiceContext choiceContext, CardPlay play)
     {
         await CommonActions.CardBlock(this, play);
     }

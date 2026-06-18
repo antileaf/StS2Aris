@@ -9,12 +9,14 @@ using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.ValueProps;
 using StS2Aris.StS2ArisCode.Character;
+using StS2Aris.StS2ArisCode.CardModels;
 using StS2Aris.StS2ArisCode.Keywords;
+using StS2Aris.StS2ArisCode.Mechanics;
 using StS2Aris.StS2ArisCode.Powers;
 
 namespace StS2Aris.StS2ArisCode.Cards;
 [Pool(typeof(StS2ArisCardPool))]
-public class PrecisionCamera() : StS2ArisCard(0, CardType.Skill, CardRarity.Uncommon, TargetType.AllEnemies)
+public class PrecisionCamera() : StS2ArisCard(0, CardType.Skill, CardRarity.Uncommon, TargetType.AllEnemies), IOverload
 {
     protected override IEnumerable<IHoverTip> ExtraHoverTips =>
     [
@@ -33,8 +35,20 @@ public class PrecisionCamera() : StS2ArisCard(0, CardType.Skill, CardRarity.Unco
         if (CombatState == null)
             return;
 
+        if (!ArisCharge.IsOverloadState(Owner))
+        {
+            foreach (var opponent in CombatState.GetOpponentsOf(Owner.Creature))
+                await PowerCmd.Apply<VulnerablePower>(choiceContext, opponent, DynamicVars["Magic"].IntValue, Owner.Creature, this);
+        }
+    }
+
+    public async Task OnOverload(PlayerChoiceContext choiceContext, CardPlay play)
+    {
+        if (CombatState == null)
+            return;
+
         foreach (var opponent in CombatState.GetOpponentsOf(Owner.Creature))
-            await PowerCmd.Apply<VulnerablePower>(choiceContext, opponent, DynamicVars["Magic"].IntValue, Owner.Creature, this);
+            await PowerCmd.Apply<WeakPower>(choiceContext, opponent, DynamicVars["Magic"].IntValue, Owner.Creature, this);
     }
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];

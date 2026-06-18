@@ -13,12 +13,38 @@ namespace StS2Aris.StS2ArisCode.Mechanics;
 public static class ArisCharge
 {
     private static readonly SpireField<CardModel, int> ChargeSpentField = new(() => 0);
+    public static int OverloadsThisCombat { get; private set; }
 
     public static int Get(Player player) => player.Creature.GetPower<ChargePower>()?.Amount ?? 0;
 
     public static int GetSpent(CardModel card) => ChargeSpentField.Get(card);
 
-    public static bool IsOverloadAvailable(Player player) => player.PlayerCombatState?.Energy <= 0 && Get(player) > 0;
+    public static bool IsOverloadState(Player? player) => player?.PlayerCombatState?.Energy <= 0;
+
+    public static bool IsOverloadAvailable(Player player) => IsOverloadState(player);
+
+    public static bool WillBeOverloadAfterSpending(CardModel card)
+    {
+        Player? player = card.Owner;
+        PlayerCombatState? state = player?.PlayerCombatState;
+        if (player == null || state == null)
+        {
+            return false;
+        }
+
+        int energySpent = Math.Min(GetEnergyAmountToSpend(card, includeChargeForX: CanSpendCharge(card)), state.Energy);
+        return state.Energy - energySpent <= 0;
+    }
+
+    public static void ResetOverloadCount()
+    {
+        OverloadsThisCombat = 0;
+    }
+
+    public static void NotifyOverload()
+    {
+        OverloadsThisCombat++;
+    }
 
     public static bool CanSpendCharge(CardModel card) => card is not IArisOutputCard;
 
