@@ -1,4 +1,20 @@
 {
+  "STS2ARIS-CHARGE.title": "Charge",
+  "STS2ARIS-CHARGE.description": "If you lack Energy, you can spend Charge to play cards. Charge disappears at the end of your turn.",
+  "STS2ARIS-SHOCK.title": "Shock",
+  "STS2ARIS-SHOCK.description": "Whenever you take attack damage, lose HP equal to your Shock and reduce Shock by 1.",
+  "STS2ARIS-OVERLOAD.title": "Overload",
+  "STS2ARIS-OVERLOAD.description": "This effect activates if your remaining Energy is 0 after this card is played.",
+  "STS2ARIS-OUTPUT.title": "Output",
+  "STS2ARIS-OUTPUT.description": "Charge cannot be spent to play this card.",
+  "STS2ARIS-EQUIPMENT.title": "Equipment",
+  "STS2ARIS-EQUIPMENT.description": "When played, this attaches to the character and changes Jobs. If you already have Equipment, discard the old Equipment.",
   "STS2ARIS-CLASSCHANGE.title": "Class Change",
-  "STS2ARIS-CLASSCHANGE.description": "The class-change effect of an equipment card."
+  "STS2ARIS-CLASSCHANGE.description": "This effect triggers when your Job changes.",
+  "STS2ARIS-JOB.title": "Job",
+  "STS2ARIS-JOB.description": "Your Job effect applies while Equipment is equipped. You can only have one Job at a time.",
+  "STS2ARIS-REWARD.title": "Reward",
+  "STS2ARIS-REWARD.description": "Reward cards cannot be obtained normally. You can get them by completing Quests.",
+  "STS2ARIS-QUEST.title": "Quest",
+  "STS2ARIS-QUEST.description": "When you complete a Quest, it turns into a Reward card."
 }

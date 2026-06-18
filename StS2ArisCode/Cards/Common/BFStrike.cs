@@ -18,7 +18,7 @@ public class BFStrike() : StS2ArisCard(2, CardType.Attack, CardRarity.Common, Ta
 {
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new DamageVar(3, ValueProp.Move),
+        new DamageVar(4, ValueProp.Move),
         new DynamicVar("Magic", 4m)
     ];
 

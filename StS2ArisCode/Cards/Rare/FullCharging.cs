@@ -10,16 +10,18 @@ using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.ValueProps;
 using StS2Aris.StS2ArisCode.Character;
 using StS2Aris.StS2ArisCode.Keywords;
+using StS2Aris.StS2ArisCode.Mechanics;
 using StS2Aris.StS2ArisCode.Powers;
+using StS2Aris.StS2ArisCode.Utils;
 
 namespace StS2Aris.StS2ArisCode.Cards;
 [Pool(typeof(StS2ArisCardPool))]
-public class FullCharging() : StS2ArisCard(-1, CardType.Skill, CardRarity.Rare, TargetType.Self)
+public class FullCharging() : StS2ArisCard(-1, CardType.Skill, CardRarity.Rare, TargetType.Self), IArisOutputCard
 {
     protected override IEnumerable<IHoverTip> ExtraHoverTips =>
     [
         HoverTipFactory.FromKeyword(ArisKeywords.Output),
-        HoverTipFactory.FromKeyword(ArisKeywords.Charge)
+        ArisHoverTips.ChargePower()
     ];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>

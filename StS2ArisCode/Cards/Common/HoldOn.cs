@@ -16,7 +16,9 @@ namespace StS2Aris.StS2ArisCode.Cards;
 [Pool(typeof(StS2ArisCardPool))]
 public class HoldOn() : StS2ArisCard(1, CardType.Skill, CardRarity.Common, TargetType.Self)
 {
-    protected override IEnumerable<IHoverTip> ExtraHoverTips => [HoverTipFactory.FromPower<EndTurnBlockPower>()];
+    protected override IEnumerable<IHoverTip> ExtraHoverTips => [
+        HoverTipFactory.FromPower<EndTurnBlockPower>()
+    ];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [

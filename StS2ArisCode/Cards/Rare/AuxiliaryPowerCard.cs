@@ -11,12 +11,13 @@ using MegaCrit.Sts2.Core.ValueProps;
 using StS2Aris.StS2ArisCode.Character;
 using StS2Aris.StS2ArisCode.Keywords;
 using StS2Aris.StS2ArisCode.Powers;
+using StS2Aris.StS2ArisCode.Utils;
 
 namespace StS2Aris.StS2ArisCode.Cards;
 [Pool(typeof(StS2ArisCardPool))]
 public class AuxiliaryPowerCard() : StS2ArisCard(1, CardType.Power, CardRarity.Rare, TargetType.Self)
 {
-    protected override IEnumerable<IHoverTip> ExtraHoverTips => [HoverTipFactory.FromKeyword(ArisKeywords.Charge)];
+    protected override IEnumerable<IHoverTip> ExtraHoverTips => [ArisHoverTips.ChargePower()];
 
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {

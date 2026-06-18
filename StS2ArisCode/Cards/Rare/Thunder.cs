@@ -11,6 +11,7 @@ using MegaCrit.Sts2.Core.ValueProps;
 using StS2Aris.StS2ArisCode.Character;
 using StS2Aris.StS2ArisCode.Keywords;
 using StS2Aris.StS2ArisCode.Powers;
+using StS2Aris.StS2ArisCode.Utils;
 
 namespace StS2Aris.StS2ArisCode.Cards;
 [Pool(typeof(StS2ArisCardPool))]
@@ -19,7 +20,7 @@ public class Thunder() : StS2ArisCard(3, CardType.Attack, CardRarity.Rare, Targe
     protected override IEnumerable<IHoverTip> ExtraHoverTips =>
     [
         HoverTipFactory.FromKeyword(ArisKeywords.Overload),
-        HoverTipFactory.FromKeyword(ArisKeywords.Charge)
+        ArisHoverTips.ChargePower()
     ];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>

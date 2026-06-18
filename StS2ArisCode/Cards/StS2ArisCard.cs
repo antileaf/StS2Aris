@@ -6,6 +6,8 @@ using StS2Aris.StS2ArisCode.Character;
 using StS2Aris.StS2ArisCode.Extensions;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Localization;
+using StS2Aris.StS2ArisCode.Formatters;
 
 namespace StS2Aris.StS2ArisCode.Cards;
 
@@ -21,6 +23,11 @@ public abstract class StS2ArisCard(int cost, CardType type, CardRarity rarity, T
     protected sealed override Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
         return OnArisPlay(choiceContext, play);
+    }
+
+    protected override void AddExtraArgsToDescription(LocString description)
+    {
+        description.Add("chargeIcon", ChargeIconFormatter.Icon);
     }
 
     public override string CustomPortraitPath

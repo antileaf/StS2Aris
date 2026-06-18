@@ -10,31 +10,33 @@ using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.ValueProps;
 using StS2Aris.StS2ArisCode.Character;
 using StS2Aris.StS2ArisCode.Keywords;
+using StS2Aris.StS2ArisCode.Mechanics;
 using StS2Aris.StS2ArisCode.Powers;
+using StS2Aris.StS2ArisCode.Utils;
 
 namespace StS2Aris.StS2ArisCode.Cards;
 [Pool(typeof(StS2ArisCardPool))]
-public class HailingLight() : StS2ArisCard(1, CardType.Skill, CardRarity.Common, TargetType.Self)
+public class HailingLight() : StS2ArisCard(1, CardType.Skill, CardRarity.Common, TargetType.Self), IArisOutputCard
 {
     protected override IEnumerable<IHoverTip> ExtraHoverTips =>
     [
         HoverTipFactory.FromKeyword(ArisKeywords.Output),
-        HoverTipFactory.FromKeyword(ArisKeywords.Charge)
+        ArisHoverTips.ChargePower()
     ];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new DynamicVar("Magic", 2m)
+        new PowerVar<ChargePower>(2m)
     ];
 
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        await PowerCmd.Apply<ChargePower>(choiceContext, Owner.Creature, DynamicVars["Magic"].IntValue, Owner.Creature, this);
+        await PowerCmd.Apply<ChargePower>(choiceContext, Owner.Creature, DynamicVars["ChargePower"].IntValue, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()
     {
-        DynamicVars["Magic"].UpgradeValueBy(1m);
+        DynamicVars["ChargePower"].UpgradeValueBy(1m);
     }
 }
 

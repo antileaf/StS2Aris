@@ -10,11 +10,12 @@ using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.ValueProps;
 using StS2Aris.StS2ArisCode.Character;
 using StS2Aris.StS2ArisCode.Keywords;
+using StS2Aris.StS2ArisCode.Mechanics;
 using StS2Aris.StS2ArisCode.Powers;
 
 namespace StS2Aris.StS2ArisCode.Cards;
 [Pool(typeof(StS2ArisCardPool))]
-public class Tutorial() : StS2ArisCard(-1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
+public class Tutorial() : StS2ArisCard(-1, CardType.Skill, CardRarity.Uncommon, TargetType.Self), IArisOutputCard
 {
     protected override IEnumerable<IHoverTip> ExtraHoverTips => [HoverTipFactory.FromKeyword(ArisKeywords.Output)];
 
