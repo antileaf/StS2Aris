@@ -10,6 +10,7 @@ using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.ValueProps;
 using StS2Aris.StS2ArisCode.Character;
 using StS2Aris.StS2ArisCode.Keywords;
+using StS2Aris.StS2ArisCode.Mechanics;
 using StS2Aris.StS2ArisCode.Powers;
 
 namespace StS2Aris.StS2ArisCode.Cards;
@@ -31,6 +32,8 @@ public class FakeIDCard() : StS2ArisCard(1, CardType.Skill, CardRarity.Uncommon,
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
         await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block.BaseValue, ValueProp.Move, play);
+        await ArisEquipment.TriggerClassChange(choiceContext, Owner);
+        await ArisEquipment.ReturnCurrentJob(choiceContext, Owner, PileType.Discard);
     }
 
     protected override void OnUpgrade()

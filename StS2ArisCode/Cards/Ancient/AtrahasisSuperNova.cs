@@ -13,15 +13,18 @@ using MegaCrit.Sts2.Core.ValueProps;
 using StS2Aris.StS2ArisCode.CardModels;
 using StS2Aris.StS2ArisCode.Character;
 using StS2Aris.StS2ArisCode.Keywords;
+using StS2Aris.StS2ArisCode.Powers;
 
 namespace StS2Aris.StS2ArisCode.Cards;
 
 [Pool(typeof(StS2ArisCardPool))]
-public class AtrahasisSuperNova() : StS2ArisCard(1, CardType.Attack, CardRarity.Ancient, TargetType.AllEnemies), IOverload
+public class AtrahasisSuperNova() : StS2ArisEquipmentCard(1, CardType.Attack, CardRarity.Ancient, TargetType.AllEnemies)
 {
     protected override IEnumerable<IHoverTip> ExtraHoverTips =>
     [
-        HoverTipFactory.FromKeyword(ArisKeywords.Overload),
+        HoverTipFactory.FromKeyword(ArisKeywords.Equipment),
+        HoverTipFactory.FromKeyword(ArisKeywords.ClassChange),
+        HoverTipFactory.FromKeyword(ArisKeywords.Job),
         HoverTipFactory.FromPower<StrengthPower>()
     ];
 
@@ -31,7 +34,12 @@ public class AtrahasisSuperNova() : StS2ArisCard(1, CardType.Attack, CardRarity.
         new PowerVar<StrengthPower>(5m)
     ];
 
-    protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
+    public override ArisJobPower CreateJobPower()
+    {
+        return MakeJobPower<JobAtrahasisSuperNovaPower>();
+    }
+
+    protected override async Task OnClassChange(PlayerChoiceContext choiceContext, CardPlay play)
     {
         if (CombatState == null)
         {
@@ -65,11 +73,6 @@ public class AtrahasisSuperNova() : StS2ArisCard(1, CardType.Attack, CardRarity.
                 }
             })
             .Execute(choiceContext);
-    }
-
-    public async Task OnOverload(PlayerChoiceContext choiceContext, CardPlay play)
-    {
-        await PowerCmd.Apply<StrengthPower>(choiceContext, Owner.Creature, DynamicVars["StrengthPower"].BaseValue, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()

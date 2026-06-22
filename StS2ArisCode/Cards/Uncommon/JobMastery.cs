@@ -29,7 +29,7 @@ public class JobMastery() : StS2ArisCard(1, CardType.Power, CardRarity.Uncommon,
 
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        await Task.CompletedTask;
+        await PowerCmd.Apply<JobMasteryPower>(choiceContext, Owner.Creature, DynamicVars["Magic"].BaseValue, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()

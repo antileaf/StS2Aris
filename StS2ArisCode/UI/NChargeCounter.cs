@@ -138,7 +138,7 @@ public partial class NChargeCounter : Control
         _lerpingCount = MathHelper.SmoothDamp(_lerpingCount, charge, ref _velocity, 0.1f, (float)delta);
         SetCountText(Mathf.RoundToInt(_lerpingCount));
 
-        bool overloaded = ArisCharge.IsOverloadAvailable(_player);
+        bool overloaded = charge > 0 && ArisCharge.IsOverloadAvailable(_player);
         if (overloaded)
         {
             _glowCounter += (float)delta;

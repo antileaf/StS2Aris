@@ -1,7 +1,10 @@
 ﻿{
     "STS2ARIS-JOB_AOE_POWER.title":  "직업: 광역딜러",
-    "STS2ARIS-JOB_AOE_POWER.description":  "이름에 \"타격\"이 포함한 카드가 추가로 피해를 [blue]{Amount}[/blue] 줍니다.",
-    "STS2ARIS-JOB_AOE_POWER.smartDescription":  "이름에 \"타격\"이 포함한 카드가 추가로 피해를 [blue]{Amount}[/blue] 줍니다.",
+    "STS2ARIS-JOB_AOE_POWER.description":  "에너지가 0일 때 [gold]힘[/gold]을 [blue]{Amount}[/blue] 얻습니다",
+    "STS2ARIS-JOB_AOE_POWER.smartDescription":  "에너지가 0일 때 [gold]힘[/gold]을 [blue]{Amount}[/blue] 얻습니다",
+    "STS2ARIS-JOB_ATRAHASIS_SUPER_NOVA_POWER.title":  "직업: 용사",
+    "STS2ARIS-JOB_ATRAHASIS_SUPER_NOVA_POWER.description":  "에너지가 0일 때 [gold]힘[/gold]을 [blue]{Amount}[/blue] 얻습니다",
+    "STS2ARIS-JOB_ATRAHASIS_SUPER_NOVA_POWER.smartDescription":  "에너지가 0일 때 [gold]힘[/gold]을 [blue]{Amount}[/blue] 얻습니다",
     "STS2ARIS-JOB_NEWBY_POWER.title":  "직업: 초보자",
     "STS2ARIS-JOB_NEWBY_POWER.description":  "아무 효과도 없습니다.",
     "STS2ARIS-JOB_NEWBY_POWER.smartDescription":  "아무 효과도 없습니다.",

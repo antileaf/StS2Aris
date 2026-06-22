@@ -1,7 +1,10 @@
 ﻿{
     "STS2ARIS-JOB_AOE_POWER.title":  "직업: 광역딜러",
-    "STS2ARIS-JOB_AOE_POWER.description":  "이름에 \"타격\"이 포함한 카드가 추가로 피해를 #b[blue]{Amount}[/blue] 줍니다.",
-    "STS2ARIS-JOB_AOE_POWER.smartDescription":  "이름에 \"타격\"이 포함한 카드가 추가로 피해를 #b[blue]{Amount}[/blue] 줍니다.",
+    "STS2ARIS-JOB_AOE_POWER.description":  "While you have 0 Energy, gain Strength equal to the equipped card's value.",
+    "STS2ARIS-JOB_AOE_POWER.smartDescription":  "While you have 0 Energy, gain Strength equal to the equipped card's value.",
+    "STS2ARIS-JOB_ATRAHASIS_SUPER_NOVA_POWER.title":  "Job: Hero",
+    "STS2ARIS-JOB_ATRAHASIS_SUPER_NOVA_POWER.description":  "While you have 0 Energy, gain Strength equal to the equipped card's value.",
+    "STS2ARIS-JOB_ATRAHASIS_SUPER_NOVA_POWER.smartDescription":  "While you have 0 Energy, gain Strength equal to the equipped card's value.",
     "STS2ARIS-JOB_NEWBY_POWER.title":  "직업: 초보자",
     "STS2ARIS-JOB_NEWBY_POWER.description":  "아무 효과도 없습니다.",
     "STS2ARIS-JOB_NEWBY_POWER.smartDescription":  "아무 효과도 없습니다.",

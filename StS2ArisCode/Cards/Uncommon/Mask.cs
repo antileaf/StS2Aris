@@ -14,7 +14,7 @@ using StS2Aris.StS2ArisCode.Powers;
 
 namespace StS2Aris.StS2ArisCode.Cards;
 [Pool(typeof(StS2ArisCardPool))]
-public class Mask() : StS2ArisCard(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
+public class Mask() : StS2ArisEquipmentCard(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
 {
     protected override IEnumerable<IHoverTip> ExtraHoverTips =>
     [
@@ -30,7 +30,12 @@ public class Mask() : StS2ArisCard(1, CardType.Skill, CardRarity.Uncommon, Targe
         new DynamicVar("Magic", 4m)
     ];
 
-    protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
+    public override ArisJobPower CreateJobPower()
+    {
+        return MakeJobPower<JobWarriorPower>();
+    }
+
+    protected override async Task OnClassChange(PlayerChoiceContext choiceContext, CardPlay play)
     {
         await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block.BaseValue, ValueProp.Move, play);
     }

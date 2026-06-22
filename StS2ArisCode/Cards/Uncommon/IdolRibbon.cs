@@ -14,7 +14,7 @@ using StS2Aris.StS2ArisCode.Powers;
 
 namespace StS2Aris.StS2ArisCode.Cards;
 [Pool(typeof(StS2ArisCardPool))]
-public class IdolRibbon() : StS2ArisCard(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
+public class IdolRibbon() : StS2ArisEquipmentCard(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
 {
     protected override IEnumerable<IHoverTip> ExtraHoverTips =>
     [
@@ -28,9 +28,14 @@ public class IdolRibbon() : StS2ArisCard(1, CardType.Skill, CardRarity.Uncommon,
         new DynamicVar("Magic", 3m)
     ];
 
-    protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
+    public override ArisJobPower CreateJobPower()
     {
-        await Task.CompletedTask;
+        return MakeJobPower<JobIdolPower>();
+    }
+
+    protected override async Task OnClassChange(PlayerChoiceContext choiceContext, CardPlay play)
+    {
+        await CardPileCmd.Draw(choiceContext, DynamicVars["Magic"].BaseValue, Owner);
     }
 
     protected override void OnUpgrade()

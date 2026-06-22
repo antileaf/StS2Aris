@@ -20,7 +20,7 @@ public class WeaponMaster() : StS2ArisCard(1, CardType.Power, CardRarity.Uncommo
 
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        await Task.CompletedTask;
+        await PowerCmd.Apply<WeaponMasterPower>(choiceContext, Owner.Creature, 1m, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()

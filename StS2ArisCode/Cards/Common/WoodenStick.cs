@@ -14,7 +14,7 @@ using StS2Aris.StS2ArisCode.Powers;
 
 namespace StS2Aris.StS2ArisCode.Cards;
 [Pool(typeof(StS2ArisCardPool))]
-public class WoodenStick() : StS2ArisCard(0, CardType.Skill, CardRarity.Common, TargetType.Self)
+public class WoodenStick() : StS2ArisEquipmentCard(0, CardType.Skill, CardRarity.Common, TargetType.Self)
 {
     protected override IEnumerable<IHoverTip> ExtraHoverTips =>
     [
@@ -28,7 +28,12 @@ public class WoodenStick() : StS2ArisCard(0, CardType.Skill, CardRarity.Common, 
         new BlockVar(5, ValueProp.Move)
     ];
 
-    protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
+    public override ArisJobPower CreateJobPower()
+    {
+        return MakeJobPower<JobNewbyPower>();
+    }
+
+    protected override async Task OnClassChange(PlayerChoiceContext choiceContext, CardPlay play)
     {
         await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block.BaseValue, ValueProp.Move, play);
     }

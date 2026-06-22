@@ -1,11 +1,15 @@
 using BaseLib.Abstracts;
 using Godot;
+using MegaCrit.Sts2.Core.Animation;
+using MegaCrit.Sts2.Core.Bindings.MegaSpine;
 using MegaCrit.Sts2.Core.Entities.Characters;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Cards;
 using MegaCrit.Sts2.Core.Models.Relics;
+using MegaCrit.Sts2.Core.Nodes.Combat;
 using StS2Aris.StS2ArisCode.Cards;
 using StS2Aris.StS2ArisCode.Extensions;
+using StS2Aris.StS2ArisCode.Mechanics;
 using StS2Aris.StS2ArisCode.Relics;
 
 namespace StS2Aris.StS2ArisCode.Character;
@@ -56,4 +60,69 @@ public class StS2Aris : PlaceholderCharacterModel
     public override string CustomCharacterSelectBg => "res://StS2Aris/scenes/char_select_bg_aris.tscn";
     public override string CustomRestSiteAnimPath => "res://StS2Aris/scenes/aris_rest_site.tscn";
     public override string CustomMerchantAnimPath => "res://StS2Aris/scenes/aris_merchant.tscn";
+
+    public override CreatureAnimator GenerateAnimator(MegaSprite controller)
+    {
+        var idle = new AnimState("idle_loop", true);
+        var attack = new AnimState("attack", false) { NextState = idle };
+        var cast = new AnimState("cast", false) { NextState = idle };
+        var hit = new AnimState("hurt", false) { NextState = idle };
+        var dead = new AnimState("die", false);
+
+        var animator = new CreatureAnimator(idle, controller);
+
+        MegaCrit.Sts2.Core.Entities.Creatures.Creature? GetCreature()
+        {
+            var current = controller.BoundObject as Node;
+            while (current != null)
+            {
+                if (current is NCreature nCreature)
+                {
+                    return nCreature.Entity;
+                }
+
+                current = current.GetParent();
+            }
+
+            return null;
+        }
+
+        string? CurrentJobSuffix()
+        {
+            var player = GetCreature()?.Player;
+            return player == null ? null : ArisEquipment.GetCurrentAnimationSuffix(player);
+        }
+
+        var jobIdleStates = new Dictionary<string, AnimState>();
+
+        void AddJobIdleState(string suffix)
+        {
+            var state = new AnimState($"idle_loop_{suffix}", true);
+            jobIdleStates[suffix] = state;
+            animator.AddAnyState("Idle", state, () => CurrentJobSuffix() == suffix);
+        }
+
+        void AddJobActionState(string trigger, string animationPrefix, string suffix)
+        {
+            var nextIdle = jobIdleStates.TryGetValue(suffix, out var jobIdle) ? jobIdle : idle;
+            var state = new AnimState($"{animationPrefix}_{suffix}", false) { NextState = nextIdle };
+            animator.AddAnyState(trigger, state, () => CurrentJobSuffix() == suffix);
+        }
+
+        foreach (var suffix in new[] { "AOEDPS", "Newby", "Rogue", "Wizard", "Warrior", "Idol", "Hero" })
+        {
+            AddJobIdleState(suffix);
+            AddJobActionState("Attack", "attack", suffix);
+            AddJobActionState("Cast", "cast", suffix);
+            AddJobActionState("Hit", "hurt", suffix);
+        }
+
+        animator.AddAnyState("Idle", idle);
+        animator.AddAnyState("Attack", attack);
+        animator.AddAnyState("Cast", cast);
+        animator.AddAnyState("Hit", hit);
+        animator.AddAnyState("Dead", dead);
+
+        return animator;
+    }
 }

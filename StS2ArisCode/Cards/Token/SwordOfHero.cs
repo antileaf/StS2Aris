@@ -17,7 +17,7 @@ using StS2Aris.StS2ArisCode.Utils;
 
 namespace StS2Aris.StS2ArisCode.Cards;
 [Pool(typeof(TokenCardPool))]
-public class SwordOfHero() : StS2ArisCard(1, CardType.Attack, CardRarity.Token, TargetType.AnyEnemy), IArisOutputCard
+public class SwordOfHero() : StS2ArisEquipmentCard(1, CardType.Attack, CardRarity.Token, TargetType.AnyEnemy), IArisOutputCard
 {
     protected override IEnumerable<IHoverTip> ExtraHoverTips =>
     [
@@ -35,10 +35,16 @@ public class SwordOfHero() : StS2ArisCard(1, CardType.Attack, CardRarity.Token, 
         new PowerVar<ChargePower>(1m)
     ];
 
-    protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
+    public override ArisJobPower CreateJobPower()
+    {
+        return MakeJobPower<JobHeroPower>();
+    }
+
+    protected override async Task OnClassChange(PlayerChoiceContext choiceContext, CardPlay play)
     {
         ArgumentNullException.ThrowIfNull(play.Target);
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this).Targeting(play.Target).Execute(choiceContext);
+        await PowerCmd.Apply<ChargePower>(choiceContext, Owner.Creature, DynamicVars["ChargePower"].IntValue, Owner.Creature, this);
     }
 }
 

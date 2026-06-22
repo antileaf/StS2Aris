@@ -14,7 +14,7 @@ using StS2Aris.StS2ArisCode.Powers;
 
 namespace StS2Aris.StS2ArisCode.Cards;
 [Pool(typeof(StS2ArisCardPool))]
-public class Rogue() : StS2ArisCard(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
+public class Rogue() : StS2ArisEquipmentCard(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
 {
     protected override IEnumerable<IHoverTip> ExtraHoverTips =>
     [
@@ -30,9 +30,20 @@ public class Rogue() : StS2ArisCard(1, CardType.Skill, CardRarity.Uncommon, Targ
         new DynamicVar("Magic", 1m)
     ];
 
-    protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
+    public override ArisJobPower CreateJobPower()
     {
-        await Task.CompletedTask;
+        return MakeJobPower<JobRoguePower>();
+    }
+
+    protected override async Task OnClassChange(PlayerChoiceContext choiceContext, CardPlay play)
+    {
+        if (CombatState == null)
+        {
+            return;
+        }
+
+        await PowerCmd.Apply<WeakPower>(choiceContext, CombatState.HittableEnemies, DynamicVars["Magic"].IntValue, Owner.Creature, this);
+        await PowerCmd.Apply<ShockPower>(choiceContext, CombatState.HittableEnemies, DynamicVars["Magic"].IntValue, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()

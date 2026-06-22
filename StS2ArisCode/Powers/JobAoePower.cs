@@ -1,0 +1,104 @@
+using MegaCrit.Sts2.Core.Commands;
+using MegaCrit.Sts2.Core.Entities.Cards;
+using MegaCrit.Sts2.Core.Entities.Creatures;
+using MegaCrit.Sts2.Core.Entities.Players;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Helpers;
+using MegaCrit.Sts2.Core.Models;
+using MegaCrit.Sts2.Core.Models.Powers;
+using MegaCrit.Sts2.Core.Nodes.Rooms;
+using MegaCrit.Sts2.Core.Nodes.Vfx;
+using StS2Aris.StS2ArisCode.Mechanics;
+
+namespace StS2Aris.StS2ArisCode.Powers;
+
+public sealed class JobAoePower : ArisJobPower
+{
+    private int _strengthApplied;
+
+    public override string AnimationSuffix => "AOEDPS";
+
+    public override async Task AfterApplied(Creature? applier, CardModel? cardSource)
+    {
+        await RefreshStrength(new ThrowingPlayerChoiceContext());
+    }
+
+    public override async Task AfterEnergyReset(Player player)
+    {
+        if (player == PlayerOwner)
+        {
+            await RefreshStrength(new ThrowingPlayerChoiceContext());
+        }
+    }
+
+    public override async Task AfterEnergySpent(CardModel card, int amount)
+    {
+        if (card.Owner == PlayerOwner)
+        {
+            await RefreshStrength(new ThrowingPlayerChoiceContext());
+        }
+    }
+
+    public override async Task AfterCardPlayed(PlayerChoiceContext choiceContext, CardPlay cardPlay)
+    {
+        if (cardPlay.Card.Owner == PlayerOwner)
+        {
+            await RefreshStrength(choiceContext);
+        }
+    }
+
+    public override async Task AfterRemoved(Creature oldOwner)
+    {
+        await RemoveStrength(new ThrowingPlayerChoiceContext(), oldOwner);
+    }
+
+    private async Task RefreshStrength(PlayerChoiceContext choiceContext)
+    {
+        var desiredAmount = PlayerOwner != null && ArisCharge.IsOverloadState(PlayerOwner)
+            ? (int)EquipmentStrengthAmount
+            : 0;
+        var amountToApply = desiredAmount - _strengthApplied;
+        if (amountToApply == 0)
+        {
+            return;
+        }
+
+        await PowerCmd.Apply<StrengthPower>(choiceContext, Owner, amountToApply, Owner, EquipmentCard);
+        _strengthApplied = desiredAmount;
+    }
+
+    private async Task RemoveStrength(PlayerChoiceContext choiceContext, Creature owner)
+    {
+        if (_strengthApplied == 0)
+        {
+            return;
+        }
+
+        await PowerCmd.Apply<StrengthPower>(choiceContext, owner, -_strengthApplied, owner, EquipmentCard);
+        _strengthApplied = 0;
+    }
+
+    public override async Task OnClassChange(PlayerChoiceContext choiceContext)
+    {
+        if (EquipmentCard == null || CombatState == null)
+        {
+            return;
+        }
+
+        Flash();
+        await DamageCmd.Attack(EquipmentCard.DynamicVars.Damage.BaseValue).FromCard(EquipmentCard)
+            .TargetingAllOpponents(CombatState)
+            .WithAttackerAnim("Cast", 0.5f)
+            .BeforeDamage(async () =>
+            {
+                var targets = CombatState.HittableEnemies.ToList();
+                var vfx = NSweepingBeamVfx.Create(Owner, targets);
+                if (vfx != null)
+                {
+                    NCombatRoom.Instance?.CombatVfxContainer.AddChildSafely(vfx);
+                    await Cmd.Wait(0.5f);
+                }
+            })
+            .Execute(choiceContext);
+    }
+}
