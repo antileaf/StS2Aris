@@ -7,6 +7,7 @@ using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Powers;
+using MegaCrit.Sts2.Core.Rooms;
 using MegaCrit.Sts2.Core.ValueProps;
 using StS2Aris.StS2ArisCode.Character;
 using StS2Aris.StS2ArisCode.Keywords;
@@ -14,12 +15,17 @@ using StS2Aris.StS2ArisCode.Powers;
 
 namespace StS2Aris.StS2ArisCode.Cards;
 [Pool(typeof(StS2ArisCardPool))]
-public class DailyQuest() : StS2ArisCard(1, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy)
+public class DailyQuest() : ArisQuestCard<DailyQuest>(1, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy)
 {
+    public override int QuestGoal => 3;
+
+    protected override bool RewardInheritsUpgrade => false;
+
     protected override IEnumerable<IHoverTip> ExtraHoverTips =>
     [
         HoverTipFactory.FromKeyword(ArisKeywords.Quest),
-        HoverTipFactory.FromKeyword(ArisKeywords.Reward)
+        HoverTipFactory.FromKeyword(ArisKeywords.Reward),
+        HoverTipFactory.FromCard<DailyQuest>(false)
     ];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
@@ -32,6 +38,20 @@ public class DailyQuest() : StS2ArisCard(1, CardType.Attack, CardRarity.Uncommon
     {
         ArgumentNullException.ThrowIfNull(play.Target);
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this).Targeting(play.Target).Execute(choiceContext);
+    }
+
+    public override async Task AfterCombatVictory(CombatRoom room)
+    {
+        await AdvanceQuest();
+    }
+
+    protected override async Task BeforeQuestComplete()
+    {
+        await CreatureCmd.Heal(Owner.Creature, DynamicVars["Magic"].BaseValue);
+        if (IsUpgraded)
+        {
+            await PlayerCmd.GainGold(50m, Owner);
+        }
     }
 
     protected override void OnUpgrade()

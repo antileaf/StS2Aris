@@ -78,7 +78,7 @@
     "STS2ARIS-WEAPON_MASTER.title":  "웨폰 마스터",
     "STS2ARIS-WEAPON_MASTER.description":  "[gold]직업[/gold]이 변경될때마다 카드를 1장 뽑습니다.",
     "STS2ARIS-ELIXIR_SYNDROME.title":  "엘릭서 증후군",
-    "STS2ARIS-ELIXIR_SYNDROME.description":  "[gold]방어도[/gold]를 {Block:diff()} 얻습니다.\n[gold]퀘스트[/gold]: 포션을 3개 버립니다.\n[gold]보상[/gold]: [gold]{IfUpgraded:show:라스트 엘릭서+|라스트 엘릭서}[/gold]",
+    "STS2ARIS-ELIXIR_SYNDROME.description":  "[gold]퀘스트[/gold]: 포션을 3개 버립니다.\n[gold]보상[/gold]: [gold]{IfUpgraded:show:라스트 엘릭서+|라스트 엘릭서}[/gold]",
     "STS2ARIS-ELIXIR.title":  "라스트 엘릭서",
     "STS2ARIS-ELIXIR.description":  "[gold]보상[/gold]\n최대체력이 {Magic:diff()} 증가합니다. 체력을 전부 회복합니다. 영구[gold]소멸[/gold]",
     "STS2ARIS-GRINDING.title":  "앵벌이",

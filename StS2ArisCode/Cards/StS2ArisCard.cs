@@ -24,6 +24,8 @@ public abstract class StS2ArisCard(int cost, CardType type, CardRarity rarity, T
 {
     private bool _isGlitchReplay;
 
+    public virtual bool IsArisQuest => false;
+
     protected override bool ShouldGlowGoldInternal =>
         Owner != null
         && ArisCharge.WillBeOverloadAfterSpending(this)
@@ -94,7 +96,7 @@ public abstract class StS2ArisCard(int cost, CardType type, CardRarity rarity, T
         get
         {
             var path = $"{Id.Entry.RemovePrefix().ToLowerInvariant()}_p.png".CardImagePath();
-            return ResourceLoader.Exists(path) ? path : (Type==CardType.Attack?"temp_attack_p.png":
+            return ResourceLoader.Exists(path) ? path : (Type == CardType.Attack ? "temp_attack_p.png":
                 (Type==CardType.Power?"temp_power_p.png":"temp_skill_p.png")).CardImagePath();
         }
     }
@@ -103,7 +105,7 @@ public abstract class StS2ArisCard(int cost, CardType type, CardRarity rarity, T
         get
         {
             var path = $"{Id.Entry.RemovePrefix().ToLowerInvariant()}.png".CardImagePath();
-            return ResourceLoader.Exists(path) ? path : (Type==CardType.Attack?"temp_attack.png":
+            return ResourceLoader.Exists(path) ? path : (Type == CardType.Attack ? "temp_attack.png":
                 (Type==CardType.Power?"temp_power.png":"temp_skill.png")).CardImagePath();
         }
     }
