@@ -5,6 +5,7 @@ using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Models;
 using StS2Aris.StS2ArisCode.Cards;
+using StS2Aris.StS2ArisCode.Hooks;
 using StS2Aris.StS2ArisCode.Powers;
 
 namespace StS2Aris.StS2ArisCode.Mechanics;
@@ -75,13 +76,7 @@ public static class ArisEquipment
         if (currentJob != null)
         {
             await currentJob.OnClassChange(choiceContext);
-        }
-
-        await ReturnStraightStrikes(choiceContext, player);
-
-        foreach (var power in player.Creature.Powers.OfType<JobMasteryPower>())
-        {
-            await CreatureCmd.GainBlock(player.Creature, power.Amount, MegaCrit.Sts2.Core.ValueProps.ValueProp.Move, null);
+            await ArisHook.OnClassChanged(choiceContext, player, currentJob.EquipmentCard);
         }
     }
 
@@ -117,12 +112,4 @@ public static class ArisEquipment
         }
     }
 
-    private static async Task ReturnStraightStrikes(PlayerChoiceContext choiceContext, Player player)
-    {
-        var cards = PileType.Discard.GetPile(player).Cards.OfType<StraightStrike>().ToList();
-        foreach (var card in cards)
-        {
-            await CardPileCmd.Add(card, PileType.Hand);
-        }
-    }
 }

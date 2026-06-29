@@ -18,7 +18,7 @@ using StS2Aris.StS2ArisCode.Powers;
 namespace StS2Aris.StS2ArisCode.Cards;
 
 [Pool(typeof(StS2ArisCardPool))]
-public class SuperNova() : StS2ArisEquipmentCard(2, CardType.Attack, CardRarity.Basic, TargetType.AllEnemies)
+public class SuperNova() : StS2ArisEquipmentCard(1, CardType.Attack, CardRarity.Basic, TargetType.AllEnemies)
 {
     protected override IEnumerable<IHoverTip> ExtraHoverTips =>
     [
@@ -30,7 +30,7 @@ public class SuperNova() : StS2ArisEquipmentCard(2, CardType.Attack, CardRarity.
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new DamageVar(8, ValueProp.Move),
+        new DamageVar(7, ValueProp.Move),
         new PowerVar<StrengthPower>(3m)
     ];
 

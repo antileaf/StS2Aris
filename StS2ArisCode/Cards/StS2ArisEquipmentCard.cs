@@ -2,6 +2,7 @@ using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Models;
 using StS2Aris.StS2ArisCode.CardModels;
+using StS2Aris.StS2ArisCode.Hooks;
 using StS2Aris.StS2ArisCode.Mechanics;
 using StS2Aris.StS2ArisCode.Powers;
 
@@ -22,6 +23,7 @@ public abstract class StS2ArisEquipmentCard(int cost, CardType type, CardRarity 
         if (ArisEquipment.ShouldTriggerClassChange(Owner, this))
         {
             await OnClassChange(choiceContext, play);
+            await ArisHook.OnClassChanged(choiceContext, Owner, this);
         }
 
         await ArisEquipment.Equip(choiceContext, this, CreateJobPower());
