@@ -16,16 +16,16 @@ namespace StS2Aris.StS2ArisCode.Cards;
 [Pool(typeof(StS2ArisCardPool))]
 public class ShortCircuit() : StS2ArisCard(2, CardType.Skill, CardRarity.Rare, TargetType.Self)
 {
-    protected override IEnumerable<IHoverTip> ExtraHoverTips => [HoverTipFactory.FromKeyword(ArisKeywords.Shock)];
-
-    protected override IEnumerable<DynamicVar> CanonicalVars =>
-    [
-        new BlockVar(5, ValueProp.Move)
-    ];
+    protected override IEnumerable<IHoverTip> ExtraHoverTips => [HoverTipFactory.FromCard<Shock>(IsUpgraded)];
 
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block.BaseValue, ValueProp.Move, play);
+        var combatState = Owner.Creature.CombatState;
+        if (combatState == null)
+            return;
+
+        int count = Math.Max(0, CardPile.MaxCardsInHand - PileType.Hand.GetPile(Owner).Cards.Count);
+        await Shock.CreateInHand(Owner, count, combatState);
     }
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Ethereal, CardKeyword.Exhaust];

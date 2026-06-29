@@ -1,7 +1,9 @@
-﻿using BaseLib.Utils;
+using BaseLib.Utils;
+using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
+using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
@@ -37,7 +39,27 @@ public class Shock() : StS2ArisCard(0, CardType.Attack, CardRarity.Token, Target
         DynamicVars.Damage.UpgradeValueBy(1m);
         DynamicVars["ShockPower"].UpgradeValueBy(1m);
     }
+
+    public static async Task<CardModel?> CreateInHand(Player owner, ICombatState combatState, bool upgraded = false)
+    {
+        return (await CreateInHand(owner, 1, combatState, upgraded)).FirstOrDefault();
+    }
+
+    public static async Task<IEnumerable<CardModel>> CreateInHand(Player owner, int count, ICombatState combatState, bool upgraded = false)
+    {
+        if (count == 0 || CombatManager.Instance.IsOverOrEnding)
+            return Array.Empty<CardModel>();
+
+        List<CardModel> shocks = [];
+        for (int i = 0; i < count; i++)
+        {
+            var shock = combatState.CreateCard<Shock>(owner);
+            if (upgraded)
+                CardCmd.Upgrade(shock);
+            shocks.Add(shock);
+        }
+
+        await CardPileCmd.AddGeneratedCardsToCombat(shocks, PileType.Hand, owner);
+        return shocks;
+    }
 }
-
-
-

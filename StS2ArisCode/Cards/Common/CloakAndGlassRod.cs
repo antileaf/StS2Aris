@@ -16,7 +16,7 @@ namespace StS2Aris.StS2ArisCode.Cards;
 [Pool(typeof(StS2ArisCardPool))]
 public class CloakAndGlassRod() : StS2ArisCard(1, CardType.Skill, CardRarity.Common, TargetType.Self)
 {
-    protected override IEnumerable<IHoverTip> ExtraHoverTips => [HoverTipFactory.FromKeyword(ArisKeywords.Shock)];
+    protected override IEnumerable<IHoverTip> ExtraHoverTips => [HoverTipFactory.FromCard<Shock>(IsUpgraded)];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
@@ -27,6 +27,10 @@ public class CloakAndGlassRod() : StS2ArisCard(1, CardType.Skill, CardRarity.Com
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
         await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block.BaseValue, ValueProp.Move, play);
+        var combatState = Owner.Creature.CombatState;
+        if (combatState == null)
+            return;
+        await Shock.CreateInHand(Owner, DynamicVars["Magic"].IntValue, combatState);
     }
 
     protected override void OnUpgrade()

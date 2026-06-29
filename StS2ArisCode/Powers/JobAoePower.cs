@@ -31,14 +31,6 @@ public sealed class JobAoePower : ArisJobPower
         }
     }
 
-    public override async Task AfterEnergySpent(CardModel card, int amount)
-    {
-        if (card.Owner == PlayerOwner)
-        {
-            await RefreshStrength(new ThrowingPlayerChoiceContext());
-        }
-    }
-
     public override async Task AfterCardPlayed(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         if (cardPlay.Card.Owner == PlayerOwner)

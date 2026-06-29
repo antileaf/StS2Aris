@@ -18,7 +18,7 @@ public class StaticStrike() : StS2ArisCard(1, CardType.Attack, CardRarity.Common
 {
     protected override HashSet<CardTag> CanonicalTags => [CardTag.Strike];
 
-    protected override IEnumerable<IHoverTip> ExtraHoverTips => [HoverTipFactory.FromKeyword(ArisKeywords.Shock)];
+    protected override IEnumerable<IHoverTip> ExtraHoverTips => [HoverTipFactory.FromCard<Shock>(IsUpgraded)];
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(8, ValueProp.Move)];
 
@@ -26,10 +26,9 @@ public class StaticStrike() : StS2ArisCard(1, CardType.Attack, CardRarity.Common
     {
         ArgumentNullException.ThrowIfNull(play.Target);
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this).Targeting(play.Target).Execute(choiceContext);
-        var shock = (CardModel)ModelDb.Card<Shock>().MutableClone();
-        shock.Owner = Owner;
-        if (IsUpgraded)
-            CardCmd.Upgrade(shock);
-        await CardPileCmd.Add(shock, PileType.Hand);
+        var combatState = Owner.Creature.CombatState;
+        if (combatState == null)
+            return;
+        await Shock.CreateInHand(Owner, combatState, IsUpgraded);
     }
 }
