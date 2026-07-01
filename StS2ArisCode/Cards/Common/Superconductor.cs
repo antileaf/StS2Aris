@@ -37,7 +37,19 @@ public class Superconductor() : StS2ArisCard(0, CardType.Attack, CardRarity.Comm
     {
         int amount = DynamicVars["Magic"].IntValue;
         await CardPileCmd.Draw(choiceContext, amount, Owner);
-        var selected = await CardSelectCmd.FromHandForDiscard(choiceContext, Owner, new CardSelectorPrefs(CardSelectorPrefs.DiscardSelectionPrompt, amount), null, this);
+        var playerCombatState = Owner.PlayerCombatState;
+        if (playerCombatState == null)
+        {
+            return;
+        }
+
+        int discardCount = Math.Min(amount, playerCombatState.Hand.Cards.Count);
+        if (discardCount <= 0)
+        {
+            return;
+        }
+
+        var selected = await CardSelectCmd.FromHandForDiscard(choiceContext, Owner, new CardSelectorPrefs(CardSelectorPrefs.DiscardSelectionPrompt, discardCount), null, this);
         await CardCmd.Discard(choiceContext, selected);
     }
 
@@ -46,4 +58,3 @@ public class Superconductor() : StS2ArisCard(0, CardType.Attack, CardRarity.Comm
         DynamicVars.Damage.UpgradeValueBy(3m);
     }
 }
-

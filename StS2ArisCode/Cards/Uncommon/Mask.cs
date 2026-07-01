@@ -27,7 +27,7 @@ public class Mask() : StS2ArisEquipmentCard(1, CardType.Skill, CardRarity.Uncomm
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new BlockVar(9, ValueProp.Move),
-        new DynamicVar("Magic", 4m)
+        new DynamicVar("Magic", 3m)
     ];
 
     public override ArisJobPower CreateJobPower()

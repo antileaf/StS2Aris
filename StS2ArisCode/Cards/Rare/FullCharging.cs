@@ -16,22 +16,26 @@ using StS2Aris.StS2ArisCode.Utils;
 
 namespace StS2Aris.StS2ArisCode.Cards;
 [Pool(typeof(StS2ArisCardPool))]
-public class FullCharging() : StS2ArisCard(-1, CardType.Skill, CardRarity.Rare, TargetType.Self), IArisOutputCard
+public class FullCharging() : StS2ArisCard(0, CardType.Skill, CardRarity.Rare, TargetType.Self), IArisOutputCard
 {
+    protected override bool HasEnergyCostX => true;
+
     protected override IEnumerable<IHoverTip> ExtraHoverTips =>
     [
         HoverTipFactory.FromKeyword(ArisKeywords.Output),
         ArisHoverTips.ChargePower()
     ];
 
-    protected override IEnumerable<DynamicVar> CanonicalVars =>
-    [
-        new BlockVar(5, ValueProp.Move)
-    ];
-
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block.BaseValue, ValueProp.Move, play);
+        var amount = ResolveEnergyXValue() + (IsUpgraded ? 1 : 0);
+        if (amount <= 0)
+        {
+            return;
+        }
+
+        await CardPileCmd.Draw(choiceContext, amount, Owner);
+        await PowerCmd.Apply<ChargePower>(choiceContext, Owner.Creature, amount, Owner.Creature, this);
     }
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];

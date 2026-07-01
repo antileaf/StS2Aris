@@ -14,7 +14,7 @@ using StS2Aris.StS2ArisCode.Powers;
 
 namespace StS2Aris.StS2ArisCode.Cards;
 [Pool(typeof(StS2ArisCardPool))]
-public class StaticArmour() : StS2ArisCard(1, CardType.Power, CardRarity.Uncommon, TargetType.Self)
+public class StaticArmour() : StS2ArisCard(2, CardType.Power, CardRarity.Uncommon, TargetType.Self)
 {
     protected override IEnumerable<IHoverTip> ExtraHoverTips => [HoverTipFactory.FromKeyword(ArisKeywords.Shock)];
 
@@ -25,7 +25,7 @@ public class StaticArmour() : StS2ArisCard(1, CardType.Power, CardRarity.Uncommo
 
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        await Task.CompletedTask;
+        await PowerCmd.Apply<StaticArmourPower>(choiceContext, Owner.Creature, DynamicVars["Magic"].BaseValue, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()

@@ -22,7 +22,7 @@ public class EnergyProjection() : StS2ArisCard(1, CardType.Attack, CardRarity.Co
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        ..MakeCalculatedDamage(7, (card, _) => ArisCharge.IsOverloadState(card.Owner) ? card.DynamicVars.CalculationBase.BaseValue : 0m)
+        ..MakeCalculatedDamage(7, (card, _) => ArisCharge.WillBeOverloadAfterSpending(card) ? card.DynamicVars.CalculationBase.BaseValue : 0m)
     ];
 
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)

@@ -18,24 +18,31 @@ namespace StS2Aris.StS2ArisCode.Cards;
 [Pool(typeof(StS2ArisCardPool))]
 public class BalanceBroken() : StS2ArisCard(3, CardType.Attack, CardRarity.Rare, TargetType.AllEnemies)
 {
-    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
     protected override IEnumerable<IHoverTip> ExtraHoverTips => [ArisHoverTips.ChargePower()];
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new DamageVar(21, ValueProp.Move),
+        ..MakeCalculatedDamage(21, (card, _) => ArisCharge.GetSpentOrExpected(card) * card.DynamicVars["Magic"].BaseValue),
         new DynamicVar("Magic", 8m)
     ];
 
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        var charge = ArisCharge.GetSpent(this);
         if (CombatState != null)
-            await DamageCmd.Attack(DynamicVars.Damage.BaseValue + charge * DynamicVars["Magic"].BaseValue).FromCard(this).TargetingAllOpponents(CombatState).Execute(choiceContext);
+        {
+            try
+            {
+                await DamageCmd.Attack(DynamicVars.CalculatedDamage).FromCard(this).TargetingAllOpponents(CombatState).Execute(choiceContext);
+            }
+            finally
+            {
+                ArisCharge.ClearSpent(this);
+            }
+        }
     }
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(5m);
+        DynamicVars.CalculationBase.UpgradeValueBy(5m);
         DynamicVars["Magic"].UpgradeValueBy(2m);
     }
 }

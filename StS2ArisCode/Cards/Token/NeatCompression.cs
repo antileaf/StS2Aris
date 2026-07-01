@@ -1,13 +1,16 @@
 ﻿using BaseLib.Utils;
+using MegaCrit.Sts2.Core.CardSelection;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
+using MegaCrit.Sts2.Core.Extensions;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.CardPools;
 using MegaCrit.Sts2.Core.Models.Powers;
+using MegaCrit.Sts2.Core.Rooms;
 using MegaCrit.Sts2.Core.ValueProps;
 using StS2Aris.StS2ArisCode.Character;
 using StS2Aris.StS2ArisCode.Keywords;
@@ -23,14 +26,40 @@ public class NeatCompression() : StS2ArisCard(0, CardType.Skill, CardRarity.Toke
         HoverTipFactory.FromKeyword(CardKeyword.Exhaust)
     ];
 
-    protected override IEnumerable<DynamicVar> CanonicalVars =>
-    [
-        new BlockVar(5, ValueProp.Move)
-    ];
-
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block.BaseValue, ValueProp.Move, play);
+        var ownDeckVersion = DeckVersion;
+        if (ownDeckVersion?.Pile?.Type == PileType.Deck)
+        {
+            await CardPileCmd.RemoveFromDeck(ownDeckVersion);
+            DeckVersion = null;
+        }
+
+        if (!IsUpgraded)
+        {
+            return;
+        }
+
+        var upgradeTarget = PileType.Deck.GetPile(Owner).Cards
+            .Where(static card => card.IsUpgradable)
+            .ToList()
+            .TakeRandom(1, Owner.RunState.Rng.CombatCardSelection)
+            .FirstOrDefault();
+
+        if (upgradeTarget != null)
+        {
+            CardCmd.Upgrade(upgradeTarget);
+        }
+    }
+
+    public override Task AfterCombatEnd(CombatRoom room)
+    {
+        if (!HasBeenRemovedFromState && Owner != null)
+        {
+            room.AddExtraReward(Owner, new MegaCrit.Sts2.Core.Rewards.CardRemovalReward(Owner));
+        }
+
+        return Task.CompletedTask;
     }
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];

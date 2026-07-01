@@ -30,7 +30,16 @@ public class Bzzzzz() : StS2ArisCard(1, CardType.Attack, CardRarity.Uncommon, Ta
     {
         ArgumentNullException.ThrowIfNull(play.Target);
         var shock = play.Target.GetPower<ShockPower>()?.Amount ?? 0;
-        await DamageCmd.Attack(DynamicVars.Damage.BaseValue + shock).FromCard(this).Targeting(play.Target).Execute(choiceContext);
+        if (shock > 0)
+        {
+            await PowerCmd.Apply<ShockPower>(choiceContext, play.Target, shock, Owner.Creature, this);
+        }
+
+        await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
+            .WithHitCount(DynamicVars["Magic"].IntValue)
+            .FromCard(this)
+            .Targeting(play.Target)
+            .Execute(choiceContext);
     }
 
     protected override void OnUpgrade()

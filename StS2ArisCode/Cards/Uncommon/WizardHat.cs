@@ -1,7 +1,9 @@
 ﻿using BaseLib.Utils;
+using MegaCrit.Sts2.Core.CardSelection;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
+using MegaCrit.Sts2.Core.Extensions;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
@@ -26,7 +28,6 @@ public class WizardHat() : StS2ArisEquipmentCard(1, CardType.Skill, CardRarity.U
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new BlockVar(5, ValueProp.Move),
         new DynamicVar("Magic", 3m)
     ];
 
@@ -37,12 +38,32 @@ public class WizardHat() : StS2ArisEquipmentCard(1, CardType.Skill, CardRarity.U
 
     protected override async Task OnClassChange(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block.BaseValue, ValueProp.Move, play);
+        var powerCards = PileType.Deck.GetPile(Owner).Cards
+            .Where(static card => card.Type == CardType.Power)
+            .ToList();
+
+        CardModel? selected;
+        if (IsUpgraded)
+        {
+            selected = (await CardSelectCmd.FromDeckGeneric(
+                Owner,
+                new CardSelectorPrefs(SelectionScreenPrompt, 1),
+                static card => card.Type == CardType.Power)).FirstOrDefault();
+        }
+        else
+        {
+            selected = powerCards.TakeRandom(1, Owner.RunState.Rng.CombatCardSelection).FirstOrDefault();
+        }
+
+        if (selected != null)
+        {
+            await CardPileCmd.Add(selected, PileType.Hand);
+        }
     }
 
     protected override void OnUpgrade()
     {
-        AddKeyword(CardKeyword.Innate);
+        DynamicVars["Magic"].UpgradeValueBy(1m);
     }
 }
 

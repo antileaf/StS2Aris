@@ -2,7 +2,7 @@
   "STS2ARIS-CHARGE.title": "Charge",
   "STS2ARIS-CHARGE.description": "If you lack Energy, you can spend Charge to play cards. Charge disappears at the end of your turn.",
   "STS2ARIS-SHOCK.title": "Shock",
-  "STS2ARIS-SHOCK.description": "Whenever you take attack damage, lose HP equal to your Shock and reduce Shock by 1.",
+  "STS2ARIS-SHOCK.description": "Whenever you are attacked, lose HP equal to your Shock and reduce Shock by 1.",
   "STS2ARIS-OVERLOAD.title": "Overload",
   "STS2ARIS-OVERLOAD.description": "This effect activates if your remaining Energy is 0 after this card is played.",
   "STS2ARIS-OUTPUT.title": "Output",

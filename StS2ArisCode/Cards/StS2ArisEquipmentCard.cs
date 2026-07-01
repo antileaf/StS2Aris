@@ -23,7 +23,16 @@ public abstract class StS2ArisEquipmentCard(int cost, CardType type, CardRarity 
         if (ArisEquipment.ShouldTriggerClassChange(Owner, this))
         {
             await OnClassChange(choiceContext, play);
+            if (Owner.Creature.IsDead)
+            {
+                return;
+            }
+
             await ArisHook.OnClassChanged(choiceContext, Owner, this);
+            if (Owner.Creature.IsDead)
+            {
+                return;
+            }
         }
 
         await ArisEquipment.Equip(choiceContext, this, CreateJobPower());

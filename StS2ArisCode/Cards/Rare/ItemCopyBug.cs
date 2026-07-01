@@ -18,14 +18,17 @@ public class ItemCopyBug() : StS2ArisCard(2, CardType.Skill, CardRarity.Rare, Ta
 {
     protected override IEnumerable<IHoverTip> ExtraHoverTips => [HoverTipFactory.FromKeyword(ArisKeywords.Reward)];
 
-    protected override IEnumerable<DynamicVar> CanonicalVars =>
-    [
-        new BlockVar(5, ValueProp.Move)
-    ];
-
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block.BaseValue, ValueProp.Move, play);
+        var handCards = PileType.Hand.GetPile(Owner).Cards
+            .Where(card => card != this && !IsRewardCard(card))
+            .ToList();
+
+        foreach (var card in handCards)
+        {
+            var copy = card.CreateClone();
+            await CardPileCmd.AddGeneratedCardToCombat(copy, PileType.Hand, Owner);
+        }
     }
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
@@ -33,6 +36,11 @@ public class ItemCopyBug() : StS2ArisCard(2, CardType.Skill, CardRarity.Rare, Ta
     protected override void OnUpgrade()
     {
         EnergyCost.UpgradeBy(-1);
+    }
+
+    private static bool IsRewardCard(CardModel card)
+    {
+        return card is ExecutionSword or NeatCompression or RaidersLeader or SwordOfHero;
     }
 }
 

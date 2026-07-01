@@ -19,6 +19,32 @@ public static class ArisCharge
 
     public static int GetSpent(CardModel card) => ChargeSpentField.Get(card);
 
+    public static int GetExpectedSpent(CardModel card)
+    {
+        Player? player = card.Owner;
+        PlayerCombatState? state = player?.PlayerCombatState;
+        if (player == null || state == null || !CanSpendCharge(card))
+        {
+            return 0;
+        }
+
+        int totalEnergyCost = GetEnergyAmountToSpend(card, includeChargeForX: true);
+        int energySpent = Math.Min(totalEnergyCost, state.Energy);
+        int remainingEnergyCost = totalEnergyCost - energySpent;
+        return Math.Min(remainingEnergyCost, Get(player));
+    }
+
+    public static int GetSpentOrExpected(CardModel card)
+    {
+        int spent = GetSpent(card);
+        return spent > 0 ? spent : GetExpectedSpent(card);
+    }
+
+    public static void ClearSpent(CardModel card)
+    {
+        ChargeSpentField.Set(card, 0);
+    }
+
     public static bool IsOverloadState(Player? player) => player?.PlayerCombatState?.Energy <= 0;
 
     public static bool IsOverloadAvailable(Player player) => IsOverloadState(player);

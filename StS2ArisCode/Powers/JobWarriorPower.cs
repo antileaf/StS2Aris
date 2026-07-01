@@ -11,18 +11,19 @@ namespace StS2Aris.StS2ArisCode.Powers;
 
 public sealed class JobWarriorPower : ArisJobPower
 {
-    protected override IEnumerable<DynamicVar> CanonicalVars => [new DynamicVar("Amount", 4m)];
+    protected override IEnumerable<DynamicVar> CanonicalVars => [new DynamicVar("Amount", 3m)];
     public override string AnimationSuffix => "Warrior";
 
     public override async Task AfterDamageReceived(PlayerChoiceContext choiceContext, Creature target, DamageResult result, ValueProp props, Creature? dealer, CardModel? cardSource)
     {
-        if (target != Owner || result.UnblockedDamage <= 0 || Owner.IsDead)
+        if (target != Owner || result.TotalDamage <= 0 || Owner.IsDead)
         {
             return;
         }
 
         Flash();
-        await PowerCmd.Apply<EndTurnBlockPower>(choiceContext, Owner, Amount + LevelBonus, Owner, EquipmentCard);
+        var amount = EquipmentCard?.DynamicVars["Magic"].IntValue ?? DynamicVars["Amount"].IntValue;
+        await PowerCmd.Apply<EndTurnBlockPower>(choiceContext, Owner, amount + LevelBonus, Owner, EquipmentCard);
     }
 
     public override async Task OnClassChange(PlayerChoiceContext choiceContext)

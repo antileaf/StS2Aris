@@ -3,7 +3,9 @@ using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.Models;
+using MegaCrit.Sts2.Core.Nodes.Cards;
 using StS2Aris.StS2ArisCode.Cards;
 using StS2Aris.StS2ArisCode.Hooks;
 using StS2Aris.StS2ArisCode.Powers;
@@ -31,6 +33,11 @@ public static class ArisEquipment
     public static async Task Equip(PlayerChoiceContext choiceContext, CardModel equipmentCard, ArisJobPower nextJob)
     {
         var owner = equipmentCard.Owner;
+        if (owner.Creature.IsDead)
+        {
+            return;
+        }
+
         var currentJob = GetCurrentJob(owner);
         var changed = currentJob == null || currentJob.GetType() != nextJob.GetType();
 
@@ -45,7 +52,7 @@ public static class ArisEquipment
         }
 
         nextJob.EquipmentCard = equipmentCard;
-       // HoldPlayedEquipmentCard(equipmentCard);
+        HoldPlayedEquipmentCard(equipmentCard);
         await PowerCmd.Apply(choiceContext, nextJob, owner.Creature, 1m, owner.Creature, equipmentCard);
         await CreatureCmd.TriggerAnim(owner.Creature, "Idle", 0f);
 
@@ -68,6 +75,8 @@ public static class ArisEquipment
         {
             await ReturnEquipmentCard(currentJob.EquipmentCard, pileType);
         }
+
+        await CreatureCmd.TriggerAnim(player.Creature, "Idle", 0f);
     }
 
     public static async Task TriggerClassChange(PlayerChoiceContext choiceContext, Player player)
@@ -92,7 +101,9 @@ public static class ArisEquipment
     {
         if (equipmentCard.Pile?.Type == PileType.Play)
         {
+            var cardNode = NCard.FindOnTable(equipmentCard);
             equipmentCard.RemoveFromCurrentPile();
+            cardNode?.QueueFreeSafely();
         }
     }
 
@@ -108,7 +119,10 @@ public static class ArisEquipment
         {
             var replacement = combatState.CloneCard(equipmentCard);
             var result = await CardPileCmd.AddGeneratedCardToCombat(replacement, pileType, equipmentCard.Owner);
-            CardCmd.PreviewCardPileAdd(result);
+            if (pileType != PileType.Hand)
+            {
+                CardCmd.PreviewCardPileAdd(result);
+            }
         }
     }
 

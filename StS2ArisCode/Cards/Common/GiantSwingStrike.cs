@@ -26,8 +26,18 @@ public class GiantSwingStrike() : StS2ArisCard(1, CardType.Attack, CardRarity.Co
 
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        if (CombatState != null)
-            await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this).TargetingAllOpponents(CombatState).Execute(choiceContext);
+        if (CombatState == null)
+        {
+            return;
+        }
+
+        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this).TargetingAllOpponents(CombatState).Execute(choiceContext);
+
+        var enemyCount = CombatState.HittableEnemies.Count();
+        if (enemyCount > 0)
+        {
+            await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block.BaseValue * enemyCount, ValueProp.Move, play);
+        }
     }
 
     protected override void OnUpgrade()
@@ -36,5 +46,4 @@ public class GiantSwingStrike() : StS2ArisCard(1, CardType.Attack, CardRarity.Co
         DynamicVars.Block.UpgradeValueBy(1m);
     }
 }
-
 

@@ -31,7 +31,7 @@ public class SuperNova() : StS2ArisEquipmentCard(1, CardType.Attack, CardRarity.
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new DamageVar(7, ValueProp.Move),
-        new PowerVar<StrengthPower>(3m)
+        new PowerVar<StrengthPower>(2m)
     ];
 
     public override ArisJobPower CreateJobPower()

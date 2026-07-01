@@ -18,14 +18,19 @@ public class WeaponMaster() : StS2ArisCard(1, CardType.Power, CardRarity.Uncommo
 {
     protected override IEnumerable<IHoverTip> ExtraHoverTips => [HoverTipFactory.FromKeyword(ArisKeywords.Job)];
 
+    protected override IEnumerable<DynamicVar> CanonicalVars =>
+    [
+        new PowerVar<WeaponMasterPower>(1m)
+    ];
+
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        await PowerCmd.Apply<WeaponMasterPower>(choiceContext, Owner.Creature, 1m, Owner.Creature, this);
+        await PowerCmd.Apply<WeaponMasterPower>(choiceContext, Owner.Creature, DynamicVars["WeaponMasterPower"].BaseValue, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()
     {
-        EnergyCost.UpgradeBy(-1);
+        DynamicVars["WeaponMasterPower"].UpgradeValueBy(1m);
     }
 }
 

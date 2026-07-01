@@ -18,15 +18,32 @@ public class NanoMachine() : StS2ArisCard(1, CardType.Skill, CardRarity.Rare, Ta
 {
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new BlockVar(5, ValueProp.Move)
+        new DynamicVar("Magic", 2m)
     ];
 
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block.BaseValue, ValueProp.Move, play);
+        var existing = Owner.Creature.GetPower<NanoMachinePower>();
+        if (existing != null)
+        {
+            existing.DelayHpLossTurn();
+            return;
+        }
+
+        var power = await PowerCmd.Apply<NanoMachinePower>(choiceContext, Owner.Creature, 1, Owner.Creature, this);
+        if (power != null)
+        {
+            power.SetAmount(0, silent: true);
+            power.LossDivisor = DynamicVars["Magic"].IntValue;
+        }
     }
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
+
+    protected override void OnUpgrade()
+    {
+        EnergyCost.UpgradeBy(-1);
+    }
 }
 
 

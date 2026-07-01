@@ -39,6 +39,14 @@ public sealed class JobAtrahasisSuperNovaPower : ArisJobPower
         }
     }
 
+    public override async Task AfterPowerAmountChanged(PlayerChoiceContext choiceContext, PowerModel power, decimal amount, Creature? applier, CardModel? cardSource)
+    {
+        if (power == this)
+        {
+            await RefreshStrength(choiceContext);
+        }
+    }
+
     public override async Task AfterRemoved(Creature oldOwner)
     {
         await RemoveStrength(new ThrowingPlayerChoiceContext(), oldOwner);
@@ -46,8 +54,13 @@ public sealed class JobAtrahasisSuperNovaPower : ArisJobPower
 
     private async Task RefreshStrength(PlayerChoiceContext choiceContext)
     {
+        if (Owner.IsDead)
+        {
+            return;
+        }
+
         var desiredAmount = PlayerOwner != null && ArisCharge.IsOverloadState(PlayerOwner)
-            ? (int)EquipmentStrengthAmount
+            ? (int)(EquipmentStrengthAmount * EffectApplications)
             : 0;
         var amountToApply = desiredAmount - _strengthApplied;
         if (amountToApply == 0)
@@ -61,7 +74,7 @@ public sealed class JobAtrahasisSuperNovaPower : ArisJobPower
 
     private async Task RemoveStrength(PlayerChoiceContext choiceContext, Creature owner)
     {
-        if (_strengthApplied == 0)
+        if (_strengthApplied == 0 || owner.IsDead)
         {
             return;
         }

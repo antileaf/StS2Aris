@@ -22,7 +22,10 @@ public class ElectronicExplosion() : StS2ArisCard(1, CardType.Attack, CardRarity
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new DamageVar(4, ValueProp.Move),
-        new DynamicVar("Magic", 1m)
+        new DynamicVar("Magic", 1m),
+        new CalculationBaseVar(0m),
+        new CalculationExtraVar(1m),
+        new CalculatedVar("CalculatedHits").WithMultiplier((card, _) => card.IsUpgraded ? card.DynamicVars["Magic"].BaseValue : ArisCharge.OverloadsThisCombat)
     ];
 
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
@@ -36,6 +39,7 @@ public class ElectronicExplosion() : StS2ArisCard(1, CardType.Attack, CardRarity
         for (int i = 0; i < hits; i++)
         {
             await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this).TargetingRandomOpponents(CombatState, true).Execute(choiceContext);
+            await Cmd.Wait(0.1f);
         }
     }
 

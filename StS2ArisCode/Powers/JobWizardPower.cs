@@ -23,7 +23,8 @@ public sealed class JobWizardPower : ArisJobPower
         }
 
         Flash();
-        await PowerCmd.Apply<EndTurnBlockPower>(choiceContext, Owner, Amount + LevelBonus, Owner, EquipmentCard);
+        var repairAmount = EquipmentCard?.DynamicVars["Magic"].IntValue ?? DynamicVars["Amount"].IntValue;
+        await PowerCmd.Apply<EndTurnBlockPower>(choiceContext, Owner, repairAmount + LevelBonus, Owner, EquipmentCard);
     }
 
     public override async Task OnClassChange(PlayerChoiceContext choiceContext)

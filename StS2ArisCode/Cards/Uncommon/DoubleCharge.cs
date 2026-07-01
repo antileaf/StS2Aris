@@ -19,14 +19,18 @@ public class DoubleCharge() : StS2ArisCard(0, CardType.Skill, CardRarity.Uncommo
 {
     protected override IEnumerable<IHoverTip> ExtraHoverTips => [ArisHoverTips.ChargePower()];
 
-    protected override IEnumerable<DynamicVar> CanonicalVars =>
-    [
-        new BlockVar(5, ValueProp.Move)
-    ];
-
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block.BaseValue, ValueProp.Move, play);
+        var currentEnergy = Owner.PlayerCombatState?.Energy ?? 0;
+        var currentCharge = Owner.Creature.GetPower<ChargePower>()?.Amount ?? 0;
+        var amount = IsUpgraded
+            ? currentEnergy + currentCharge
+            : currentEnergy;
+
+        if (amount > 0)
+        {
+            await PowerCmd.Apply<ChargePower>(choiceContext, Owner.Creature, amount, Owner.Creature, this);
+        }
     }
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];

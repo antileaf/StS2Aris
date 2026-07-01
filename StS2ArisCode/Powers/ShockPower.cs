@@ -1,4 +1,5 @@
 using MegaCrit.Sts2.Core.Commands;
+using MegaCrit.Sts2.Core.Commands.Builders;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -13,9 +14,17 @@ public sealed class ShockPower : StS2ArisPower
 
     public override PowerStackType StackType => PowerStackType.Counter;
 
-    public override async Task AfterDamageReceived(PlayerChoiceContext choiceContext, Creature target, DamageResult result, ValueProp props, Creature? dealer, CardModel? cardSource)
+    public override async Task AfterAttack(PlayerChoiceContext choiceContext, AttackCommand command)
     {
-        if (target != Owner || result.UnblockedDamage <= 0 || !props.IsPoweredAttack() || Owner.IsDead)
+        if (Owner.IsDead || command.Attacker == null || command.Attacker == Owner || !command.DamageProps.IsPoweredAttack())
+        {
+            return;
+        }
+
+        int triggers = command.Results
+            .SelectMany(static results => results)
+            .Count(result => result.Receiver == Owner && result.TotalDamage > 0);
+        if (triggers <= 0)
         {
             return;
         }
@@ -26,12 +35,15 @@ public sealed class ShockPower : StS2ArisPower
             return;
         }
 
-        Flash();
-        var targets = Owner.GetPower<TransformerPower>() == null
-            ? [Owner]
-            : combatState.GetCreaturesOnSide(Owner.Side).Where(static creature => creature.IsAlive).ToList();
+        for (int i = 0; i < triggers && Amount > 0 && !Owner.IsDead; i++)
+        {
+            Flash();
+            var targets = Owner.GetPower<TransformerPower>() == null
+                ? [Owner]
+                : combatState.GetCreaturesOnSide(Owner.Side).Where(static creature => creature.IsAlive).ToList();
 
-        await CreatureCmd.Damage(choiceContext, targets, Amount, DamageProps.nonCardHpLoss, Applier, null);
-        await PowerCmd.Decrement(this);
+            await CreatureCmd.Damage(choiceContext, targets, Amount, DamageProps.nonCardHpLoss, Applier, null);
+            await PowerCmd.Decrement(this);
+        }
     }
 }

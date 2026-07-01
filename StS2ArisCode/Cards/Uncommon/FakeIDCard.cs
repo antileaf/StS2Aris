@@ -24,14 +24,8 @@ public class FakeIDCard() : StS2ArisCard(1, CardType.Skill, CardRarity.Uncommon,
         HoverTipFactory.FromKeyword(ArisKeywords.Job)
     ];
 
-    protected override IEnumerable<DynamicVar> CanonicalVars =>
-    [
-        new BlockVar(5, ValueProp.Move)
-    ];
-
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block.BaseValue, ValueProp.Move, play);
         await ArisEquipment.TriggerClassChange(choiceContext, Owner);
         await ArisEquipment.ReturnCurrentJob(choiceContext, Owner, PileType.Discard);
     }

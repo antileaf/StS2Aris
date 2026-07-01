@@ -25,6 +25,16 @@ public class Autofire() : StS2ArisCard(2, CardType.Attack, CardRarity.Rare, Targ
     {
         ArgumentNullException.ThrowIfNull(play.Target);
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this).Targeting(play.Target).Execute(choiceContext);
+
+        var strikeCards = PileType.Discard.GetPile(Owner).Cards
+            .Where(static card => card.Tags.Contains(CardTag.Strike))
+            .ToList();
+
+        foreach (var card in strikeCards)
+        {
+            card.EnergyCost.SetThisTurnOrUntilPlayed(0, reduceOnly: true);
+            await CardPileCmd.Add(card, PileType.Hand);
+        }
     }
 
     protected override void OnUpgrade()

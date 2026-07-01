@@ -1,4 +1,5 @@
 ﻿using BaseLib.Utils;
+using MegaCrit.Sts2.Core.CardSelection;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.CardRewardAlternatives;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -40,7 +41,22 @@ public class Diet() : ArisQuestCard<NeatCompression>(0, CardType.Skill, CardRari
 
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        await Task.CompletedTask;
+        var amount = DynamicVars["Magic"].IntValue;
+        var minSelection = Math.Min(amount, PileType.Hand.GetPile(Owner).Cards.Count);
+        var selected = await CardSelectCmd.FromHand(
+            choiceContext,
+            Owner,
+            new CardSelectorPrefs(CardSelectorPrefs.ExhaustSelectionPrompt, minSelection, amount)
+            {
+                Cancelable = false
+            },
+            null,
+            this);
+
+        foreach (var card in selected.ToList())
+        {
+            await CardCmd.Exhaust(choiceContext, card);
+        }
     }
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];

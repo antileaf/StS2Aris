@@ -39,11 +39,10 @@ public class PrismaticBeams() : StS2ArisCard(1, CardType.Attack, CardRarity.Unco
 
     public async Task OnOverload(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        var beam = (PrismaticBeams)MutableClone();
-        beam.Owner = Owner;
+        var beam = (PrismaticBeams)CreateClone();
         beam.DynamicVars.Damage.BaseValue = DynamicVars.Damage.BaseValue + DynamicVars["Magic"].BaseValue;
-        beam.ExhaustOnNextPlay = true;
-        await CardPileCmd.Add(beam, PileType.Hand);
+        CardCmd.ApplyKeyword(beam, CardKeyword.Ethereal, CardKeyword.Exhaust);
+        await CardPileCmd.AddGeneratedCardToCombat(beam, PileType.Hand, Owner);
     }
 
     protected override void OnUpgrade()

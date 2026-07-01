@@ -1,36 +1,29 @@
-﻿using BaseLib.Utils;
+using BaseLib.Utils;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
-using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
-using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.ValueProps;
 using StS2Aris.StS2ArisCode.Character;
-using StS2Aris.StS2ArisCode.Keywords;
-using StS2Aris.StS2ArisCode.Powers;
+using StS2Aris.StS2ArisCode.Utils;
 
 namespace StS2Aris.StS2ArisCode.Cards;
-[Pool(typeof(StS2ArisCardPool))]
-public class EnhancementScroll() : StS2ArisCard(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
-{
-    protected override IEnumerable<IHoverTip> ExtraHoverTips =>
-    [
-        HoverTipFactory.FromKeyword(ArisKeywords.Equipment),
-        HoverTipFactory.FromPower<StrengthPower>(),
-        HoverTipFactory.FromPower<DexterityPower>()
-    ];
 
+[Pool(typeof(StS2ArisCardPool))]
+public class QuestClear() : StS2ArisCard(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
+{
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new DynamicVar("Magic", 2m)
+        new DynamicVar("Magic", 2m),
+        ..MakeCalculatedBlock("CalculatedBlock", 6, (card, _) =>
+            ArisQuestUtils.CountCompletedQuests(card.Owner) * card.DynamicVars["Magic"].IntValue)
     ];
 
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        await Task.CompletedTask;
+        await CreatureCmd.GainBlock(Owner.Creature, DynamicVars["CalculatedBlock"].BaseValue, ValueProp.Move, play);
     }
 
     protected override void OnUpgrade()
@@ -38,7 +31,3 @@ public class EnhancementScroll() : StS2ArisCard(1, CardType.Skill, CardRarity.Un
         DynamicVars["Magic"].UpgradeValueBy(1m);
     }
 }
-
-
-
-

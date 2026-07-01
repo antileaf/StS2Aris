@@ -15,25 +15,20 @@ using StS2Aris.StS2ArisCode.Powers;
 
 namespace StS2Aris.StS2ArisCode.Cards;
 [Pool(typeof(StS2ArisCardPool))]
-public class LevelUp() : StS2ArisCard(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
+public class LevelUp() : StS2ArisCard(1, CardType.Power, CardRarity.Uncommon, TargetType.Self)
 {
     protected override IEnumerable<IHoverTip> ExtraHoverTips => [HoverTipFactory.FromKeyword(ArisKeywords.Job)];
 
-    protected override IEnumerable<DynamicVar> CanonicalVars =>
-    [
-        new BlockVar(5, ValueProp.Move)
-    ];
-
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block.BaseValue, ValueProp.Move, play);
         var job = ArisEquipment.GetCurrentJob(Owner);
-        if (job != null)
+        if (job == null)
         {
-            job.FlashJob();
+            return;
         }
 
-        await PowerCmd.Apply<LevelUpPower>(choiceContext, Owner.Creature, 1m, Owner.Creature, this);
+        job.FlashJob();
+        await PowerCmd.ModifyAmount(choiceContext, job, 1m, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()

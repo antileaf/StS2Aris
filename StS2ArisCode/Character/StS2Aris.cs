@@ -52,6 +52,7 @@ public class StS2Aris : PlaceholderCharacterModel
     public override float AttackAnimDelay => 0.15f;
     public override float CastAnimDelay => 0.25f;
 
+	public override string CustomIconPath => "res://StS2Aris/scenes/icon_aris.tscn";
     public override string CustomIconTexturePath => "character_icon_aris.png".CharacterUiPath();
     public override string CustomCharacterSelectIconPath => "char_select_aris.png".CharacterUiPath();
     public override string CustomCharacterSelectLockedIconPath => "char_select_aris_locked.png".CharacterUiPath();

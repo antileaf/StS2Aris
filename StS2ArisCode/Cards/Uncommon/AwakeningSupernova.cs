@@ -25,17 +25,17 @@ public class AwakeningSupernova() : StS2ArisCard(1, CardType.Power, CardRarity.U
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new DynamicVar("Magic", 2m)
+        new PowerVar<AwakeningSupernovaPower>(1m)
     ];
 
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        await Task.CompletedTask;
+        await PowerCmd.Apply<AwakeningSupernovaPower>(choiceContext, Owner.Creature, DynamicVars["AwakeningSupernovaPower"].BaseValue, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()
     {
-        DynamicVars["Magic"].UpgradeValueBy(1m);
+        DynamicVars["AwakeningSupernovaPower"].UpgradeValueBy(1m);
     }
 }
 

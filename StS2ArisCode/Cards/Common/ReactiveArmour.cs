@@ -28,6 +28,16 @@ public class ReactiveArmour() : StS2ArisCard(1, CardType.Skill, CardRarity.Commo
         await PowerCmd.Apply<EndTurnBlockPower>(choiceContext, Owner.Creature, DynamicVars["Magic"].IntValue, Owner.Creature, this);
     }
 
+    public override async Task AfterDamageReceived(PlayerChoiceContext choiceContext, Creature target, DamageResult result, ValueProp props, Creature? dealer, CardModel? cardSource)
+    {
+        if (Pile?.Type != PileType.Discard || target != Owner.Creature || result.UnblockedDamage <= 0 || dealer == null || Owner.Creature.IsDead)
+        {
+            return;
+        }
+
+        await CardPileCmd.Add(this, PileType.Hand);
+    }
+
     protected override void OnUpgrade()
     {
         DynamicVars["Magic"].UpgradeValueBy(3m);

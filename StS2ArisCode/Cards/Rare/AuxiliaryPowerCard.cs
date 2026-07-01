@@ -21,7 +21,7 @@ public class AuxiliaryPowerCard() : StS2ArisCard(1, CardType.Power, CardRarity.R
 
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        await Task.CompletedTask;
+        await PowerCmd.Apply<AuxiliaryPower>(choiceContext, Owner.Creature, 1, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()

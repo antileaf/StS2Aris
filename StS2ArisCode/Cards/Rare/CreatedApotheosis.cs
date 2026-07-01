@@ -2,6 +2,7 @@
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
+using MegaCrit.Sts2.Core.Extensions;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
@@ -18,19 +19,30 @@ public class CreatedApotheosis() : StS2ArisCard(1, CardType.Skill, CardRarity.Ra
 {
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new DynamicVar("Magic", 5m)
+        new DynamicVar("Magic", 4m)
     ];
 
-    protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
+    protected override Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        await Task.CompletedTask;
+        var cards = new[] { PileType.Draw, PileType.Hand, PileType.Discard }
+            .SelectMany(pileType => pileType.GetPile(Owner).Cards)
+            .Where(card => card != this && card.IsUpgradable)
+            .TakeRandom(DynamicVars["Magic"].IntValue, Owner.RunState.Rng.CombatCardSelection)
+            .ToList();
+
+        foreach (var card in cards)
+        {
+            CardCmd.Upgrade(card);
+            CardCmd.Preview(card);
+        }
+
+        return Task.CompletedTask;
     }
 
-    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust, CardKeyword.Innate];
 
     protected override void OnUpgrade()
     {
-        DynamicVars["Magic"].UpgradeValueBy(3m);
     }
 }
 

@@ -7,6 +7,7 @@ using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Powers;
+using MegaCrit.Sts2.Core.Nodes.Vfx;
 using MegaCrit.Sts2.Core.ValueProps;
 using StS2Aris.StS2ArisCode.Character;
 using StS2Aris.StS2ArisCode.Keywords;
@@ -27,6 +28,18 @@ public class CursedWeapon() : StS2ArisCard(1, CardType.Attack, CardRarity.Uncomm
     {
         ArgumentNullException.ThrowIfNull(play.Target);
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this).Targeting(play.Target).Execute(choiceContext);
+    }
+
+    public override async Task AfterCardPlayed(PlayerChoiceContext choiceContext, CardPlay cardPlay)
+    {
+        if (cardPlay.Card == this || Pile?.Type != PileType.Hand || cardPlay.Card.Owner != Owner)
+        {
+            return;
+        }
+
+        await CreatureCmd.Damage(choiceContext, Owner.Creature, DynamicVars.HpLoss.BaseValue, ValueProp.Unpowered | ValueProp.Move, this);
+        NPowerUpVfx.CreateGhostly(Owner.Creature);
+        DynamicVars.Damage.BaseValue += DynamicVars["Increase"].BaseValue;
     }
 
     protected override void OnUpgrade()

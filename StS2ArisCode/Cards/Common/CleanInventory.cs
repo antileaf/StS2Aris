@@ -21,7 +21,8 @@ public class CleanInventory() : StS2ArisCard(1, CardType.Skill, CardRarity.Commo
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new DynamicVar("Magic", 2m)
+        new DynamicVar("Magic", 2m),
+        new DynamicVar("OverloadDraw", 2m)
     ];
 
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
@@ -31,7 +32,7 @@ public class CleanInventory() : StS2ArisCard(1, CardType.Skill, CardRarity.Commo
 
     public async Task OnOverload(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        await CardPileCmd.Draw(choiceContext, DynamicVars["Magic"].BaseValue, Owner);
+        await CardPileCmd.Draw(choiceContext, DynamicVars["OverloadDraw"].BaseValue, Owner);
     }
 
     protected override void OnUpgrade()

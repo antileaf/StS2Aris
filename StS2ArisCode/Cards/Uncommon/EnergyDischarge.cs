@@ -25,6 +25,11 @@ public class EnergyDischarge() : StS2ArisCard(0, CardType.Attack, CardRarity.Unc
     {
         if (CombatState != null)
             await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this).TargetingAllOpponents(CombatState).Execute(choiceContext);
+
+        if (Owner.PlayerCombatState != null)
+        {
+            await PlayerCmd.LoseEnergy(Owner.PlayerCombatState.Energy, Owner);
+        }
     }
 
     protected override void OnUpgrade()

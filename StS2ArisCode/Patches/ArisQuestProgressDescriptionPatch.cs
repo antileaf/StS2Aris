@@ -12,7 +12,7 @@ public static class ArisQuestProgressDescriptionPatch
 {
     public static void Postfix(CardModel __instance, PileType pileType, ref string __result)
     {
-        if (pileType != PileType.Deck || __instance is not IArisQuestProgressCard quest)
+        if (pileType != PileType.Deck || __instance is not IArisQuestProgressCard quest || quest.QuestProgressGoal <= 1)
         {
             return;
         }

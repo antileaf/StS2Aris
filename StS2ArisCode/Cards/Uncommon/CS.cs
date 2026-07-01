@@ -24,7 +24,22 @@ public class CS() : StS2ArisCard(2, CardType.Attack, CardRarity.Uncommon, Target
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
         ArgumentNullException.ThrowIfNull(play.Target);
-        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this).Targeting(play.Target).Execute(choiceContext);
+        var attack = await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this).Targeting(play.Target).Execute(choiceContext);
+        var combatState = CombatState;
+        if (combatState == null)
+        {
+            return;
+        }
+
+        var levelUp = combatState.CreateCard<LevelUp>(Owner);
+        CardCmd.Upgrade(levelUp);
+
+        var shouldAddToHand = IsUpgraded || attack.Results.SelectMany(static hit => hit).Any(static result => result.WasTargetKilled);
+        await CardPileCmd.AddGeneratedCardToCombat(
+            levelUp,
+            shouldAddToHand ? PileType.Hand : PileType.Draw,
+            Owner,
+            shouldAddToHand ? CardPilePosition.Bottom : CardPilePosition.Random);
     }
 
     protected override void OnUpgrade()
