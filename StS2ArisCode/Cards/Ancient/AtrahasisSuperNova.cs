@@ -46,7 +46,7 @@ public class AtrahasisSuperNova() : StS2ArisEquipmentCard(1, CardType.Attack, Ca
             return;
         }
 
-        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this).TargetingAllOpponents(CombatState)
+        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this, play).TargetingAllOpponents(CombatState)
             .WithAttackerAnim("Cast", 0.5f)
             .BeforeDamage(async () =>
             {

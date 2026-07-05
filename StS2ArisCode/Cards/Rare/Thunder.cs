@@ -34,7 +34,7 @@ public class Thunder() : StS2ArisCard(3, CardType.Attack, CardRarity.Rare, Targe
     {
         if (play.Target == null)
             return;
-        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this).Targeting(play.Target).Execute(choiceContext);
+        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this, play).Targeting(play.Target).Execute(choiceContext);
     }
 
     public async Task OnOverload(PlayerChoiceContext choiceContext, CardPlay play)

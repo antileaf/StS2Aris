@@ -33,7 +33,7 @@ public sealed class JobRoguePower : ArisJobPower
         }
     }
 
-    public override async Task OnClassChange(PlayerChoiceContext choiceContext)
+    public override async Task OnClassChange(PlayerChoiceContext choiceContext, CardPlay play)
     {
         if (CombatState == null)
         {

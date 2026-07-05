@@ -23,7 +23,7 @@ public class ExecutionSword() : StS2ArisCard(2, CardType.Attack, CardRarity.Toke
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
         ArgumentNullException.ThrowIfNull(play.Target);
-        await DamageCmd.Attack(DynamicVars.CalculatedDamage).FromCard(this).Targeting(play.Target).Execute(choiceContext);
+        await DamageCmd.Attack(DynamicVars.CalculatedDamage).FromCard(this, play).Targeting(play.Target).Execute(choiceContext);
     }
 
     protected override void OnUpgrade()

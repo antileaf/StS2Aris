@@ -27,7 +27,7 @@ public sealed class JobWizardPower : ArisJobPower
         await PowerCmd.Apply<EndTurnBlockPower>(choiceContext, Owner, repairAmount + LevelBonus, Owner, EquipmentCard);
     }
 
-    public override async Task OnClassChange(PlayerChoiceContext choiceContext)
+    public override async Task OnClassChange(PlayerChoiceContext choiceContext, CardPlay play)
     {
         if (EquipmentCard == null)
         {

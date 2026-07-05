@@ -7,7 +7,7 @@ using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Powers;
-using MegaCrit.Sts2.Core.Saves.Runs;
+using MegaCrit.Sts2.Core.Rooms;
 using MegaCrit.Sts2.Core.ValueProps;
 using StS2Aris.StS2ArisCode.Character;
 using StS2Aris.StS2ArisCode.Keywords;
@@ -17,8 +17,7 @@ namespace StS2Aris.StS2ArisCode.Cards;
 [Pool(typeof(StS2ArisCardPool))]
 public class Cabinet() : StS2ArisCard(2, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
 {
-    [SavedProperty]
-    public int DamageTakenCount { get; set; }
+    private int _damageTakenCount;
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
@@ -33,16 +32,28 @@ public class Cabinet() : StS2ArisCard(2, CardType.Skill, CardRarity.Uncommon, Ta
 
     public override decimal ModifyBlockAdditive(Creature target, decimal block, ValueProp props, CardModel? cardSource, CardPlay? cardPlay)
     {
-        return target == Owner.Creature && cardSource == this ? DamageTakenCount * DynamicVars["Magic"].BaseValue : 0;
+        return target == Owner.Creature && cardSource == this ? _damageTakenCount * DynamicVars["Magic"].BaseValue : 0;
     }
 
     public override Task AfterDamageReceived(PlayerChoiceContext choiceContext, Creature target, DamageResult result, ValueProp props, Creature? dealer, CardModel? cardSource)
     {
         if (target == Owner.Creature && result.UnblockedDamage > 0)
         {
-            DamageTakenCount++;
+            _damageTakenCount++;
         }
 
+        return Task.CompletedTask;
+    }
+
+    public override Task BeforeCombatStart()
+    {
+        _damageTakenCount = 0;
+        return Task.CompletedTask;
+    }
+
+    public override Task AfterCombatEnd(CombatRoom room)
+    {
+        _damageTakenCount = 0;
         return Task.CompletedTask;
     }
 

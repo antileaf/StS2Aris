@@ -26,7 +26,7 @@ public class FakeIDCard() : StS2ArisCard(1, CardType.Skill, CardRarity.Uncommon,
 
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        await ArisEquipment.TriggerClassChange(choiceContext, Owner);
+        await ArisEquipment.TriggerClassChange(choiceContext, Owner, play);
         await ArisEquipment.ReturnCurrentJob(choiceContext, Owner, PileType.Discard);
     }
 

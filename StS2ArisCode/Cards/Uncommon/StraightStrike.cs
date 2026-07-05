@@ -30,7 +30,7 @@ public class StraightStrike() : StS2ArisCard(0, CardType.Attack, CardRarity.Unco
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
         if (CombatState != null)
-            await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this).TargetingAllOpponents(CombatState).Execute(choiceContext);
+            await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this, play).TargetingAllOpponents(CombatState).Execute(choiceContext);
     }
 
     protected override void OnUpgrade()

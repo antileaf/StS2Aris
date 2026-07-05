@@ -39,7 +39,7 @@ public sealed class NanoMachinePower : StS2ArisPower, BaseLib.Patches.Localizati
 
     public override decimal ModifyHpLostBeforeOsty(Creature target, decimal amount, ValueProp props, Creature? dealer, CardModel? cardSource)
     {
-        if (target != Owner || amount <= 0 || props.HasFlag(ValueProp.Unpowered))
+        if (target != Owner || amount <= 0 || props.HasFlag(ValueProp.Unblockable))
         {
             return amount;
         }
@@ -67,7 +67,7 @@ public sealed class NanoMachinePower : StS2ArisPower, BaseLib.Patches.Localizati
         var hpLoss = Amount;
         if (hpLoss > 0)
         {
-            await CreatureCmd.Damage(choiceContext, Owner, hpLoss, DamageProps.nonCardHpLoss, Applier, null);
+            await CreatureCmd.Damage(choiceContext, Owner, hpLoss, DamageProps.nonCardHpLoss, Applier, null, null);
         }
 
         await PowerCmd.Remove(this);
@@ -83,4 +83,3 @@ public sealed class NanoMachinePower : StS2ArisPower, BaseLib.Patches.Localizati
         InvokeDisplayAmountChanged();
     }
 }
-

@@ -30,7 +30,7 @@ public class Superconductor() : StS2ArisCard(0, CardType.Attack, CardRarity.Comm
     {
         if (play.Target == null)
             return;
-        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this).Targeting(play.Target).Execute(choiceContext);
+        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this, play).Targeting(play.Target).Execute(choiceContext);
     }
 
     public async Task OnOverload(PlayerChoiceContext choiceContext, CardPlay play)

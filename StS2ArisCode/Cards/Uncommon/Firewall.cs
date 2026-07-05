@@ -14,21 +14,29 @@ using StS2Aris.StS2ArisCode.Powers;
 
 namespace StS2Aris.StS2ArisCode.Cards;
 [Pool(typeof(StS2ArisCardPool))]
-public class Firewall() : StS2ArisCard(2, CardType.Skill, CardRarity.Uncommon, TargetType.AnyEnemy)
+public class Firewall() : StS2ArisCard(2, CardType.Skill, CardRarity.Uncommon, TargetType.AllEnemies)
 {
     protected override IEnumerable<IHoverTip> ExtraHoverTips => [HoverTipFactory.FromKeyword(ArisKeywords.Shock)];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new DynamicVar("Weak", 2m),
-        new PowerVar<ShockPower>(6m)
+        new PowerVar<ShockPower>(4m)
     ];
 
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        ArgumentNullException.ThrowIfNull(play.Target);
-        await PowerCmd.Apply<WeakPower>(choiceContext, play.Target, DynamicVars["Weak"].IntValue, Owner.Creature, this);
-        await PowerCmd.Apply<ShockPower>(choiceContext, play.Target, DynamicVars["ShockPower"].IntValue, Owner.Creature, this);
+
+        if (CombatState == null)
+            return;
+
+        foreach (var opponent in CombatState.GetOpponentsOf(Owner.Creature))
+        {
+            await PowerCmd.Apply<VulnerablePower>(choiceContext, opponent, DynamicVars["Weak"].IntValue, Owner.Creature,
+                this);
+            await PowerCmd.Apply<ShockPower>(choiceContext, opponent, DynamicVars["ShockPower"].IntValue, Owner.Creature,
+                this);
+        }
     }
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];

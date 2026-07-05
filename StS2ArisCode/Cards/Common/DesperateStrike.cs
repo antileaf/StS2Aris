@@ -33,7 +33,7 @@ public class DesperateStrike() : StS2ArisCard(1, CardType.Attack, CardRarity.Com
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
         ArgumentNullException.ThrowIfNull(play.Target);
-        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this).Targeting(play.Target).Execute(choiceContext);
+        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this, play).Targeting(play.Target).Execute(choiceContext);
         await ArisEquipment.ReturnCurrentJob(choiceContext, Owner, PileType.Hand);
     }
 

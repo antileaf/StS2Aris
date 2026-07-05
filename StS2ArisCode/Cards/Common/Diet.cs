@@ -112,6 +112,5 @@ public class Diet() : ArisQuestCard<NeatCompression>(0, CardType.Skill, CardRari
 
     protected override void OnUpgrade()
     {
-        DynamicVars["Magic"].UpgradeValueBy(1m);
     }
 }

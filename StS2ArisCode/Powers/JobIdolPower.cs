@@ -40,7 +40,7 @@ public sealed class JobIdolPower : ArisJobPower
         }
     }
 
-    public override async Task OnClassChange(PlayerChoiceContext choiceContext)
+    public override async Task OnClassChange(PlayerChoiceContext choiceContext, CardPlay play)
     {
         if (PlayerOwner == null)
         {
@@ -48,6 +48,7 @@ public sealed class JobIdolPower : ArisJobPower
         }
 
         Flash();
-        await CardPileCmd.Draw(choiceContext, Amount, PlayerOwner);
+        var drawAmount = EquipmentCard?.DynamicVars["Magic"].IntValue ?? Amount;
+        await CardPileCmd.Draw(choiceContext, drawAmount, PlayerOwner);
     }
 }

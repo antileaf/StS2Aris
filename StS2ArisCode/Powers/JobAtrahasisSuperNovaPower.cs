@@ -83,7 +83,7 @@ public sealed class JobAtrahasisSuperNovaPower : ArisJobPower
         _strengthApplied = 0;
     }
 
-    public override async Task OnClassChange(PlayerChoiceContext choiceContext)
+    public override async Task OnClassChange(PlayerChoiceContext choiceContext, CardPlay play)
     {
         if (EquipmentCard == null || CombatState == null)
         {
@@ -91,7 +91,7 @@ public sealed class JobAtrahasisSuperNovaPower : ArisJobPower
         }
 
         Flash();
-        await DamageCmd.Attack(EquipmentCard.DynamicVars.Damage.BaseValue).FromCard(EquipmentCard)
+        await DamageCmd.Attack(EquipmentCard.DynamicVars.Damage.BaseValue).FromCard(EquipmentCard, play)
             .TargetingAllOpponents(CombatState)
             .WithAttackerAnim("Cast", 0.5f)
             .BeforeDamage(async () =>
@@ -119,5 +119,10 @@ public sealed class JobAtrahasisSuperNovaPower : ArisJobPower
                 }
             })
             .Execute(choiceContext);
+    }
+
+    public override Task OnLevelUpChanged(PlayerChoiceContext choiceContext)
+    {
+        return RefreshStrength(choiceContext);
     }
 }

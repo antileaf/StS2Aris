@@ -23,7 +23,7 @@ public sealed class ShockPower : StS2ArisPower
 
         int triggers = command.Results
             .SelectMany(static results => results)
-            .Count(result => result.Receiver == Owner && result.TotalDamage > 0);
+            .Count(result => result.Receiver == Owner);
         if (triggers <= 0)
         {
             return;
@@ -38,11 +38,9 @@ public sealed class ShockPower : StS2ArisPower
         for (int i = 0; i < triggers && Amount > 0 && !Owner.IsDead; i++)
         {
             Flash();
-            var targets = Owner.GetPower<TransformerPower>() == null
-                ? [Owner]
-                : combatState.GetCreaturesOnSide(Owner.Side).Where(static creature => creature.IsAlive).ToList();
+            var targets = Owner;
 
-            await CreatureCmd.Damage(choiceContext, targets, Amount, DamageProps.nonCardHpLoss, Applier, null);
+            await CreatureCmd.Damage(choiceContext, targets, Amount, DamageProps.nonCardHpLoss, Applier, null, null);
             await PowerCmd.Decrement(this);
         }
     }

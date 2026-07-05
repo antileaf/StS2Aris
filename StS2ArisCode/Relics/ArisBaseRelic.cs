@@ -56,4 +56,9 @@ public class ArisBaseRelic : StS2ArisRelic, IOnClassChanged
         await PowerCmd.Apply<ChargePower>(choiceContext, Owner.Creature, DynamicVars["ChargePower"].IntValue, Owner.Creature, null);
         ClassChangeTriggeredThisCombat = true;
     }
+    
+    public override RelicModel? GetUpgradeReplacement()
+    {
+        return ModelDb.Relic<ArisBaseRelicPlus>();
+    }
 }

@@ -1,4 +1,6 @@
 using BaseLib.Utils;
+using MegaCrit.Sts2.Core.CardSelection;
+using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
@@ -22,7 +24,7 @@ public class Maid() : StS2ArisEquipmentCard(1, CardType.Skill, CardRarity.Uncomm
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new DynamicVar("Cards", 1m)
+        new CardsVar(1)
     ];
 
     public override ArisJobPower CreateJobPower()
@@ -32,11 +34,28 @@ public class Maid() : StS2ArisEquipmentCard(1, CardType.Skill, CardRarity.Uncomm
 
     protected override async Task OnClassChange(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        if (CombatState == null)
-        {
-            return;
-        }
+        var selection = (await CardSelectCmd.FromCombatPile(
+            choiceContext,
+            PileType.Draw.GetPile(Owner),
+            Owner,
+            new CardSelectorPrefs(CardSelectorPrefs.TransformSelectionPrompt, DynamicVars.Cards.IntValue))).ToList();
 
-        await CleanUp.CreateInHand(Owner, CombatState, IsUpgraded);
+        await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
+        foreach (var card in selection)
+        {
+            var cardScope = card.CardScope;
+            if (cardScope == null)
+            {
+                continue;
+            }
+
+            var replacement = cardScope.CreateCard<CleanUp>(Owner);
+            if (IsUpgraded)
+            {
+                CardCmd.Upgrade(replacement);
+            }
+
+            await CardCmd.Transform(card, replacement);
+        }
     }
 }

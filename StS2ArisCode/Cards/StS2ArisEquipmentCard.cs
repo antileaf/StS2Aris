@@ -20,7 +20,13 @@ public abstract class StS2ArisEquipmentCard(int cost, CardType type, CardRarity 
 
     protected sealed override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        if (ArisEquipment.ShouldTriggerClassChange(Owner, this))
+        if (play.PlayIndex > 0)
+        {
+            return;
+        }
+
+        var nextJob = CreateJobPower();
+        if (ArisEquipment.ShouldTriggerClassChange(Owner, nextJob))
         {
             await OnClassChange(choiceContext, play);
             if (Owner.Creature.IsDead)
@@ -35,7 +41,7 @@ public abstract class StS2ArisEquipmentCard(int cost, CardType type, CardRarity 
             }
         }
 
-        await ArisEquipment.Equip(choiceContext, this, CreateJobPower());
+        await ArisEquipment.Equip(choiceContext, this, nextJob);
     }
 
     protected virtual Task OnClassChange(PlayerChoiceContext choiceContext, CardPlay play)
@@ -43,8 +49,8 @@ public abstract class StS2ArisEquipmentCard(int cost, CardType type, CardRarity 
         return Task.CompletedTask;
     }
 
-    protected override PileType GetResultPileTypeForCardPlay()
+    protected override (PileType, CardPilePosition) GetResultPileTypeAndPositionForCardPlay()
     {
-        return PileType.None;
+        return (PileType.None, CardPilePosition.Bottom);
     }
 }

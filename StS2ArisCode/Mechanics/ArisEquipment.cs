@@ -24,10 +24,10 @@ public static class ArisEquipment
         return GetCurrentJob(player)?.AnimationSuffix;
     }
 
-    public static bool ShouldTriggerClassChange(Player player, CardModel equipmentCard)
+    public static bool ShouldTriggerClassChange(Player player, ArisJobPower nextJob)
     {
         var currentJob = GetCurrentJob(player);
-        return currentJob?.EquipmentCard?.GetType() != equipmentCard.GetType();
+        return currentJob?.GetType() != nextJob.GetType();
     }
 
     public static async Task Equip(PlayerChoiceContext choiceContext, CardModel equipmentCard, ArisJobPower nextJob)
@@ -79,12 +79,12 @@ public static class ArisEquipment
         await CreatureCmd.TriggerAnim(player.Creature, "Idle", 0f);
     }
 
-    public static async Task TriggerClassChange(PlayerChoiceContext choiceContext, Player player)
+    public static async Task TriggerClassChange(PlayerChoiceContext choiceContext, Player player, CardPlay play)
     {
         var currentJob = GetCurrentJob(player);
         if (currentJob != null)
         {
-            await currentJob.OnClassChange(choiceContext);
+            await currentJob.OnClassChange(choiceContext, play);
             await ArisHook.OnClassChanged(choiceContext, player, currentJob.EquipmentCard);
         }
     }

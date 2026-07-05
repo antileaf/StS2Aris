@@ -21,7 +21,7 @@ public class Ouch() : StS2ArisCard(0, CardType.Skill, CardRarity.Common, TargetT
 
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        await CreatureCmd.Damage(choiceContext, Owner.Creature, DynamicVars.HpLoss.BaseValue, ValueProp.Unpowered | ValueProp.Move, this);
+        await CreatureCmd.Damage(choiceContext, Owner.Creature, DynamicVars.HpLoss.BaseValue, ValueProp.Unpowered | ValueProp.Move, this, play);
         await CardPileCmd.Draw(choiceContext, DynamicVars["Cards"].IntValue, Owner);
         DynamicVars.HpLoss.BaseValue += DynamicVars["Increase"].BaseValue;
     }

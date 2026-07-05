@@ -1,3 +1,4 @@
+using BaseLib.Abstracts;
 using BaseLib.Utils;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -6,6 +7,7 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.Nodes.Rooms;
 using MegaCrit.Sts2.Core.Nodes.Vfx;
@@ -18,7 +20,7 @@ using StS2Aris.StS2ArisCode.Powers;
 namespace StS2Aris.StS2ArisCode.Cards;
 
 [Pool(typeof(StS2ArisCardPool))]
-public class SuperNova() : StS2ArisEquipmentCard(1, CardType.Attack, CardRarity.Basic, TargetType.AllEnemies)
+public class SuperNova() : StS2ArisEquipmentCard(1, CardType.Attack, CardRarity.Basic, TargetType.AllEnemies), ITranscendenceCard
 {
     protected override IEnumerable<IHoverTip> ExtraHoverTips =>
     [
@@ -31,7 +33,7 @@ public class SuperNova() : StS2ArisEquipmentCard(1, CardType.Attack, CardRarity.
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new DamageVar(7, ValueProp.Move),
-        new PowerVar<StrengthPower>(2m)
+        new PowerVar<StrengthPower>(3m)
     ];
 
     public override ArisJobPower CreateJobPower()
@@ -46,7 +48,7 @@ public class SuperNova() : StS2ArisEquipmentCard(1, CardType.Attack, CardRarity.
             return;
         }
 
-        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this).TargetingAllOpponents(CombatState)
+        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this, play).TargetingAllOpponents(CombatState)
             .WithAttackerAnim("Cast", 0.5f)
             .BeforeDamage(async () =>
             {
@@ -65,5 +67,10 @@ public class SuperNova() : StS2ArisEquipmentCard(1, CardType.Attack, CardRarity.
     {
         DynamicVars.Damage.UpgradeValueBy(2m);
         DynamicVars["StrengthPower"].UpgradeValueBy(1m);
+    }
+    
+    public CardModel GetTranscendenceTransformedCard()
+    {
+        return ModelDb.Card<AtrahasisSuperNova>();
     }
 }

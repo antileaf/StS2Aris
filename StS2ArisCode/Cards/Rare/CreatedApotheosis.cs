@@ -1,25 +1,34 @@
-﻿using BaseLib.Utils;
+using BaseLib.Utils;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Extensions;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
-using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
-using MegaCrit.Sts2.Core.Models;
-using MegaCrit.Sts2.Core.Models.Powers;
-using MegaCrit.Sts2.Core.ValueProps;
 using StS2Aris.StS2ArisCode.Character;
-using StS2Aris.StS2ArisCode.Keywords;
-using StS2Aris.StS2ArisCode.Powers;
 
 namespace StS2Aris.StS2ArisCode.Cards;
+
 [Pool(typeof(StS2ArisCardPool))]
 public class CreatedApotheosis() : StS2ArisCard(1, CardType.Skill, CardRarity.Rare, TargetType.Self)
 {
+    private const int BaseUpgradeCount = 4;
+
+    public override int MaxUpgradeLevel => int.MaxValue;
+
+    private int UpgradeCount
+    {
+        get
+        {
+            long upgradeLevel = CurrentUpgradeLevel;
+            long upgradeCount = BaseUpgradeCount + upgradeLevel * (upgradeLevel + 5) / 2;
+            return (int)Math.Min(upgradeCount, int.MaxValue);
+        }
+    }
+
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new DynamicVar("Magic", 4m)
+        new DynamicVar("Magic", UpgradeCount)
     ];
 
     protected override Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
@@ -43,9 +52,6 @@ public class CreatedApotheosis() : StS2ArisCard(1, CardType.Skill, CardRarity.Ra
 
     protected override void OnUpgrade()
     {
+        DynamicVars["Magic"].BaseValue = UpgradeCount;
     }
 }
-
-
-
-

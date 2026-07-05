@@ -20,6 +20,6 @@ public sealed class JobMasteryPower : StS2ArisPower, IOnClassChanged
             return;
         }
 
-        await CreatureCmd.GainBlock(Owner, Amount, ValueProp.Move, null);
+        await CreatureCmd.GainBlock(Owner, Amount,  ValueProp.Unpowered, null);
     }
 }

@@ -28,7 +28,7 @@ public class HoldOn() : StS2ArisCard(1, CardType.Skill, CardRarity.Common, Targe
 
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        await CreatureCmd.Damage(choiceContext, Owner.Creature, DynamicVars.HpLoss.BaseValue, ValueProp.Unpowered | ValueProp.Move, this);
+        await CreatureCmd.Damage(choiceContext, Owner.Creature, DynamicVars.HpLoss.BaseValue, ValueProp.Unpowered | ValueProp.Move, this, play);
         await PowerCmd.Apply<EndTurnBlockPower>(choiceContext, Owner.Creature, DynamicVars["Repair"].IntValue, Owner.Creature, this);
     }
 

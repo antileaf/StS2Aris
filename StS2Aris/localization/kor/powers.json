@@ -6,8 +6,8 @@
     "STS2ARIS-JOB_ATRAHASIS_SUPER_NOVA_POWER.description":  "에너지가 0일 때 [gold]힘[/gold]을 [blue]{Amount}[/blue] 얻습니다",
     "STS2ARIS-JOB_ATRAHASIS_SUPER_NOVA_POWER.smartDescription":  "에너지가 0일 때 [gold]힘[/gold]을 [blue]{Amount}[/blue] 얻습니다",
     "STS2ARIS-JOB_MAID_POWER.title":  "직업: 메이드 용사",
-    "STS2ARIS-JOB_MAID_POWER.description":  "내 턴 시작 시, [gold]청소합니다![/gold]를 1장 손으로 가져옵니다.",
-    "STS2ARIS-JOB_MAID_POWER.smartDescription":  "내 턴 시작 시, [gold]청소합니다![/gold]를 1장 손으로 가져옵니다.",
+    "STS2ARIS-JOB_MAID_POWER.description":  "손에 공격 카드가 1장이라면 그 카드의 피해량이 50% 증가합니다.",
+    "STS2ARIS-JOB_MAID_POWER.smartDescription":  "손에 공격 카드가 1장이라면 그 카드의 피해량이 50% 증가합니다.",
     "STS2ARIS-JOB_NEWBY_POWER.title":  "직업: 초보자",
     "STS2ARIS-JOB_NEWBY_POWER.description":  "아무 효과도 없습니다.",
     "STS2ARIS-JOB_NEWBY_POWER.smartDescription":  "아무 효과도 없습니다.",
@@ -85,5 +85,8 @@
     "STS2ARIS-ARIS_FORM_POWER.smartDescription":  "다음 [blue]{Amount}[/blue] 턴동안, 턴이 시작할때마다 모두에게 [gold]불가침[/gold]을 [blue]1[/blue] 부여합니다.",
     "STS2ARIS-WEAPON_MASTER_POWER.title":  "웨폰 마스터",
     "STS2ARIS-WEAPON_MASTER_POWER.description":  "직업이 바뀔때마다 카드를 [blue]{Amount}[/blue]장 뽑습니다.",
-    "STS2ARIS-WEAPON_MASTER_POWER.smartDescription":  "직업이 바뀔때마다 카드를 [blue]{Amount}[/blue]장 뽑습니다."
+    "STS2ARIS-WEAPON_MASTER_POWER.smartDescription":  "직업이 바뀔때마다 카드를 [blue]{Amount}[/blue]장 뽑습니다.",
+    "STS2ARIS-MOMOI_APPEAR_POWER.title":  "모모이 출현!",
+    "STS2ARIS-MOMOI_APPEAR_POWER.description":  "내 턴 시작 시, 무작위 카드를 만들어냅니다. 만든 카드를 받지 않는다면 미래에 더욱 좋은 카드가 만들어집니다.",
+    "STS2ARIS-MOMOI_APPEAR_POWER.smartDescription":  "내 턴 시작 시, 무작위 카드를 만들어냅니다. 만든 카드를 받지 않는다면 미래에 더욱 좋은 카드가 만들어집니다."
 }

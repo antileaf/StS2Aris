@@ -38,14 +38,17 @@ public class WizardHat() : StS2ArisEquipmentCard(1, CardType.Skill, CardRarity.U
 
     protected override async Task OnClassChange(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        var powerCards = PileType.Deck.GetPile(Owner).Cards
+        var drawPile = PileType.Draw.GetPile(Owner);
+        var powerCards = drawPile.Cards
             .Where(static card => card.Type == CardType.Power)
             .ToList();
 
         CardModel? selected;
         if (IsUpgraded)
         {
-            selected = (await CardSelectCmd.FromDeckGeneric(
+            selected = (await CardSelectCmd.FromCombatPile(
+                choiceContext,
+                drawPile,
                 Owner,
                 new CardSelectorPrefs(SelectionScreenPrompt, 1),
                 static card => card.Type == CardType.Power)).FirstOrDefault();

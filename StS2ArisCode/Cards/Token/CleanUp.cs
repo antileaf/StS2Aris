@@ -14,37 +14,24 @@ using StS2Aris.StS2ArisCode.Character;
 namespace StS2Aris.StS2ArisCode.Cards;
 
 [Pool(typeof(TokenCardPool))]
-public class CleanUp() : StS2ArisCard(0, CardType.Attack, CardRarity.Token, TargetType.AnyEnemy)
+public class CleanUp() : StS2ArisCard(2, CardType.Attack, CardRarity.Token, TargetType.AnyEnemy)
 {
-    protected override IEnumerable<DynamicVar> CanonicalVars =>
-    [
-        new DamageVar(5, ValueProp.Move),
-        new DynamicVar("Increase", 5m)
-    ];
+    protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(30, ValueProp.Move)];
 
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
         ArgumentNullException.ThrowIfNull(play.Target);
-        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this).Targeting(play.Target).Execute(choiceContext);
-
-        if (CombatState == null)
-        {
-            return;
-        }
-
-        foreach (var cleanUp in Owner.PlayerCombatState?.AllCards.OfType<CleanUp>() ?? [])
-        {
-            cleanUp.DynamicVars.Damage.BaseValue += DynamicVars["Increase"].BaseValue;
-        }
+        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this, play).Targeting(play.Target).Execute(choiceContext);
     }
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(2m);
-        DynamicVars["Increase"].UpgradeValueBy(2m);
+        EnergyCost.UpgradeBy(-1);
     }
 
-    public static async Task<CardModel?> CreateInHand(Player owner, ICombatState combatState, bool upgraded)
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
+
+    public static async Task<CardModel?> CreateInDrawPile(Player owner, ICombatState combatState, bool upgraded)
     {
         if (CombatManager.Instance.IsOverOrEnding)
         {
@@ -57,7 +44,7 @@ public class CleanUp() : StS2ArisCard(0, CardType.Attack, CardRarity.Token, Targ
             CardCmd.Upgrade(card);
         }
 
-        await CardPileCmd.AddGeneratedCardToCombat(card, PileType.Hand, owner);
+        await CardPileCmd.AddGeneratedCardToCombat(card, PileType.Draw, owner, CardPilePosition.Random);
         return card;
     }
 }

@@ -14,9 +14,10 @@ using StS2Aris.StS2ArisCode.Powers;
 
 namespace StS2Aris.StS2ArisCode.Cards;
 [Pool(typeof(StS2ArisCardPool))]
-public class ItemCopyBug() : StS2ArisCard(2, CardType.Skill, CardRarity.Rare, TargetType.Self)
+public class ItemCopyBug() : StS2ArisCard(1, CardType.Skill, CardRarity.Rare, TargetType.Self)
 {
     protected override IEnumerable<IHoverTip> ExtraHoverTips => [HoverTipFactory.FromKeyword(ArisKeywords.Reward)];
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
@@ -31,16 +32,15 @@ public class ItemCopyBug() : StS2ArisCard(2, CardType.Skill, CardRarity.Rare, Ta
         }
     }
 
-    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 
     protected override void OnUpgrade()
     {
-        EnergyCost.UpgradeBy(-1);
+        AddKeyword(CardKeyword.Retain);
     }
 
     private static bool IsRewardCard(CardModel card)
     {
-        return card is ExecutionSword or NeatCompression or RaidersLeader or SwordOfHero;
+        return card is ExecutionSword or NeatCompression or RaidersLeader;
     }
 }
 

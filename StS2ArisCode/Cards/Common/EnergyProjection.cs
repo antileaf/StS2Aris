@@ -29,7 +29,7 @@ public class EnergyProjection() : StS2ArisCard(1, CardType.Attack, CardRarity.Co
     {
         if (play.Target == null)
             return;
-        await DamageCmd.Attack(DynamicVars.CalculatedDamage).FromCard(this).Targeting(play.Target).Execute(choiceContext);
+        await DamageCmd.Attack(DynamicVars.CalculatedDamage).FromCard(this, play).Targeting(play.Target).Execute(choiceContext);
     }
 
     public Task OnOverload(PlayerChoiceContext choiceContext, CardPlay play)

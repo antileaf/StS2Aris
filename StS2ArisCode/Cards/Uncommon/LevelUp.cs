@@ -21,14 +21,14 @@ public class LevelUp() : StS2ArisCard(1, CardType.Power, CardRarity.Uncommon, Ta
 
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        var job = ArisEquipment.GetCurrentJob(Owner);
-        if (job == null)
-        {
-            return;
-        }
+        await PowerCmd.Apply<LevelUpPower>(choiceContext, Owner.Creature, 1m, Owner.Creature, this);
 
-        job.FlashJob();
-        await PowerCmd.ModifyAmount(choiceContext, job, 1m, Owner.Creature, this);
+        var job = ArisEquipment.GetCurrentJob(Owner);
+        if (job != null)
+        {
+            job.FlashJob();
+            await job.OnLevelUpChanged(choiceContext);
+        }
     }
 
     protected override void OnUpgrade()

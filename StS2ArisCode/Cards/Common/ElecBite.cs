@@ -22,7 +22,7 @@ public class ElecBite() : StS2ArisCard(2, CardType.Skill, CardRarity.Common, Tar
     ];
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new PowerVar<ShockPower>(5m)
+        new PowerVar<ShockPower>(6m)
     ];
 
     protected override IEnumerable<IHoverTip> ExtraHoverTips =>

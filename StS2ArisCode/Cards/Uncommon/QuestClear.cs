@@ -17,7 +17,7 @@ public class QuestClear() : StS2ArisCard(1, CardType.Skill, CardRarity.Uncommon,
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new DynamicVar("Magic", 2m),
-        ..MakeCalculatedBlock("CalculatedBlock", 6, (card, _) =>
+        ..MakeCalculatedBlock("CalculatedBlock", 8, (card, _) =>
             ArisQuestUtils.CountCompletedQuests(card.Owner) * card.DynamicVars["Magic"].IntValue)
     ];
 

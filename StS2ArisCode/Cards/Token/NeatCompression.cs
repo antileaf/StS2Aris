@@ -28,42 +28,30 @@ public class NeatCompression() : StS2ArisCard(0, CardType.Skill, CardRarity.Toke
 
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        var ownDeckVersion = DeckVersion;
-        if (ownDeckVersion?.Pile?.Type == PileType.Deck)
+        await CreatureCmd.TriggerAnim(base.Owner.Creature, "PowerUp", base.Owner.Character.PowerUpAnimDelay);
+        await PowerCmd.Apply<ForbiddenGrimoirePower>(choiceContext, base.Owner.Creature, 1m, base.Owner.Creature, this);
+
+        if (IsUpgraded)
         {
-            await CardPileCmd.RemoveFromDeck(ownDeckVersion);
+            var upgradeTarget = PileType.Deck.GetPile(Owner).Cards
+                .Where(static card => card.IsUpgradable)
+                .ToList()
+                .TakeRandom(1, Owner.RunState.Rng.CombatCardSelection)
+                .FirstOrDefault();
+
+            if (upgradeTarget != null)
+            {
+                CardCmd.Upgrade(upgradeTarget);
+            }
+        }
+
+        if (DeckVersion != null)
+        {
+            await CardPileCmd.RemoveFromDeck(DeckVersion);
             DeckVersion = null;
         }
-
-        if (!IsUpgraded)
-        {
-            return;
-        }
-
-        var upgradeTarget = PileType.Deck.GetPile(Owner).Cards
-            .Where(static card => card.IsUpgradable)
-            .ToList()
-            .TakeRandom(1, Owner.RunState.Rng.CombatCardSelection)
-            .FirstOrDefault();
-
-        if (upgradeTarget != null)
-        {
-            CardCmd.Upgrade(upgradeTarget);
-        }
-    }
-
-    public override Task AfterCombatEnd(CombatRoom room)
-    {
-        if (!HasBeenRemovedFromState && Owner != null)
-        {
-            room.AddExtraReward(Owner, new MegaCrit.Sts2.Core.Rewards.CardRemovalReward(Owner));
-        }
-
-        return Task.CompletedTask;
     }
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 }
-
-
 
