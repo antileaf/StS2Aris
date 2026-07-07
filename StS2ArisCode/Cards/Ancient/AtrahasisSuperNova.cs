@@ -39,44 +39,8 @@ public class AtrahasisSuperNova() : StS2ArisEquipmentCard(1, CardType.Attack, Ca
         return MakeJobPower<JobAtrahasisSuperNovaPower>();
     }
 
-    protected override async Task OnClassChange(PlayerChoiceContext choiceContext, CardPlay play)
-    {
-        if (CombatState == null)
-        {
-            return;
-        }
-
-        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this, play).TargetingAllOpponents(CombatState)
-            .WithAttackerAnim("Cast", 0.5f)
-            .BeforeDamage(async () =>
-            {
-                var enemies = CombatState.Enemies.Where(e => e.IsAlive).ToList();
-                if (enemies.Count == 0)
-                {
-                    return;
-                }
-
-                var beam = NHyperbeamVfx.Create(Owner.Creature, enemies.Last());
-                if (beam != null)
-                {
-                    NCombatRoom.Instance?.CombatVfxContainer.AddChildSafely(beam);
-                    await Cmd.Wait(0.5f);
-                }
-
-                foreach (var enemy in enemies)
-                {
-                    var impact = NHyperbeamImpactVfx.Create(Owner.Creature, enemy);
-                    if (impact != null)
-                    {
-                        NCombatRoom.Instance?.CombatVfxContainer.AddChildSafely(impact);
-                    }
-                }
-            })
-            .Execute(choiceContext);
-    }
-
     protected override void OnUpgrade()
     {
-        DynamicVars["StrengthPower"].UpgradeValueBy(2m);
+        DynamicVars.Damage.UpgradeValueBy(6m);
     }
 }

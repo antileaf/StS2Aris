@@ -335,6 +335,11 @@ public static class MomoiScenarioGenerator
 
     private static bool CanAfford(MomoiScenarioAbilityDefinition definition, int budget, GameScenario scenario)
     {
+        if (definition.Ability == MomoiScenarioAbility.Retain && scenario.ScenarioCost <= 0)
+        {
+            return false;
+        }
+
         int cost = GetCost(definition, scenario);
         return cost > 0 && cost * definition.MinLevel <= budget || definition.IsPenalty && cost < 0;
     }

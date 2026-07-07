@@ -28,7 +28,8 @@ public abstract class StS2ArisEquipmentCard(int cost, CardType type, CardRarity 
         var nextJob = CreateJobPower();
         if (ArisEquipment.ShouldTriggerClassChange(Owner, nextJob))
         {
-            await OnClassChange(choiceContext, play);
+            nextJob.EquipmentCard = this;
+            await nextJob.OnClassChange(choiceContext, play);
             if (Owner.Creature.IsDead)
             {
                 return;
@@ -42,11 +43,6 @@ public abstract class StS2ArisEquipmentCard(int cost, CardType type, CardRarity 
         }
 
         await ArisEquipment.Equip(choiceContext, this, nextJob);
-    }
-
-    protected virtual Task OnClassChange(PlayerChoiceContext choiceContext, CardPlay play)
-    {
-        return Task.CompletedTask;
     }
 
     protected override (PileType, CardPilePosition) GetResultPileTypeAndPositionForCardPlay()

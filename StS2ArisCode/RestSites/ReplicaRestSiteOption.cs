@@ -6,11 +6,12 @@ using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Models;
 using StS2Aris.StS2ArisCode.Cards;
 using StS2Aris.StS2ArisCode.Extensions;
+using StS2Aris.StS2ArisCode.Mechanics;
 using StS2Aris.StS2ArisCode.Utils;
 
 namespace StS2Aris.StS2ArisCode.RestSites;
 
-public sealed class ReplicaRestSiteOption(Player owner, Replica replica) : CustomRestSiteOption(owner)
+public sealed class ReplicaRestSiteOption(Player owner, ItemCopyBug itemCopyBug) : CustomRestSiteOption(owner)
 {
     private static readonly string IconAssetPath = "option_replica.png".CharacterUiPath();
 
@@ -20,7 +21,7 @@ public sealed class ReplicaRestSiteOption(Player owner, Replica replica) : Custo
 
     public override IEnumerable<string> AssetPaths => [IconAssetPath];
 
-    public override bool IsEnabled => HasValidTarget(Owner, replica);
+    public override bool IsEnabled => HasValidTarget(Owner, itemCopyBug);
 
     public override LocString Description => new("rest_site_ui", IsEnabled
         ? "OPTION_STS2ARIS_REPLICA.description"
@@ -33,29 +34,29 @@ public sealed class ReplicaRestSiteOption(Player owner, Replica replica) : Custo
             return false;
         }
 
-        if (replica.QuestRemaining <= 0)
+        if (itemCopyBug.QuestRemaining <= 0)
         {
-            replica.QuestRemaining = replica.QuestGoal;
+            itemCopyBug.QuestRemaining = itemCopyBug.QuestGoal;
         }
 
-        replica.QuestRemaining = int.Max(0, replica.QuestRemaining - 1);
-        if (replica.QuestRemaining > 0)
+        itemCopyBug.QuestRemaining = int.Max(0, itemCopyBug.QuestRemaining - 1);
+        if (itemCopyBug.QuestRemaining > 0)
         {
             return true;
         }
 
-        var rewardTargets = GetRewardTargets(Owner, replica).ToList();
+        var rewardTargets = GetRewardTargets(Owner, itemCopyBug).ToList();
         if (rewardTargets.Count == 0)
         {
             return false;
         }
 
-        await CardPileCmd.RemoveFromDeck(replica, showPreview: false);
+        await CardPileCmd.RemoveFromDeck(itemCopyBug, showPreview: false);
         var addedResults = new List<CardPileAddResult>();
         foreach (var rewardTarget in rewardTargets)
         {
-            PlayerCmd.CompleteQuest(rewardTarget);
-            var addedResult = await ArisQuestUtils.ApplyReplicaRewardFor(rewardTarget, replica.IsUpgraded);
+            ArisQuestProgress.MarkCompleted(rewardTarget);
+            var addedResult = await ArisQuestUtils.ApplyReplicaRewardFor(rewardTarget, itemCopyBug.IsUpgraded);
             if (addedResult.HasValue)
             {
                 addedResults.Add(addedResult.Value);
@@ -69,18 +70,18 @@ public sealed class ReplicaRestSiteOption(Player owner, Replica replica) : Custo
         return true;
     }
 
-    public static bool HasValidTarget(Player player, Replica replica)
+    public static bool HasValidTarget(Player player, ItemCopyBug itemCopyBug)
     {
-        return GetRewardTargets(player, replica).Any();
+        return GetRewardTargets(player, itemCopyBug).Any();
     }
 
-    private static IEnumerable<CardModel> GetRewardTargets(Player player, Replica replica)
+    private static IEnumerable<CardModel> GetRewardTargets(Player player, ItemCopyBug itemCopyBug)
     {
-        return PileType.Deck.GetPile(player).Cards.Where(card => IsValidTarget(card, replica));
+        return PileType.Deck.GetPile(player).Cards.Where(card => IsValidTarget(card, itemCopyBug));
     }
 
-    private static bool IsValidTarget(CardModel card, Replica replica)
+    private static bool IsValidTarget(CardModel card, ItemCopyBug itemCopyBug)
     {
-        return card != replica && ArisQuestUtils.HasSelectableReplicaReward(card);
+        return card != itemCopyBug && ArisQuestUtils.HasSelectableReplicaReward(card);
     }
 }

@@ -85,19 +85,20 @@ public sealed class JobAoePower : ArisJobPower
 
     public override async Task OnClassChange(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        if (EquipmentCard == null || CombatState == null)
+        var equipment = EquipmentCard;
+        var combatState = equipment?.CombatState ?? equipment?.Owner.Creature.CombatState;
+        if (equipment == null || combatState == null)
         {
             return;
         }
 
-        Flash();
-        await DamageCmd.Attack(EquipmentCard.DynamicVars.Damage.BaseValue).FromCard(EquipmentCard, play)
-            .TargetingAllOpponents(CombatState)
+        await DamageCmd.Attack(equipment.DynamicVars.Damage.BaseValue).FromCard(equipment, play)
+            .TargetingAllOpponents(combatState)
             .WithAttackerAnim("Cast", 0.5f)
             .BeforeDamage(async () =>
             {
-                var targets = CombatState.HittableEnemies.ToList();
-                var vfx = NSweepingBeamVfx.Create(Owner, targets);
+                var targets = combatState.HittableEnemies.ToList();
+                var vfx = NSweepingBeamVfx.Create(equipment.Owner.Creature, targets);
                 if (vfx != null)
                 {
                     NCombatRoom.Instance?.CombatVfxContainer.AddChildSafely(vfx);

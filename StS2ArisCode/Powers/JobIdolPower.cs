@@ -42,13 +42,14 @@ public sealed class JobIdolPower : ArisJobPower
 
     public override async Task OnClassChange(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        if (PlayerOwner == null)
+        var equipment = EquipmentCard;
+        var player = equipment?.Owner ?? PlayerOwner;
+        if (equipment == null || player == null)
         {
             return;
         }
 
-        Flash();
-        var drawAmount = EquipmentCard?.DynamicVars["Magic"].IntValue ?? Amount;
-        await CardPileCmd.Draw(choiceContext, drawAmount, PlayerOwner);
+        var drawAmount = equipment.DynamicVars["Magic"].IntValue;
+        await CardPileCmd.Draw(choiceContext, drawAmount, player);
     }
 }

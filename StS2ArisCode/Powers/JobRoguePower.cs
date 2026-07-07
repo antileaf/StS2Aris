@@ -35,13 +35,15 @@ public sealed class JobRoguePower : ArisJobPower
 
     public override async Task OnClassChange(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        if (CombatState == null)
+        var equipment = EquipmentCard;
+        var combatState = equipment?.CombatState ?? equipment?.Owner.Creature.CombatState;
+        if (equipment == null || combatState == null)
         {
             return;
         }
 
-        Flash();
-        await PowerCmd.Apply<WeakPower>(choiceContext, CombatState.HittableEnemies, Amount, Owner, EquipmentCard);
-        await PowerCmd.Apply<ShockPower>(choiceContext, CombatState.HittableEnemies, Amount, Owner, EquipmentCard);
+        var amount = equipment.DynamicVars["Magic"].IntValue;
+        await PowerCmd.Apply<WeakPower>(choiceContext, combatState.HittableEnemies, amount, equipment.Owner.Creature, equipment);
+        await PowerCmd.Apply<ShockPower>(choiceContext, combatState.HittableEnemies, amount, equipment.Owner.Creature, equipment);
     }
 }

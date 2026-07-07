@@ -1,20 +1,20 @@
 {
   "STS2ARIS-CHARGE.title": "전력",
-  "STS2ARIS-CHARGE.description": "모자란 에너지 대신 전력을 소모하여 카드를 사용할 수 있습니다. 턴이 끝나면 사라집니다.",
+  "STS2ARIS-CHARGE.description": "모자란 에너지 대신 [gold]전력[/gold]을 소모하여 카드를 사용할 수 있습니다. 턴이 끝나면 사라집니다.",
   "STS2ARIS-SHOCK.title": "감전",
   "STS2ARIS-SHOCK.description": "공격받을 때마다 감전 수치만큼 체력을 잃고 감전이 1 감소합니다.",
   "STS2ARIS-OVERLOAD.title": "과부하",
   "STS2ARIS-OVERLOAD.description": "카드를 사용한 뒤 남은 에너지가 0이면 효과가 발동합니다.",
   "STS2ARIS-OUTPUT.title": "출력",
-  "STS2ARIS-OUTPUT.description": "이 카드를 사용할 때 전력을 사용할 수 없습니다.",
+  "STS2ARIS-OUTPUT.description": "이 카드를 사용할 때 [gold]전력[/gold]을 사용할 수 없습니다.",
   "STS2ARIS-EQUIPMENT.title": "장비",
-  "STS2ARIS-EQUIPMENT.description": "사용하면 캐릭터에게 장착되어 직업을 변경합니다. 이미 장비가 있다면 기존 장비는 버려집니다.",
+  "STS2ARIS-EQUIPMENT.description": "사용하면 캐릭터에게 장착되어 [gold]직업[/gold]을 변경합니다. 이미 [gold]장비[/gold]가 있다면 기존 [gold]장비[/gold]는 버려집니다.",
   "STS2ARIS-CLASSCHANGE.title": "클래스체인지",
-  "STS2ARIS-CLASSCHANGE.description": "직업이 변경될 때 발동하는 효과입니다.",
+  "STS2ARIS-CLASSCHANGE.description": "[gold]직업[/gold]이 변경될 때 발동하는 효과입니다.",
   "STS2ARIS-JOB.title": "직업",
-  "STS2ARIS-JOB.description": "장비를 장착한 동안 직업 효과가 적용됩니다. 한 번에 하나의 직업만 가질 수 있습니다.",
+  "STS2ARIS-JOB.description": "[gold]장비[/gold]를 장착한 동안 [gold]직업[/gold] 효과가 적용됩니다. 한 번에 하나의 [gold]직업[/gold]만 가질 수 있습니다.",
   "STS2ARIS-REWARD.title": "보상",
-  "STS2ARIS-REWARD.description": "일반적인 방법으로는 얻을 수 없고, 퀘스트를 완료해야 얻을 수 있는 카드입니다.",
+  "STS2ARIS-REWARD.description": "일반적인 방법으로는 얻을 수 없고, [gold]퀘스트[/gold]를 완료해야 얻을 수 있는 카드입니다.",
   "STS2ARIS-QUEST.title": "퀘스트",
-  "STS2ARIS-QUEST.description": "조건을 달성하면 보상 카드로 변합니다."
+  "STS2ARIS-QUEST.description": "조건을 달성하면 [gold]보상[/gold] 카드로 변합니다."
 }

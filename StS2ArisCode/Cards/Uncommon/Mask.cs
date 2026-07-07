@@ -35,11 +35,6 @@ public class Mask() : StS2ArisEquipmentCard(1, CardType.Skill, CardRarity.Uncomm
         return MakeJobPower<JobWarriorPower>();
     }
 
-    protected override async Task OnClassChange(PlayerChoiceContext choiceContext, CardPlay play)
-    {
-        await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block.BaseValue, ValueProp.Move, play);
-    }
-
     protected override void OnUpgrade()
     {
         DynamicVars.Block.UpgradeValueBy(4m);

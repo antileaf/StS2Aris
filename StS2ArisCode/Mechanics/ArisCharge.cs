@@ -6,6 +6,7 @@ using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Hooks;
 using MegaCrit.Sts2.Core.Models;
+using StS2Aris.StS2ArisCode.Keywords;
 using StS2Aris.StS2ArisCode.Powers;
 
 namespace StS2Aris.StS2ArisCode.Mechanics;
@@ -72,7 +73,7 @@ public static class ArisCharge
         OverloadsThisCombat++;
     }
 
-    public static bool CanSpendCharge(CardModel card) => card is not IArisOutputCard;
+    public static bool CanSpendCharge(CardModel card) => card is not IArisOutputCard && !card.Keywords.Contains(ArisKeywords.Output);
 
     public static bool HasEnoughResourcesFor(PlayerCombatState state, Player player, CardModel card, out UnplayableReason reason)
     {

@@ -35,17 +35,6 @@ public class Rogue() : StS2ArisEquipmentCard(1, CardType.Skill, CardRarity.Uncom
         return MakeJobPower<JobRoguePower>();
     }
 
-    protected override async Task OnClassChange(PlayerChoiceContext choiceContext, CardPlay play)
-    {
-        if (CombatState == null)
-        {
-            return;
-        }
-
-        await PowerCmd.Apply<WeakPower>(choiceContext, CombatState.HittableEnemies, DynamicVars["Magic"].IntValue, Owner.Creature, this);
-        await PowerCmd.Apply<ShockPower>(choiceContext, CombatState.HittableEnemies, DynamicVars["Magic"].IntValue, Owner.Creature, this);
-    }
-
     protected override void OnUpgrade()
     {
         DynamicVars["Magic"].UpgradeValueBy(1m);

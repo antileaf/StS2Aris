@@ -30,7 +30,7 @@ public class ReactiveArmour() : StS2ArisCard(1, CardType.Skill, CardRarity.Commo
 
     public override async Task AfterDamageReceived(PlayerChoiceContext choiceContext, Creature target, DamageResult result, ValueProp props, Creature? dealer, CardModel? cardSource)
     {
-        if (Pile?.Type != PileType.Discard || target != Owner.Creature || result.UnblockedDamage <= 0 || dealer == null || Owner.Creature.IsDead)
+        if (Pile?.Type != PileType.Discard || target != Owner.Creature || result.TotalDamage <= 0 || dealer == null || Owner.Creature.IsDead)
         {
             return;
         }

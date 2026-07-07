@@ -1,28 +1,17 @@
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
-using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Cards;
 using MegaCrit.Sts2.Core.Models.Relics;
 using StS2Aris.StS2ArisCode.Cards;
+using StS2Aris.StS2ArisCode.Mechanics;
 using DailyQuest = StS2Aris.StS2ArisCode.Cards.DailyQuest;
 
 namespace StS2Aris.StS2ArisCode.Utils;
 
 public static class ArisQuestUtils
 {
-    public static int CountCompletedQuests(Player? player)
-    {
-        if (player == null)
-        {
-            return 0;
-        }
-
-        return player.RunState.MapPointHistory
-            .SelectMany(static act => act)
-            .Select(entry => entry.GetEntry(player.NetId))
-            .Sum(static entry => entry.CompletedQuests.Count);
-    }
+    public static int CountCompletedQuests(MegaCrit.Sts2.Core.Entities.Players.Player? player) => ArisQuestProgress.CountCompletedQuests(player);
 
     public static CardModel? CreateRewardFor(CardModel quest, bool forceUpgrade = false)
     {

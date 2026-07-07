@@ -1,5 +1,6 @@
 using HarmonyLib;
 using MegaCrit.Sts2.Core.Combat;
+using StS2Aris.StS2ArisCode.Cards;
 using StS2Aris.StS2ArisCode.Mechanics;
 using StS2Aris.StS2ArisCode.Powers;
 
@@ -13,6 +14,7 @@ public static class ArisChargeTurnCleanupPatch
     public static void ResetOverloadCount()
     {
         ArisCharge.ResetOverloadCount();
+        GameScenario.ResetChronicleCount();
     }
 
     [HarmonyPatch(nameof(CombatManager.EndPlayerTurnPhaseTwoInternal))]

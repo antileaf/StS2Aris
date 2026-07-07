@@ -5,17 +5,30 @@ using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
+using MegaCrit.Sts2.Core.Models.Cards;
 using MegaCrit.Sts2.Core.ValueProps;
 
 namespace StS2Aris.StS2ArisCode.Powers;
 
 public sealed class JobWizardPower : ArisJobPower
 {
-    protected override IEnumerable<DynamicVar> CanonicalVars => [new DynamicVar("Amount", 3m)];
-    public override string AnimationSuffix => "Wizard";
+    private const string RepairAmountKey = "RepairAmount";
+
+    protected override IEnumerable<DynamicVar> CanonicalVars =>
+    [
+        new DynamicVar("Amount", 3m),
+        new DynamicVar(RepairAmountKey, 3m)
+    ];
+
+    public override string AnimationSuffix => "Necromancer";
 
     public override async Task AfterPowerAmountChanged(PlayerChoiceContext choiceContext, PowerModel power, decimal amount, Creature? applier, CardModel? cardSource)
     {
+        if (power == this || power is LevelUpPower && power.Owner == Owner)
+        {
+            RefreshRepairAmount();
+        }
+
         var target = power.Owner;
         if (applier != Owner || target.Side == Owner.Side || power.Type != PowerType.Debuff)
         {
@@ -24,17 +37,38 @@ public sealed class JobWizardPower : ArisJobPower
 
         Flash();
         var repairAmount = EquipmentCard?.DynamicVars["Magic"].IntValue ?? DynamicVars["Amount"].IntValue;
-        await PowerCmd.Apply<EndTurnBlockPower>(choiceContext, Owner, repairAmount + LevelBonus, Owner, EquipmentCard);
+        await PowerCmd.Apply<EndTurnBlockPower>(choiceContext, Owner, repairAmount * EffectApplications, Owner, EquipmentCard);
+    }
+
+    public override Task OnLevelUpChanged(PlayerChoiceContext choiceContext)
+    {
+        RefreshRepairAmount();
+        return Task.CompletedTask;
     }
 
     public override async Task OnClassChange(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        if (EquipmentCard == null)
+        var equipment = EquipmentCard;
+        var player = equipment?.Owner;
+        var combatState = equipment?.CombatState ?? player?.Creature.CombatState;
+        if (equipment == null || player == null || combatState == null)
         {
             return;
         }
 
-        Flash();
-        await CreatureCmd.GainBlock(Owner, EquipmentCard.DynamicVars.Block.BaseValue, ValueProp.Move, null);
+        var amount = equipment.DynamicVars.Cards.IntValue;
+        List<Soul> cards = Soul.Create(player, amount, combatState).ToList();
+        CardCmd.PreviewCardPileAdd(await CardPileCmd.AddGeneratedCardsToCombat(cards, PileType.Draw, player, CardPilePosition.Random));
+    }
+
+    private void RefreshRepairAmount()
+    {
+        if (DynamicVars.TryGetValue(RepairAmountKey, out var repairAmount))
+        {
+            var baseAmount = EquipmentCard?.DynamicVars["Magic"].IntValue ?? DynamicVars["Amount"].IntValue;
+            repairAmount.BaseValue = baseAmount * EffectApplications;
+        }
+
+        InvokeDisplayAmountChanged();
     }
 }

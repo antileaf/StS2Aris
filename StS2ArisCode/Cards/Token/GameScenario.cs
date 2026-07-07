@@ -13,6 +13,7 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.CardPools;
 using MegaCrit.Sts2.Core.Models.Cards;
+using MegaCrit.Sts2.Core.Models.Enchantments;
 using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.Nodes.CommonUi;
 using MegaCrit.Sts2.Core.Saves.Runs;
@@ -37,6 +38,13 @@ public enum GameScenarioDamageMode
 [Pool(typeof(TokenCardPool))]
 public class GameScenario() : StS2ArisCard(1, CardType.Skill, CardRarity.Token, TargetType.Self)
 {
+    private static int _chronicleCount;
+
+    public static void ResetChronicleCount()
+    {
+        _chronicleCount = 0;
+    }
+
     [SavedProperty(SerializationCondition.SaveIfNotTypeDefault)]
     public int ScenarioType { get; set; }
 
@@ -220,8 +228,41 @@ public class GameScenario() : StS2ArisCard(1, CardType.Skill, CardRarity.Token, 
     [SavedProperty(SerializationCondition.SaveIfNotTypeDefault)]
     public bool ScenarioExhaust { get; set; }
 
+    [SavedProperty(SerializationCondition.SaveIfNotTypeDefault)]
+    public bool ScenarioFinalRelease { get; set; }
+
+    [SavedProperty(SerializationCondition.SaveIfNotTypeDefault)]
+    public int ScenarioChronicleNumber { get; set; }
+
     public override CardType Type => ScenarioType == (int)CardType.Attack ? CardType.Attack : CardType.Skill;
     protected override int CanonicalEnergyCost => ScenarioCost;
+
+    private bool HasGameArt => Enchantment is Inky or Swift;
+    private bool HasFinalRelease => ScenarioFinalRelease;
+    private bool IsTalesSagaChronicle => HasGameArt && HasFinalRelease;
+
+    public override string Title
+    {
+        get
+        {
+            var key = GetScenarioTitleKey();
+            var title = key == null
+                ? TitleLocString.GetFormattedText()
+                : new LocString("cards", $"{Id.Entry}.title.{key}").GetFormattedText();
+
+            if (IsTalesSagaChronicle && ScenarioChronicleNumber > 1)
+            {
+                title += $" {ScenarioChronicleNumber}";
+            }
+
+            if (!IsUpgraded)
+            {
+                return title;
+            }
+
+            return MaxUpgradeLevel > 1 ? $"{title}+{CurrentUpgradeLevel}" : title + "+";
+        }
+    }
 
     public override TargetType TargetType
     {
@@ -446,6 +487,11 @@ public class GameScenario() : StS2ArisCard(1, CardType.Skill, CardRarity.Token, 
 
     public void RefreshGeneratedValues()
     {
+        if (IsTalesSagaChronicle && ScenarioChronicleNumber <= 0)
+        {
+            ScenarioChronicleNumber = ++_chronicleCount;
+        }
+
         RefreshScenarioKeywords();
         SetVar("Damage", ScenarioDamage);
         SetVar("Hits", ScenarioDamageHits);
@@ -689,6 +735,11 @@ public class GameScenario() : StS2ArisCard(1, CardType.Skill, CardRarity.Token, 
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this, play).Targeting(target)
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);
+
+        if (Enchantment is Inky inky && target.IsAlive)
+        {
+            await PowerCmd.Apply<WeakPower>(choiceContext, target, inky.DynamicVars.Weak.BaseValue, Owner.Creature, this);
+        }
     }
 
     private async Task PlayEnemyPowers(PlayerChoiceContext choiceContext, CardPlay play)
@@ -965,56 +1016,14 @@ public class GameScenario() : StS2ArisCard(1, CardType.Skill, CardRarity.Token, 
 
     protected override void OnUpgrade()
     {
-        if (ScenarioDamage > 0)
-        {
-            ScenarioDamage += Math.Max(3, ScenarioDamage / 5);
-        }
-
-        if (ScenarioBlock > 0)
-        {
-            ScenarioBlock += Math.Max(3, ScenarioBlock / 5);
-        }
-
-        if (ScenarioCards > 0)
-        {
-            ScenarioCards++;
-        }
-        else if (ScenarioForge > 0)
-        {
-            ScenarioForge += 3;
-        }
-        else if (ScenarioSummon > 0)
-        {
-            ScenarioSummon += 2;
-        }
-        else if (ScenarioColorlessCards > 0)
-        {
-            ScenarioColorlessCards = Math.Min(3, ScenarioColorlessCards + 1);
-        }
-        else if (ScenarioCharge > 0)
-        {
-            ScenarioCharge++;
-        }
-        else if (ScenarioShockCards > 0)
-        {
-            ScenarioShockCards++;
-        }
-        else if (ScenarioStrength > 0)
-        {
-            ScenarioStrength++;
-        }
-        else if (ScenarioDexterity > 0)
-        {
-            ScenarioDexterity++;
-        }
-        else if (ScenarioShiv > 0)
-        {
-            ScenarioShiv++;
-        }
-        else if (ScenarioCost > 0)
+        if (ScenarioCost > 0)
         {
             ScenarioCost--;
             EnergyCost.UpgradeBy(-1);
+        }
+        else
+        {
+            ScenarioRetain = true;
         }
 
         RefreshGeneratedValues();
@@ -1129,11 +1138,45 @@ public class GameScenario() : StS2ArisCard(1, CardType.Skill, CardRarity.Token, 
         return line;
     }
 
-    public override string CustomPortraitPath => Type == CardType.Attack
-        ? "game_scenario_a_p.png".CardImagePath()
-        : "game_scenario_p.png".CardImagePath();
+    private string? GetScenarioTitleKey()
+    {
+        if (IsTalesSagaChronicle)
+        {
+            return "talesSagaChronicle";
+        }
 
-    public override string PortraitPath => Type == CardType.Attack
-        ? "game_scenario_a.png".CardImagePath()
-        : "game_scenario.png".CardImagePath();
+        if (HasGameArt)
+        {
+            return "prototype";
+        }
+
+        return HasFinalRelease ? "betaTest" : null;
+    }
+
+    private string ScenarioPortraitName
+    {
+        get
+        {
+            if (IsTalesSagaChronicle)
+            {
+                return "game_scenario_tales_saga_chronicle";
+            }
+
+            if (HasGameArt)
+            {
+                return "game_scenario_prototype";
+            }
+
+            if (HasFinalRelease)
+            {
+                return "game_scenario_beta_test";
+            }
+
+            return "game_scenario";
+        }
+    }
+
+    public override string CustomPortraitPath => $"{ScenarioPortraitName}_p.png".CardImagePath();
+
+    public override string PortraitPath => $"{ScenarioPortraitName}.png".CardImagePath();
 }

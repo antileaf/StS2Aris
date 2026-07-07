@@ -41,32 +41,9 @@ public class SuperNova() : StS2ArisEquipmentCard(1, CardType.Attack, CardRarity.
         return MakeJobPower<JobAoePower>();
     }
 
-    protected override async Task OnClassChange(PlayerChoiceContext choiceContext, CardPlay play)
-    {
-        if (CombatState == null)
-        {
-            return;
-        }
-
-        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this, play).TargetingAllOpponents(CombatState)
-            .WithAttackerAnim("Cast", 0.5f)
-            .BeforeDamage(async () =>
-            {
-                var targets = CombatState.HittableEnemies.ToList();
-                var vfx = NSweepingBeamVfx.Create(Owner.Creature, targets);
-                if (vfx != null)
-                {
-                    NCombatRoom.Instance?.CombatVfxContainer.AddChildSafely(vfx);
-                    await Cmd.Wait(0.5f);
-                }
-            })
-            .Execute(choiceContext);
-    }
-
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(2m);
-        DynamicVars["StrengthPower"].UpgradeValueBy(1m);
+        DynamicVars.Damage.UpgradeValueBy(3m);
     }
     
     public CardModel GetTranscendenceTransformedCard()

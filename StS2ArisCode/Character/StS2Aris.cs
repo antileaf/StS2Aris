@@ -110,7 +110,7 @@ public class StS2Aris : PlaceholderCharacterModel
             animator.AddAnyState(trigger, state, () => CurrentJobSuffix() == suffix);
         }
 
-        foreach (var suffix in new[] { "AOEDPS", "Newby", "Rogue", "Wizard", "Warrior", "Idol", "Hero", "Maid" })
+        foreach (var suffix in new[] { "AOEDPS", "Newby", "Rogue", "Wizard", "Warrior", "Idol", "Hero", "Maid", "Necromancer", "Kei" })
         {
             AddJobIdleState(suffix);
             AddJobActionState("Attack", "attack", suffix);

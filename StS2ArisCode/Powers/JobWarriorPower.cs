@@ -28,12 +28,12 @@ public sealed class JobWarriorPower : ArisJobPower
 
     public override async Task OnClassChange(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        if (EquipmentCard == null)
+        var equipment = EquipmentCard;
+        if (equipment == null)
         {
             return;
         }
 
-        Flash();
-        await CreatureCmd.GainBlock(Owner, EquipmentCard.DynamicVars.Block.BaseValue, ValueProp.Move, null);
+        await CreatureCmd.GainBlock(equipment.Owner.Creature, equipment.DynamicVars.Block.BaseValue, ValueProp.Move, play);
     }
 }

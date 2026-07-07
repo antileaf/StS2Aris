@@ -1,13 +1,23 @@
+using MegaCrit.Sts2.Core.CardSelection;
+using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
+using MegaCrit.Sts2.Core.Entities.Powers;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.ValueProps;
+using StS2Aris.StS2ArisCode.Cards;
 using StS2Aris.StS2ArisCode.Mechanics;
 
 namespace StS2Aris.StS2ArisCode.Powers;
 
 public sealed class JobMaidPower : ArisJobPower
 {
+    private const string DamagePercentKey = "DamagePercent";
+
+    protected override IEnumerable<DynamicVar> CanonicalVars => [new DynamicVar(DamagePercentKey, 50m)];
+
     public override string AnimationSuffix => "Maid";
 
     public override decimal ModifyDamageMultiplicative(Creature? target, decimal amount, ValueProp props, Creature? dealer, CardModel? cardSource, CardPlay? cardPlay)
@@ -48,5 +58,65 @@ public sealed class JobMaidPower : ArisJobPower
         }
 
         return effectiveAttackCount == 1 ? 1m + 0.5m * EffectApplications : 1m;
+    }
+
+    public override Task AfterPowerAmountChanged(PlayerChoiceContext choiceContext, PowerModel power, decimal amount, Creature? applier, CardModel? cardSource)
+    {
+        if (power == this || power is LevelUpPower && power.Owner == Owner)
+        {
+            RefreshDamagePercent();
+        }
+
+        return Task.CompletedTask;
+    }
+
+    public override Task OnLevelUpChanged(PlayerChoiceContext choiceContext)
+    {
+        RefreshDamagePercent();
+        return Task.CompletedTask;
+    }
+
+    public override async Task OnClassChange(PlayerChoiceContext choiceContext, CardPlay play)
+    {
+        var equipment = EquipmentCard;
+        var player = equipment?.Owner;
+        if (equipment == null || player == null)
+        {
+            return;
+        }
+
+        var selection = (await CardSelectCmd.FromCombatPile(
+            choiceContext,
+            PileType.Draw.GetPile(player),
+            player,
+            new CardSelectorPrefs(CardSelectorPrefs.TransformSelectionPrompt, equipment.DynamicVars.Cards.IntValue))).ToList();
+
+        await CreatureCmd.TriggerAnim(player.Creature, "Cast", player.Character.CastAnimDelay);
+        foreach (var card in selection)
+        {
+            var cardScope = card.CardScope;
+            if (cardScope == null)
+            {
+                continue;
+            }
+
+            var replacement = cardScope.CreateCard<CleanUp>(player);
+            if (equipment.IsUpgraded)
+            {
+                CardCmd.Upgrade(replacement);
+            }
+
+            await CardCmd.Transform(card, replacement);
+        }
+    }
+
+    private void RefreshDamagePercent()
+    {
+        if (DynamicVars.TryGetValue(DamagePercentKey, out var damagePercent))
+        {
+            damagePercent.BaseValue = 50m * EffectApplications;
+        }
+
+        InvokeDisplayAmountChanged();
     }
 }

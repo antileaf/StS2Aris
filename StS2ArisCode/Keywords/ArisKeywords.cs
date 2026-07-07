@@ -15,7 +15,7 @@ public static class ArisKeywords
     [CustomEnum] [KeywordProperties(AutoKeywordPosition.After)]
     public static CardKeyword Overload;
 
-    [CustomEnum] [KeywordProperties(AutoKeywordPosition.After)]
+    [CustomEnum] [KeywordProperties(AutoKeywordPosition.Before)]
     public static CardKeyword Output;
 
     [CustomEnum] [KeywordProperties(AutoKeywordPosition.After)]

@@ -22,7 +22,7 @@ public class EnergyCharge() : StS2ArisCard(0, CardType.Skill, CardRarity.Basic, 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new BlockVar(4, ValueProp.Move),
-        new PowerVar<ChargePower>(1m)
+        new PowerVar<ChargePower>(2m)
     ];
 
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)

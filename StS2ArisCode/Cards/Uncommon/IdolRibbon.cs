@@ -33,11 +33,6 @@ public class IdolRibbon() : StS2ArisEquipmentCard(1, CardType.Skill, CardRarity.
         return MakeJobPower<JobIdolPower>();
     }
 
-    protected override async Task OnClassChange(PlayerChoiceContext choiceContext, CardPlay play)
-    {
-        await CardPileCmd.Draw(choiceContext, DynamicVars["Magic"].BaseValue, Owner);
-    }
-
     protected override void OnUpgrade()
     {
         DynamicVars["Magic"].UpgradeValueBy(1m);

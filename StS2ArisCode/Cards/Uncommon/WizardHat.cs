@@ -8,6 +8,7 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
+using MegaCrit.Sts2.Core.Models.Cards;
 using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.ValueProps;
 using StS2Aris.StS2ArisCode.Character;
@@ -23,12 +24,14 @@ public class WizardHat() : StS2ArisEquipmentCard(1, CardType.Skill, CardRarity.U
         HoverTipFactory.FromKeyword(ArisKeywords.Equipment),
         HoverTipFactory.FromKeyword(ArisKeywords.ClassChange),
         HoverTipFactory.FromKeyword(ArisKeywords.Job),
-        HoverTipFactory.FromPower<EndTurnBlockPower>()
+        HoverTipFactory.FromPower<EndTurnBlockPower>(),
+        HoverTipFactory.FromCard<Soul>()
     ];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new DynamicVar("Magic", 3m)
+        new DynamicVar("Magic", 3m),
+        new CardsVar(3)
     ];
 
     public override ArisJobPower CreateJobPower()
@@ -36,40 +39,11 @@ public class WizardHat() : StS2ArisEquipmentCard(1, CardType.Skill, CardRarity.U
         return MakeJobPower<JobWizardPower>();
     }
 
-    protected override async Task OnClassChange(PlayerChoiceContext choiceContext, CardPlay play)
-    {
-        var drawPile = PileType.Draw.GetPile(Owner);
-        var powerCards = drawPile.Cards
-            .Where(static card => card.Type == CardType.Power)
-            .ToList();
-
-        CardModel? selected;
-        if (IsUpgraded)
-        {
-            selected = (await CardSelectCmd.FromCombatPile(
-                choiceContext,
-                drawPile,
-                Owner,
-                new CardSelectorPrefs(SelectionScreenPrompt, 1),
-                static card => card.Type == CardType.Power)).FirstOrDefault();
-        }
-        else
-        {
-            selected = powerCards.TakeRandom(1, Owner.RunState.Rng.CombatCardSelection).FirstOrDefault();
-        }
-
-        if (selected != null)
-        {
-            await CardPileCmd.Add(selected, PileType.Hand);
-        }
-    }
-
     protected override void OnUpgrade()
     {
-        DynamicVars["Magic"].UpgradeValueBy(1m);
+        DynamicVars.Cards.UpgradeValueBy(1m);
     }
 }
-
 
 
 
