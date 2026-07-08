@@ -59,9 +59,7 @@ public sealed class JobAtrahasisSuperNovaPower : ArisJobPower
             return;
         }
 
-        var desiredAmount = PlayerOwner != null && ArisCharge.IsOverloadState(PlayerOwner)
-            ? (int)(EquipmentStrengthAmount * EffectApplications)
-            : 0;
+        var desiredAmount = (int)(EquipmentStrengthAmount * EffectApplications);
         var amountToApply = desiredAmount - _strengthApplied;
         if (amountToApply == 0)
         {
@@ -92,7 +90,7 @@ public sealed class JobAtrahasisSuperNovaPower : ArisJobPower
             return;
         }
 
-        await DamageCmd.Attack(equipment.DynamicVars.Damage.BaseValue).FromCard(equipment, play)
+        await DamageCmd.Attack(equipment.DynamicVars.Damage.BaseValue).FromCardCompat(equipment, play)
             .TargetingAllOpponents(combatState)
             .WithAttackerAnim("Cast", 0.5f)
             .BeforeDamage(async () =>

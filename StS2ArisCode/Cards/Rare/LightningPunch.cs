@@ -25,7 +25,7 @@ public class LightningPunch() : StS2ArisCard(1, CardType.Attack, CardRarity.Rare
             return;
         }
 
-        var attack = await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this, play).Targeting(play.Target).Execute(choiceContext);
+        var attack = await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCardCompat(this, play).Targeting(play.Target).Execute(choiceContext);
         var dealt = attack.Results.SelectMany(static result => result).Where(result => result.Receiver == play.Target).Sum(static result => result.UnblockedDamage);
         if (dealt > 0 && !play.Target.IsDead)
         {

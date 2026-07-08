@@ -93,8 +93,8 @@ public sealed record MomoiScenarioAbilityDefinition(
 
 public static class MomoiScenarioGenerator
 {
-    public const int BaseBudget = 80;
-    public const int BudgetPerRefusal = 30;
+    public const int BaseBudget = 100;
+    public const int BudgetPerRefusal = 40;
 
     private static readonly MomoiScenarioAbilityDefinition[] AbilityDefinitions =
     [

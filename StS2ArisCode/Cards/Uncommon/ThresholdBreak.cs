@@ -27,7 +27,7 @@ public class ThresholdBreak() : StS2ArisCard(0, CardType.Skill, CardRarity.Uncom
 
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        await CreatureCmd.Damage(choiceContext, Owner.Creature, DynamicVars.HpLoss.BaseValue, ValueProp.Unpowered | ValueProp.Move, this, play);
+        await CreatureCmdCompat.DamageFromCard(choiceContext, Owner.Creature, DynamicVars.HpLoss.BaseValue, ValueProp.Unpowered | ValueProp.Move, Owner.Creature, this, play);
         await PowerCmd.Apply<ChargePower>(choiceContext, Owner.Creature, DynamicVars["ChargePower"].IntValue, Owner.Creature, this);
     }
 
@@ -38,7 +38,5 @@ public class ThresholdBreak() : StS2ArisCard(0, CardType.Skill, CardRarity.Uncom
         DynamicVars["ChargePower"].UpgradeValueBy(1m);
     }
 }
-
-
 
 

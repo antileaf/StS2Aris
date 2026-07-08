@@ -31,7 +31,7 @@ public class GiantSwingStrike() : StS2ArisCard(1, CardType.Attack, CardRarity.Co
             return;
         }
 
-        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this, play).TargetingAllOpponents(CombatState).Execute(choiceContext);
+        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCardCompat(this, play).TargetingAllOpponents(CombatState).Execute(choiceContext);
 
         var enemyCount = CombatState.HittableEnemies.Count();
         if (enemyCount > 0)
@@ -46,4 +46,3 @@ public class GiantSwingStrike() : StS2ArisCard(1, CardType.Attack, CardRarity.Co
         DynamicVars.Block.UpgradeValueBy(1m);
     }
 }
-

@@ -4,12 +4,14 @@ using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
+using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Powers;
+using BaseLib.Patches.Localization;
 
 namespace StS2Aris.StS2ArisCode.Powers;
 
-public abstract class ArisJobPower : StS2ArisPower
+public abstract class ArisJobPower : StS2ArisPower, IAddDumbVariablesToPowerDescription
 {
     public CardModel? EquipmentCard { get; set; }
     public abstract string AnimationSuffix { get; }
@@ -47,5 +49,10 @@ public abstract class ArisJobPower : StS2ArisPower
     public virtual Task OnLevelUpChanged(PlayerChoiceContext choiceContext)
     {
         return Task.CompletedTask;
+    }
+
+    public virtual void AddDumbVariablesToPowerDescription(LocString description)
+    {
+        description.Add("StrengthAmount", EquipmentStrengthAmount * EffectApplications);
     }
 }

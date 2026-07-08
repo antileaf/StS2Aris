@@ -12,6 +12,6 @@ using StS2Aris.StS2ArisCode.Powers;
 namespace StS2Aris.StS2ArisCode.Relics;
 public class CopyCat : StS2ArisRelic
 {
-    public override RelicRarity Rarity => RelicRarity.Rare;
+    public override RelicRarity Rarity => RelicRarity.Event;
 }
 

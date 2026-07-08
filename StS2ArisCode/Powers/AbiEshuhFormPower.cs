@@ -16,10 +16,30 @@ namespace StS2Aris.StS2ArisCode.Powers;
 
 public sealed class AbiEshuhFormPower : StS2ArisPower, IAddDumbVariablesToPowerDescription
 {
-    protected override IEnumerable<DynamicVar> CanonicalVars => [new DynamicVar("DamagePerCharge", 1m)];
+    private const string DamagePerChargeKey = "DamagePerCharge";
+
+    protected override IEnumerable<DynamicVar> CanonicalVars => [new DynamicVar(DamagePerChargeKey, 1m)];
 
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.Counter;
+
+    public override Task AfterApplied(Creature? applier, CardModel? cardSource)
+    {
+        DynamicVars[DamagePerChargeKey].BaseValue = GetDamagePerCharge(cardSource);
+        InvokeDisplayAmountChanged();
+        return Task.CompletedTask;
+    }
+
+    public override Task AfterPowerAmountChanged(PlayerChoiceContext choiceContext, PowerModel power, decimal amount, Creature? applier, CardModel? cardSource)
+    {
+        if (power == this && amount > 0 && Amount != (int)amount && cardSource?.DynamicVars.ContainsKey(DamagePerChargeKey) == true)
+        {
+            DynamicVars[DamagePerChargeKey].BaseValue += GetDamagePerCharge(cardSource);
+            InvokeDisplayAmountChanged();
+        }
+
+        return Task.CompletedTask;
+    }
 
     public override async Task BeforeSideTurnStart(PlayerChoiceContext choiceContext, CombatSide side, IReadOnlyList<Creature> participants, ICombatState combatState)
     {
@@ -30,7 +50,7 @@ public sealed class AbiEshuhFormPower : StS2ArisPower, IAddDumbVariablesToPowerD
         }
     }
 
-    public override decimal ModifyDamageAdditive(Creature? target, decimal amount, ValueProp props, Creature? dealer, CardModel? cardSource, CardPlay? cardPlay)
+    public decimal ModifyDamageAdditiveCompat(Creature? target, decimal amount, ValueProp props, Creature? dealer, CardModel? cardSource, CardPlay? cardPlay)
     {
         if (dealer != Owner || cardSource?.Type != CardType.Attack || !props.IsPoweredAttack() || Owner.Player == null)
         {
@@ -39,13 +59,20 @@ public sealed class AbiEshuhFormPower : StS2ArisPower, IAddDumbVariablesToPowerD
 
         var sourceCard = cardPlay?.Card ?? cardSource;
         var chargeBeforeCost = ArisCharge.Get(Owner.Player) + (sourceCard == null ? 0 : ArisCharge.GetSpent(sourceCard));
-        return chargeBeforeCost * DynamicVars["DamagePerCharge"].BaseValue;
+        return chargeBeforeCost * DynamicVars[DamagePerChargeKey].BaseValue;
     }
 
     public void AddDumbVariablesToPowerDescription(LocString description)
     {
         description.Add("ChargeIcons", ChargeIconFormatter.Format((int)Amount));
         description.Add("Amount", Amount);
-        description.Add("DamagePerCharge", DynamicVars["DamagePerCharge"].BaseValue);
+        description.Add("DamagePerCharge", DynamicVars[DamagePerChargeKey].BaseValue);
+    }
+
+    private static decimal GetDamagePerCharge(CardModel? cardSource)
+    {
+        return cardSource?.DynamicVars.TryGetValue(DamagePerChargeKey, out var damagePerCharge) == true
+            ? damagePerCharge.BaseValue
+            : 1m;
     }
 }

@@ -14,7 +14,7 @@ using StS2Aris.StS2ArisCode.Powers;
 
 namespace StS2Aris.StS2ArisCode.Cards;
 [Pool(typeof(StS2ArisCardPool))]
-public class ShortCircuit() : StS2ArisCard(2, CardType.Skill, CardRarity.Rare, TargetType.Self)
+public class ShortCircuit() : StS2ArisCard(3, CardType.Skill, CardRarity.Rare, TargetType.Self)
 {
     protected override IEnumerable<IHoverTip> ExtraHoverTips => [HoverTipFactory.FromCard<Shock>(IsUpgraded)];
 
@@ -28,11 +28,11 @@ public class ShortCircuit() : StS2ArisCard(2, CardType.Skill, CardRarity.Rare, T
         await Shock.CreateInHand(Owner, count, combatState);
     }
 
-    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Ethereal, CardKeyword.Exhaust];
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 
     protected override void OnUpgrade()
     {
-        RemoveKeyword(CardKeyword.Ethereal);
+        EnergyCost.UpgradeBy(-1);
     }
 }
 

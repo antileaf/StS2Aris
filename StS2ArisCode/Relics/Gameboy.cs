@@ -12,6 +12,6 @@ using StS2Aris.StS2ArisCode.Powers;
 namespace StS2Aris.StS2ArisCode.Relics;
 public class Gameboy : StS2ArisRelic
 {
-    public override RelicRarity Rarity => RelicRarity.Uncommon;
+    public override RelicRarity Rarity => RelicRarity.Event;
 }
 

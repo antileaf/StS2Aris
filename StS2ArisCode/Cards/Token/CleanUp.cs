@@ -21,7 +21,7 @@ public class CleanUp() : StS2ArisCard(2, CardType.Attack, CardRarity.Token, Targ
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
         ArgumentNullException.ThrowIfNull(play.Target);
-        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this, play).Targeting(play.Target).Execute(choiceContext);
+        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCardCompat(this, play).Targeting(play.Target).Execute(choiceContext);
     }
 
     protected override void OnUpgrade()

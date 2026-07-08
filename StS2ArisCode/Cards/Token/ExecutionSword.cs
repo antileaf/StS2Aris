@@ -23,7 +23,7 @@ public class ExecutionSword() : StS2ArisCard(2, CardType.Attack, CardRarity.Toke
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
         ArgumentNullException.ThrowIfNull(play.Target);
-        await DamageCmd.Attack(DynamicVars.CalculatedDamage).FromCard(this, play).Targeting(play.Target).Execute(choiceContext);
+        await DamageCmd.Attack(DynamicVars.CalculatedDamage).FromCardCompat(this, play).Targeting(play.Target).Execute(choiceContext);
     }
 
     protected override void OnUpgrade()
@@ -36,6 +36,5 @@ public class ExecutionSword() : StS2ArisCard(2, CardType.Attack, CardRarity.Toke
         return Math.Floor(Math.Max(card.Owner?.Gold ?? 0, 0) / 10m);
     }
 }
-
 
 

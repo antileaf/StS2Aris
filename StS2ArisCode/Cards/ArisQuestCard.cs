@@ -82,7 +82,7 @@ public abstract class ArisQuestCard<TReward>(int cost, CardType type, CardRarity
         return Task.CompletedTask;
     }
 
-    protected virtual TReward CreateRewardCard()
+    protected virtual CardModel CreateRewardCard()
     {
         TReward reward = Owner.RunState.CreateCard<TReward>(Owner);
         if (RewardInheritsUpgrade && IsUpgraded)
@@ -94,7 +94,7 @@ public abstract class ArisQuestCard<TReward>(int cost, CardType type, CardRarity
         return reward;
     }
 
-    private async Task CompleteQuest()
+    protected async Task CompleteQuest()
     {
         if (!CanAdvanceQuest())
         {
@@ -103,6 +103,11 @@ public abstract class ArisQuestCard<TReward>(int cost, CardType type, CardRarity
 
         await BeforeQuestComplete();
         PlayerCmd.CompleteQuest(this);
+        await ApplyQuestReward();
+    }
+
+    protected virtual async Task ApplyQuestReward()
+    {
         await CardCmd.Transform(this, CreateRewardCard());
     }
 

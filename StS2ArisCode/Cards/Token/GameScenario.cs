@@ -571,7 +571,7 @@ public class GameScenario() : StS2ArisCard(1, CardType.Skill, CardRarity.Token, 
     {
         if (ScenarioLoseHp > 0)
         {
-            await CreatureCmd.Damage(choiceContext, Owner.Creature, ScenarioLoseHp, ValueProp.Unblockable | ValueProp.Unpowered, Owner.Creature, this, play);
+            await CreatureCmdCompat.DamageFromCard(choiceContext, Owner.Creature, ScenarioLoseHp, ValueProp.Unblockable | ValueProp.Unpowered, Owner.Creature, this, play);
         }
 
         await PlayDamage(choiceContext, play);
@@ -687,7 +687,7 @@ public class GameScenario() : StS2ArisCard(1, CardType.Skill, CardRarity.Token, 
                     return;
                 }
 
-                await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this, play).TargetingAllOpponents(combatState)
+                await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCardCompat(this, play).TargetingAllOpponents(combatState)
                     .WithHitFx("vfx/vfx_attack_slash")
                     .Execute(choiceContext);
                 break;
@@ -695,7 +695,7 @@ public class GameScenario() : StS2ArisCard(1, CardType.Skill, CardRarity.Token, 
                 ArgumentNullException.ThrowIfNull(play.Target);
                 for (int i = 0; i < Math.Max(1, ScenarioDamageHits); i++)
                 {
-                    await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this, play).Targeting(play.Target)
+                    await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCardCompat(this, play).Targeting(play.Target)
                         .WithHitFx("vfx/vfx_attack_slash")
                         .Execute(choiceContext);
                 }
@@ -711,7 +711,7 @@ public class GameScenario() : StS2ArisCard(1, CardType.Skill, CardRarity.Token, 
                 break;
             default:
                 ArgumentNullException.ThrowIfNull(play.Target);
-                await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this, play).Targeting(play.Target)
+                await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCardCompat(this, play).Targeting(play.Target)
                     .WithHitFx("vfx/vfx_attack_slash")
                     .Execute(choiceContext);
                 break;
@@ -732,7 +732,7 @@ public class GameScenario() : StS2ArisCard(1, CardType.Skill, CardRarity.Token, 
             return;
         }
 
-        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this, play).Targeting(target)
+        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCardCompat(this, play).Targeting(target)
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);
 

@@ -15,13 +15,13 @@ using StS2Aris.StS2ArisCode.Powers;
 
 namespace StS2Aris.StS2ArisCode.Cards;
 [Pool(typeof(StS2ArisCardPool))]
-public class ElectronicExplosion() : StS2ArisCard(1, CardType.Attack, CardRarity.Uncommon, TargetType.AllEnemies)
+public class ElectronicExplosion() : StS2ArisCard(1, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy)
 {
     protected override IEnumerable<IHoverTip> ExtraHoverTips => [HoverTipFactory.FromKeyword(ArisKeywords.Overload)];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new DamageVar(4, ValueProp.Move),
+        new DamageVar(5, ValueProp.Move),
         new CalculationBaseVar(0m),
         new CalculationExtraVar(1m),
         new CalculatedVar("CalculatedHits").WithMultiplier((_, _) => ArisCharge.OverloadsThisCombat)
@@ -29,17 +29,11 @@ public class ElectronicExplosion() : StS2ArisCard(1, CardType.Attack, CardRarity
 
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        if (CombatState == null)
-        {
-            return;
-        }
-
-        int hits = ArisCharge.OverloadsThisCombat;
-        for (int i = 0; i < hits; i++)
-        {
-            await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this, play).TargetingRandomOpponents(CombatState, true).Execute(choiceContext);
-            await Cmd.Wait(0.1f);
-        }
+        ArgumentNullException.ThrowIfNull(play.Target, "cardPlay.Target");
+        await DamageCmd.Attack(base.DynamicVars.Damage.BaseValue).WithHitCount((int)((CalculatedVar)base.DynamicVars["CalculatedHits"]).Calculate(play.Target)).FromCard(this)
+            .Targeting(play.Target)
+            .WithHitFx("vfx/vfx_attack_slash")
+            .Execute(choiceContext);
     }
 
     protected override void OnUpgrade()
@@ -47,5 +41,4 @@ public class ElectronicExplosion() : StS2ArisCard(1, CardType.Attack, CardRarity
         DynamicVars.Damage.UpgradeValueBy(2m);
     }
 }
-
 

@@ -27,14 +27,14 @@ public class RaidersLeader() : StS2ArisCard(2, CardType.Attack, CardRarity.Token
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new DamageVar(21, ValueProp.Move),
+        new DamageVar(24, ValueProp.Move),
         new DynamicVar("Magic", 2m)
     ];
 
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
         ArgumentNullException.ThrowIfNull(play.Target);
-        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this, play).Targeting(play.Target).Execute(choiceContext);
+        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCardCompat(this, play).Targeting(play.Target).Execute(choiceContext);
         await PowerCmd.Apply<ShockPower>(choiceContext, play.Target, DynamicVars["Magic"].BaseValue, Owner.Creature, this);
         await PowerCmd.Apply<VulnerablePower>(choiceContext, play.Target, DynamicVars["Magic"].BaseValue, Owner.Creature, this);
         await PowerCmd.Apply<WeakPower>(choiceContext, play.Target, DynamicVars["Magic"].BaseValue, Owner.Creature, this);
@@ -42,11 +42,10 @@ public class RaidersLeader() : StS2ArisCard(2, CardType.Attack, CardRarity.Token
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(5m);
+        DynamicVars.Damage.UpgradeValueBy(6m);
         DynamicVars["Magic"].UpgradeValueBy(1m);
     }
 }
-
 
 
 

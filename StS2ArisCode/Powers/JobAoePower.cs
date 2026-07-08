@@ -92,7 +92,7 @@ public sealed class JobAoePower : ArisJobPower
             return;
         }
 
-        await DamageCmd.Attack(equipment.DynamicVars.Damage.BaseValue).FromCard(equipment, play)
+        await DamageCmd.Attack(equipment.DynamicVars.Damage.BaseValue).FromCardCompat(equipment, play)
             .TargetingAllOpponents(combatState)
             .WithAttackerAnim("Cast", 0.5f)
             .BeforeDamage(async () =>

@@ -27,7 +27,7 @@ public class CursedWeapon() : StS2ArisCard(1, CardType.Attack, CardRarity.Uncomm
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
         ArgumentNullException.ThrowIfNull(play.Target);
-        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this, play).Targeting(play.Target).Execute(choiceContext);
+        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCardCompat(this, play).Targeting(play.Target).Execute(choiceContext);
     }
 
     public override async Task AfterCardPlayed(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -37,7 +37,7 @@ public class CursedWeapon() : StS2ArisCard(1, CardType.Attack, CardRarity.Uncomm
             return;
         }
 
-        await CreatureCmd.Damage(choiceContext, Owner.Creature, DynamicVars.HpLoss.BaseValue, ValueProp.Unpowered | ValueProp.Move, this, null);
+        await CreatureCmdCompat.DamageFromCard(choiceContext, Owner.Creature, DynamicVars.HpLoss.BaseValue, ValueProp.Unpowered | ValueProp.Move, Owner.Creature, this, cardPlay);
         NPowerUpVfx.CreateGhostly(Owner.Creature);
         DynamicVars.Damage.BaseValue += DynamicVars["Increase"].BaseValue;
     }
@@ -48,7 +48,3 @@ public class CursedWeapon() : StS2ArisCard(1, CardType.Attack, CardRarity.Uncomm
         DynamicVars["Increase"].UpgradeValueBy(1m);
     }
 }
-
-
-
-

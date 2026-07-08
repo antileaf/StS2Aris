@@ -9,7 +9,7 @@ namespace StS2Aris.StS2ArisCode.Relics;
 
 public class Battery : StS2ArisRelic
 {
-    public override RelicRarity Rarity => RelicRarity.Uncommon;
+    public override RelicRarity Rarity => RelicRarity.Event;
 
     public override bool TryModifyPowerAmountReceived(PowerModel canonicalPower, Creature target, decimal amount, Creature? applier, out decimal modifiedAmount)
     {

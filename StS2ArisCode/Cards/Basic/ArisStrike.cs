@@ -22,7 +22,7 @@ public class ArisStrike() : StS2ArisCard(1, CardType.Attack, CardRarity.Basic, T
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
         ArgumentNullException.ThrowIfNull(play.Target);
-        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this, play).Targeting(play.Target).Execute(choiceContext);
+        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCardCompat(this, play).Targeting(play.Target).Execute(choiceContext);
     }
 
     protected override void OnUpgrade()
@@ -30,5 +30,4 @@ public class ArisStrike() : StS2ArisCard(1, CardType.Attack, CardRarity.Basic, T
         DynamicVars.Damage.UpgradeValueBy(3m);
     }
 }
-
 

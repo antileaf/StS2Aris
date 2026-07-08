@@ -1,4 +1,5 @@
 ﻿using BaseLib.Utils;
+using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
@@ -30,7 +31,12 @@ public class ReactiveArmour() : StS2ArisCard(1, CardType.Skill, CardRarity.Commo
 
     public override async Task AfterDamageReceived(PlayerChoiceContext choiceContext, Creature target, DamageResult result, ValueProp props, Creature? dealer, CardModel? cardSource)
     {
-        if (Pile?.Type != PileType.Discard || target != Owner.Creature || result.TotalDamage <= 0 || dealer == null || Owner.Creature.IsDead)
+        if (Pile?.Type != PileType.Discard
+            || target != Owner.Creature
+            || target.CombatState?.CurrentSide != CombatSide.Player
+            || result.TotalDamage <= 0
+            || dealer == null
+            || Owner.Creature.IsDead)
         {
             return;
         }

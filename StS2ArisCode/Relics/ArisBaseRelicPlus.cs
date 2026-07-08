@@ -16,7 +16,9 @@ public class ArisBaseRelicPlus : StS2ArisRelic, IOnClassChanged
     private bool _classChangeTriggeredThisTurn;
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [new PowerVar<ChargePower>(1m)];
-    public override RelicRarity Rarity => RelicRarity.Rare;
+
+    public override RelicRarity Rarity => RelicRarity.Starter;
+
 
     [SavedProperty]
     public bool ClassChangeTriggeredThisTurn

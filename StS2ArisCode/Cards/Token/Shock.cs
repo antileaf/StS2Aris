@@ -30,13 +30,12 @@ public class Shock() : StS2ArisCard(0, CardType.Attack, CardRarity.Token, Target
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
         ArgumentNullException.ThrowIfNull(play.Target);
-        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this, play).Targeting(play.Target).Execute(choiceContext);
+        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCardCompat(this, play).Targeting(play.Target).Execute(choiceContext);
         await PowerCmd.Apply<ShockPower>(choiceContext, play.Target, DynamicVars["ShockPower"].IntValue, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(1m);
         DynamicVars["ShockPower"].UpgradeValueBy(1m);
     }
 

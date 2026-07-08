@@ -12,7 +12,7 @@ namespace StS2Aris.StS2ArisCode.Cards;
 [Pool(typeof(StS2ArisCardPool))]
 public class CreatedApotheosis() : StS2ArisCard(1, CardType.Skill, CardRarity.Rare, TargetType.Self)
 {
-    private const int BaseUpgradeCount = 4;
+    private const int BaseUpgradeCount = 3;
 
     public override int MaxUpgradeLevel => int.MaxValue;
 
@@ -52,6 +52,6 @@ public class CreatedApotheosis() : StS2ArisCard(1, CardType.Skill, CardRarity.Ra
 
     protected override void OnUpgrade()
     {
-        DynamicVars["Magic"].BaseValue = UpgradeCount;
+        DynamicVars["Magic"].UpgradeValueBy(UpgradeCount - DynamicVars["Magic"].BaseValue);
     }
 }

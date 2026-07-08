@@ -31,7 +31,7 @@ public class BalanceBroken() : StS2ArisCard(3, CardType.Attack, CardRarity.Rare,
         {
             try
             {
-                await DamageCmd.Attack(DynamicVars.CalculatedDamage).FromCard(this, play).TargetingAllOpponents(CombatState).Execute(choiceContext);
+                await DamageCmd.Attack(DynamicVars.CalculatedDamage).FromCardCompat(this, play).TargetingAllOpponents(CombatState).Execute(choiceContext);
             }
             finally
             {
@@ -46,6 +46,5 @@ public class BalanceBroken() : StS2ArisCard(3, CardType.Attack, CardRarity.Rare,
         DynamicVars["Magic"].UpgradeValueBy(2m);
     }
 }
-
 
 

@@ -45,8 +45,15 @@ public abstract class StS2ArisEquipmentCard(int cost, CardType type, CardRarity 
         await ArisEquipment.Equip(choiceContext, this, nextJob);
     }
 
-    protected override (PileType, CardPilePosition) GetResultPileTypeAndPositionForCardPlay()
+    public override (PileType, CardPilePosition) ModifyCardPlayResultPileTypeAndPosition(
+        CardModel card,
+        bool isAutoPlay,
+        ResourceInfo resources,
+        PileType pileType,
+        CardPilePosition position)
     {
-        return (PileType.None, CardPilePosition.Bottom);
+        return card == this
+            ? (PileType.None, CardPilePosition.Bottom)
+            : base.ModifyCardPlayResultPileTypeAndPosition(card, isAutoPlay, resources, pileType, position);
     }
 }

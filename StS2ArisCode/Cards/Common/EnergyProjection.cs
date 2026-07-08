@@ -22,14 +22,14 @@ public class EnergyProjection() : StS2ArisCard(1, CardType.Attack, CardRarity.Co
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        ..MakeCalculatedDamage(7, (card, _) => ArisCharge.WillBeOverloadAfterSpending(card) ? card.DynamicVars.CalculationBase.BaseValue : 0m)
+        new DamageVar(7, ValueProp.Move)
     ];
 
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
         if (play.Target == null)
             return;
-        await DamageCmd.Attack(DynamicVars.CalculatedDamage).FromCard(this, play).Targeting(play.Target).Execute(choiceContext);
+        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCardCompat(this, play).Targeting(play.Target).Execute(choiceContext);
     }
 
     public Task OnOverload(PlayerChoiceContext choiceContext, CardPlay play)
@@ -37,11 +37,18 @@ public class EnergyProjection() : StS2ArisCard(1, CardType.Attack, CardRarity.Co
         return Task.CompletedTask;
     }
 
+    public decimal ModifyDamageMultiplicativeCompat(Creature? target, decimal amount, ValueProp props, Creature? dealer, CardModel? cardSource)
+    {
+        if (cardSource != this || dealer != Owner?.Creature || !props.IsPoweredAttack())
+        {
+            return 1m;
+        }
+
+        return ArisCharge.WillBeOverloadAfterSpending(this) ? 2m : 1m;
+    }
+
     protected override void OnUpgrade()
     {
-        DynamicVars.CalculationBase.UpgradeValueBy(2m);
+        DynamicVars.Damage.UpgradeValueBy(2m);
     }
 }
-
-
-

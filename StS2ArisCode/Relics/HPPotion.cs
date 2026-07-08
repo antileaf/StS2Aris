@@ -12,6 +12,6 @@ using StS2Aris.StS2ArisCode.Powers;
 namespace StS2Aris.StS2ArisCode.Relics;
 public class HPPotion : StS2ArisRelic
 {
-    public override RelicRarity Rarity => RelicRarity.Common;
+    public override RelicRarity Rarity => RelicRarity.Event;
 }
 

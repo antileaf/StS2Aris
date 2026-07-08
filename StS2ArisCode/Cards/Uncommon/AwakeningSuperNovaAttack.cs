@@ -21,7 +21,7 @@ public class AwakeningSuperNovaAttack() : StS2ArisCard(0, CardType.Attack, CardR
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new DamageVar(5, ValueProp.Move),
+        new DamageVar(4, ValueProp.Move),
         new CalculationBaseVar(0m),
         new CalculationExtraVar(1m),
         new CalculatedVar("CalculatedHits").WithMultiplier((card, _) => CalculateExpectedHits(card))
@@ -41,14 +41,26 @@ public class AwakeningSuperNovaAttack() : StS2ArisCard(0, CardType.Attack, CardR
             {
                 await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", 0.5f);
                 await PlayHyperbeamVfx();
-            }
 
-            for (var i = 0; i < hits; i++)
-            {
-                await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this, play)
+                var resolvedHits = 0;
+                await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCardCompat(this, play)
                     .TargetingAllOpponents(CombatState)
+                    .WithHitCount(hits)
+                    .WithNoAttackerAnim()
+                    .BeforeDamage(async () =>
+                    {
+                        if (resolvedHits == 0)
+                        {
+                            await Cmd.CustomScaledWait(0.5f, 1.0f);
+                        }
+                        else if (resolvedHits > 0)
+                        {
+                            await Cmd.CustomScaledWait(0.3f, 0.5f);
+                        }
+
+                        resolvedHits++;
+                    })
                     .Execute(choiceContext);
-                await Cmd.Wait(0.1f);
             }
         }
         finally

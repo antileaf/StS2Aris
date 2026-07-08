@@ -34,7 +34,7 @@ public class PrismaticBeams() : StS2ArisCard(1, CardType.Attack, CardRarity.Unco
     {
         if (play.Target == null)
             return;
-        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this, play).Targeting(play.Target).Execute(choiceContext);
+        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCardCompat(this, play).Targeting(play.Target).Execute(choiceContext);
     }
 
     public async Task OnOverload(PlayerChoiceContext choiceContext, CardPlay play)
@@ -51,7 +51,6 @@ public class PrismaticBeams() : StS2ArisCard(1, CardType.Attack, CardRarity.Unco
         DynamicVars["Magic"].UpgradeValueBy(1m);
     }
 }
-
 
 
 

@@ -25,10 +25,15 @@ public class StaticStrike() : StS2ArisCard(1, CardType.Attack, CardRarity.Common
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
         ArgumentNullException.ThrowIfNull(play.Target);
-        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this, play).Targeting(play.Target).Execute(choiceContext);
+        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCardCompat(this, play).Targeting(play.Target).Execute(choiceContext);
         var combatState = Owner.Creature.CombatState;
         if (combatState == null)
             return;
         await Shock.CreateInHand(Owner, combatState, IsUpgraded);
+    }
+    
+    protected override void OnUpgrade()
+    {
+        DynamicVars.Damage.UpgradeValueBy(1m);
     }
 }

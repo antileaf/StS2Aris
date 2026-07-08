@@ -40,7 +40,7 @@ public sealed class ShockPower : StS2ArisPower
             Flash();
             var targets = Owner;
 
-            await CreatureCmd.Damage(choiceContext, targets, Amount, DamageProps.nonCardHpLoss, Applier, null, null);
+            await CreatureCmd.Damage(choiceContext, targets, Amount, DamageProps.nonCardHpLoss, Applier ?? Owner);
             if (!Owner.HasPower<ElectromagneticInductionPower>())
             {
                 await PowerCmd.Decrement(this);

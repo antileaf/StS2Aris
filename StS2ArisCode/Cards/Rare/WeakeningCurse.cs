@@ -27,13 +27,16 @@ public class WeakeningCurse() : StS2ArisCard(1, CardType.Skill, CardRarity.Rare,
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
         ArgumentNullException.ThrowIfNull(play.Target);
-        var strengthDown = await PowerCmd.Apply<StrengthPower>(choiceContext, play.Target, -DynamicVars["Magic"].IntValue, Owner.Creature, this);
-        if (strengthDown == null)
+        var strengthBefore = play.Target.GetPower<StrengthPower>()?.Amount ?? 0;
+        await PowerCmd.Apply<StrengthPower>(choiceContext, play.Target, -DynamicVars["Magic"].IntValue, Owner.Creature, this);
+        var strengthAfter = play.Target.GetPower<StrengthPower>()?.Amount ?? 0;
+        var reducedAmount = strengthBefore - strengthAfter;
+        if (reducedAmount <= 0)
         {
             return;
         }
 
-        var restoreAmount = DynamicVars["Magic"].IntValue / DynamicVars["ReturnTurns"].IntValue;
+        var restoreAmount = reducedAmount / DynamicVars["ReturnTurns"].IntValue;
         var restore = await PowerCmd.Apply<RestoreStrPower>(choiceContext, play.Target, restoreAmount, Owner.Creature, this);
         if (restore != null)
         {
