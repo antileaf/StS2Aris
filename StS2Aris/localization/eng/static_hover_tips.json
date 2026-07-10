@@ -1,4 +1,4 @@
 {
-    "STS2ARIS-CHARGE.title":  "전력",
-    "STS2ARIS-CHARGE.description":  "현재 전력 ({singleChargeIcon}) 수치입니다. 에너지 대신 {singleChargeIcon}을 소모하여 카드를 사용할 수 있습니다. 턴이 끝나면 사라집니다."
+  "STS2ARIS-CHARGE.title": "Charge",
+  "STS2ARIS-CHARGE.description": "Your current Charge ({singleChargeIcon}). You may spend {singleChargeIcon} in place of Energy to play cards. Charge is lost at the end of the turn."
 }

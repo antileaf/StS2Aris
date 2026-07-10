@@ -1,0 +1,5 @@
+{
+  "OPTION_STS2ARIS_REPLICA.name": "道具复制漏洞",
+  "OPTION_STS2ARIS_REPLICA.description": "获得你[gold]牌组[/gold]中所有[gold]任务[/gold]牌的[gold]奖励[/gold]。",
+  "OPTION_STS2ARIS_REPLICA.descriptionDisabled": "你的[gold]牌组[/gold]中没有其他[gold]任务[/gold]牌。"
+}

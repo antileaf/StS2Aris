@@ -1,0 +1,4 @@
+{
+  "STS2ARIS-CHARGE.title": "電力",
+  "STS2ARIS-CHARGE.description": "現在の電力（{singleChargeIcon}）。エナジーの代わりに{singleChargeIcon}を消費してカードをプレイできる。電力はターン終了時に失われる。"
+}

@@ -1,0 +1,5 @@
+{
+  "OPTION_STS2ARIS_REPLICA.name": "アイテム複製バグ",
+  "OPTION_STS2ARIS_REPLICA.description": "[gold]デッキ[/gold]にあるすべての[gold]クエスト[/gold]カードの[gold]報酬[/gold]を獲得する。",
+  "OPTION_STS2ARIS_REPLICA.descriptionDisabled": "[gold]デッキ[/gold]に他の[gold]クエスト[/gold]カードがない。"
+}

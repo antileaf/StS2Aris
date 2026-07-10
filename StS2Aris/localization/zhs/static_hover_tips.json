@@ -1,0 +1,4 @@
+{
+  "STS2ARIS-CHARGE.title": "电力",
+  "STS2ARIS-CHARGE.description": "当前的电力（{singleChargeIcon}）。你可以消耗{singleChargeIcon}代替能量来打出牌。电力会在回合结束时消失。"
+}
