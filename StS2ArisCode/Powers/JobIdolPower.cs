@@ -8,7 +8,7 @@ namespace StS2Aris.StS2ArisCode.Powers;
 
 public sealed class JobIdolPower : ArisJobPower
 {
-    protected override IEnumerable<DynamicVar> CanonicalVars => [new DynamicVar("Amount", 3m)];
+    protected override IEnumerable<DynamicVar> CanonicalVars => [new DynamicVar("Amount", 1m)];
     public override string AnimationSuffix => "Idol";
 
     public override async Task AfterPlayerTurnStart(PlayerChoiceContext choiceContext, Player player)

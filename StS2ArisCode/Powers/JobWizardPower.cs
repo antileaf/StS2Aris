@@ -16,8 +16,8 @@ public sealed class JobWizardPower : ArisJobPower
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new DynamicVar("Amount", 3m),
-        new DynamicVar(RepairAmountKey, 3m)
+        new DynamicVar("Amount", 2m),
+        new DynamicVar(RepairAmountKey, 2m)
     ];
 
     public override string AnimationSuffix => "Necromancer";
@@ -37,7 +37,7 @@ public sealed class JobWizardPower : ArisJobPower
 
         Flash();
         var repairAmount = EquipmentCard?.DynamicVars["Magic"].IntValue ?? DynamicVars["Amount"].IntValue;
-        await PowerCmd.Apply<EndTurnBlockPower>(choiceContext, Owner, repairAmount * EffectApplications, Owner, EquipmentCard);
+        await CreatureCmd.GainBlock(Owner, repairAmount * EffectApplications, ValueProp.Unpowered, null);
     }
 
     public override Task OnLevelUpChanged(PlayerChoiceContext choiceContext)

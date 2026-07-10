@@ -23,7 +23,7 @@ public class QuestClear() : StS2ArisCard(1, CardType.Skill, CardRarity.Uncommon,
 
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        await CreatureCmd.GainBlock(Owner.Creature, DynamicVars["CalculatedBlock"].BaseValue, ValueProp.Move, play);
+        await CommonActions.CardBlock(this, DynamicVars["CalculatedBlock"], play);
     }
 
     protected override void OnUpgrade()

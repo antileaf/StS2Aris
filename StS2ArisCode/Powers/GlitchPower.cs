@@ -12,7 +12,7 @@ public sealed class GlitchPower : StS2ArisPower
 
     public override int ModifyCardPlayCount(CardModel card, Creature? target, int playCount)
     {
-        if (card.Owner.Creature != Owner || !ArisCharge.IsOverloadState(card.Owner))
+        if (card.Owner.Creature != Owner || !ArisCharge.WasEnergyEmptyBeforeSpend(card))
         {
             return playCount;
         }
@@ -22,7 +22,7 @@ public sealed class GlitchPower : StS2ArisPower
 
     public override Task AfterModifyingCardPlayCount(CardModel card)
     {
-        if (card.Owner.Creature == Owner && ArisCharge.IsOverloadState(card.Owner))
+        if (card.Owner.Creature == Owner && ArisCharge.WasEnergyEmptyBeforeSpend(card))
         {
             Flash();
         }

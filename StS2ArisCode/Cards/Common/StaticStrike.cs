@@ -34,6 +34,5 @@ public class StaticStrike() : StS2ArisCard(1, CardType.Attack, CardRarity.Common
     
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(1m);
     }
 }

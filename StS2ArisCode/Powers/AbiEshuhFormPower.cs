@@ -64,6 +64,7 @@ public sealed class AbiEshuhFormPower : StS2ArisPower, IAddDumbVariablesToPowerD
 
     public void AddDumbVariablesToPowerDescription(LocString description)
     {
+        description.Add("singleChargeIcon", ChargeIconFormatter.Icon);
         description.Add("ChargeIcons", ChargeIconFormatter.Format((int)Amount));
         description.Add("Amount", Amount);
         description.Add("DamagePerCharge", DynamicVars[DamagePerChargeKey].BaseValue);

@@ -26,8 +26,6 @@ public class HellDifficulty() : ArisQuestCard<StrategyGuide>(1, CardType.Skill, 
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [new CardsVar(3)];
 
-    protected override bool ShouldGlowGoldInternal => CombatState?.RunState.CurrentRoom is CombatRoom { RoomType: RoomType.Boss } || base.ShouldGlowGoldInternal;
-
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
         await CardPileCmd.Draw(choiceContext, DynamicVars.Cards.BaseValue, Owner);
@@ -51,6 +49,7 @@ public class HellDifficulty() : ArisQuestCard<StrategyGuide>(1, CardType.Skill, 
                     reward.FinalizeUpgradeInternal();
                 }
 
+                combatCopy.CopyEnchantmentToReward(reward);
                 await CardCmd.Transform(combatCopy, reward, CardPreviewStyle.None);
             }
         }

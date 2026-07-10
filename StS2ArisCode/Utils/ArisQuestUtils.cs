@@ -44,6 +44,9 @@ public static class ArisQuestUtils
             case SpoilsMap:
                 await PlayerCmd.GainGold(600m, quest.Owner);
                 return null;
+            case LibrarianStrike librarianStrike:
+                librarianStrike.ApplyReplicaReward(forceUpgrade);
+                return null;
         }
 
         var reward = CreateRewardFor(quest, forceUpgrade);
@@ -54,7 +57,18 @@ public static class ArisQuestUtils
 
     public static bool HasSelectableReplicaReward(CardModel quest)
     {
-        return quest is DailyQuest or Diet or Grinding or RaidAddiction or LanternKey or SpoilsMap or ByrdonisEgg;
+        return quest is DailyQuest or Diet or Grinding or RaidAddiction or LanternKey or SpoilsMap or ByrdonisEgg or LibrarianStrike;
+    }
+
+    public static void TryCopyEnchantment(CardModel source, CardModel reward)
+    {
+        var enchantment = source.Enchantment;
+        if (enchantment == null || !enchantment.CanEnchant(reward))
+        {
+            return;
+        }
+
+        CardCmd.Enchant((EnchantmentModel)enchantment.ClonePreservingMutability(), reward, enchantment.Amount);
     }
 
     private static TReward CreateReward<TReward>(CardModel quest, bool forceUpgrade) where TReward : CardModel
@@ -66,6 +80,7 @@ public static class ArisQuestUtils
             reward.FinalizeUpgradeInternal();
         }
 
+        TryCopyEnchantment(quest, reward);
         return reward;
     }
 }

@@ -26,7 +26,14 @@ public static class ArisChargeResourcePatches
     [HarmonyPrefix]
     public static bool SpendResourcesPrefix(CardModel __instance, ref Task<(int, int)> __result)
     {
-        if (__instance.Owner?.PlayerCombatState == null || ArisCharge.Get(__instance.Owner) <= 0)
+        if (__instance.Owner?.PlayerCombatState == null)
+        {
+            ArisCharge.SetEnergyWasEmptyBeforeSpend(__instance, false);
+            return true;
+        }
+
+        ArisCharge.SetEnergyWasEmptyBeforeSpend(__instance, __instance.Owner.PlayerCombatState.Energy <= 0);
+        if (ArisCharge.Get(__instance.Owner) <= 0)
         {
             return true;
         }

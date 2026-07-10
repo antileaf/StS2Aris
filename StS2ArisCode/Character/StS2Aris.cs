@@ -1,4 +1,5 @@
 using BaseLib.Abstracts;
+using BaseLib.Utils.NodeFactories;
 using Godot;
 using MegaCrit.Sts2.Core.Animation;
 using MegaCrit.Sts2.Core.Bindings.MegaSpine;
@@ -48,6 +49,16 @@ public class StS2Aris : PlaceholderCharacterModel
     public override CardPoolModel CardPool => ModelDb.CardPool<StS2ArisCardPool>();
     public override RelicPoolModel RelicPool => ModelDb.RelicPool<StS2ArisRelicPool>();
     public override PotionPoolModel PotionPool => ModelDb.PotionPool<StS2ArisPotionPool>();
+    protected override IEnumerable<string> ExtraAssetPaths =>
+    [
+        "aris_charge.png".CharacterUiPath(),
+        "aris_charge_layer_2.png".CharacterUiPath(),
+        "aris_charge_layer_3.png".CharacterUiPath(),
+        "aris_charge_layer_4.png".CharacterUiPath(),
+        "aris_charge_layer_5.png".CharacterUiPath(),
+        "aris_charge_layer_6.png".CharacterUiPath(),
+        "res://StS2Aris/etc/kreon_bold_shared.tres"
+    ];
 
     public override float AttackAnimDelay => 0.15f;
     public override float CastAnimDelay => 0.25f;
@@ -61,6 +72,11 @@ public class StS2Aris : PlaceholderCharacterModel
     public override string CustomCharacterSelectBg => "res://StS2Aris/scenes/char_select_bg_aris.tscn";
     public override string CustomRestSiteAnimPath => "res://StS2Aris/scenes/aris_rest_site.tscn";
     public override string CustomMerchantAnimPath => "res://StS2Aris/scenes/aris_merchant.tscn";
+
+    public override NCreatureVisuals CreateCustomVisuals()
+    {
+        return NodeFactory<NCreatureVisuals>.CreateFromScene(CustomVisualPath);
+    }
 
     public override CreatureAnimator GenerateAnimator(MegaSprite controller)
     {
@@ -110,7 +126,7 @@ public class StS2Aris : PlaceholderCharacterModel
             animator.AddAnyState(trigger, state, () => CurrentJobSuffix() == suffix);
         }
 
-        foreach (var suffix in new[] { "AOEDPS", "Newby", "Rogue", "Wizard", "Warrior", "Idol", "Hero", "Maid", "Necromancer", "Kei" })
+        foreach (var suffix in new[] { "AOEDPS", "Newby", "Rogue", "Wizard", "Warrior", "Idol", "Hero", "Maid", "Necromancer", "Kei", "Defect" })
         {
             AddJobIdleState(suffix);
             AddJobActionState("Attack", "attack", suffix);

@@ -33,7 +33,10 @@ public abstract class ArisJobPower : StS2ArisPower, IAddDumbVariablesToPowerDesc
     protected int EffectApplications => Math.Max(1, Amount + LevelUpAmount);
     protected int LevelBonus => EffectApplications - 1;
     protected Player? PlayerOwner => Owner.Player;
-    protected decimal EquipmentStrengthAmount => EquipmentCard?.DynamicVars["StrengthPower"].BaseValue ?? 0m;
+    protected decimal EquipmentStrengthAmount =>
+        EquipmentCard?.DynamicVars.TryGetValue("StrengthPower", out var strength) == true
+            ? strength.BaseValue
+            : 0m;
     private int LevelUpAmount => (int)Owner.Powers.OfType<LevelUpPower>().Sum(power => power.Amount);
 
     public void FlashJob()

@@ -1,6 +1,6 @@
 {
-  "THE_ARCHITECT.talk.STS2ARIS-ST_S2_ARIS.0-0r.char": "I am angry at the architect",
-  "THE_ARCHITECT.talk.STS2ARIS-ST_S2_ARIS.0-0r.next": "Continue",
-  "THE_ARCHITECT.talk.STS2ARIS-ST_S2_ARIS.0-1r.ancient": "You die",
+  "THE_ARCHITECT.talk.STS2ARIS-ST_S2_ARIS.0-0r.char": "최종 보스 출현입니다! 아리스, 갑니다!",
+  "THE_ARCHITECT.talk.STS2ARIS-ST_S2_ARIS.0-0r.next": "계속",
+  "THE_ARCHITECT.talk.STS2ARIS-ST_S2_ARIS.0-1r.ancient": "인간, 아니 로봇인가?",
   "THE_ARCHITECT.talk.STS2ARIS-ST_S2_ARIS.0-attack": "Both"
 }

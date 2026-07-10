@@ -56,7 +56,7 @@ public abstract class StS2ArisCard(int cost, CardType type, CardRarity rarity, T
         if (this is IOverload overloadCard)
         {
             await overloadCard.OnOverload(choiceContext, play);
-            ArisCharge.NotifyOverload();
+            await ArisCharge.NotifyOverload(choiceContext, Owner, this);
         }
     }
 

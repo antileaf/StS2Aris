@@ -24,13 +24,12 @@ public class WizardHat() : StS2ArisEquipmentCard(1, CardType.Skill, CardRarity.U
         HoverTipFactory.FromKeyword(ArisKeywords.Equipment),
         HoverTipFactory.FromKeyword(ArisKeywords.ClassChange),
         HoverTipFactory.FromKeyword(ArisKeywords.Job),
-        HoverTipFactory.FromPower<EndTurnBlockPower>(),
         HoverTipFactory.FromCard<Soul>()
     ];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new DynamicVar("Magic", 3m),
+        new DynamicVar("Magic", 2m),
         new CardsVar(3)
     ];
 

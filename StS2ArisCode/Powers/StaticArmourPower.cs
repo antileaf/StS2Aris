@@ -1,4 +1,3 @@
-using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
@@ -16,7 +15,7 @@ public sealed class StaticArmourPower : StS2ArisPower
 
     public override async Task AfterDamageReceived(PlayerChoiceContext choiceContext, Creature target, DamageResult result, ValueProp props, Creature? dealer, CardModel? cardSource)
     {
-        if (target != Owner || result.TotalDamage <= 0 || Owner.IsDead || Owner.Player == null || !CombatManager.Instance.IsPartOfPlayerTurn((Owner.Player)))
+        if (target != Owner || result.TotalDamage <= 0 || Owner.IsDead || Owner.Player == null)
         {
             return;
         }

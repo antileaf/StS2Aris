@@ -3,6 +3,7 @@ using Godot;
 using Godot.Bridge;
 using HarmonyLib;
 using MegaCrit.Sts2.Core.Modding;
+using StS2Aris.StS2ArisCode.Patches;
 
 namespace StS2Aris;
 
@@ -21,5 +22,6 @@ public partial class StS2ArisMain : Node
         var assembly = Assembly.GetExecutingAssembly();
         ScriptManagerBridge.LookupScriptsInAssembly(assembly);
         harmony.PatchAll();
+        BugDescriptionFormatPatch.Register();
     }
 }

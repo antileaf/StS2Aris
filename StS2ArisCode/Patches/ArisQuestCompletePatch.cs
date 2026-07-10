@@ -33,9 +33,16 @@ public static class ArisQuestCompletePatch
             }
 
             var eggCount = PileType.Deck.GetPile(player).Cards.Count(static card => card is ByrdonisEgg);
+            var eggCard = PileType.Deck.GetPile(player).Cards.FirstOrDefault(static card => card is ByrdonisEgg);
             if (CombatManager.Instance.IsInProgress && player.PlayerCombatState != null)
             {
                 eggCount += player.PlayerCombatState.AllCards.Count(static card => card is ByrdonisEgg);
+                eggCard ??= player.PlayerCombatState.AllCards.FirstOrDefault(static card => card is ByrdonisEgg);
+            }
+
+            if (eggCard != null)
+            {
+                ArisQuestProgress.MarkCompletedQuestType(player, eggCard.Id.Entry);
             }
 
             ArisQuestProgress.MarkCompleted(player, eggCount);

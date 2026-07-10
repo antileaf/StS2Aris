@@ -19,6 +19,11 @@ namespace StS2Aris.StS2ArisCode.Cards;
 [Pool(typeof(TokenCardPool))]
 public class Shock() : StS2ArisCard(0, CardType.Attack, CardRarity.Token, TargetType.AnyEnemy)
 {
+    public override TargetType TargetType =>
+        IsMutable && Owner?.Creature.GetPower<UncontrollablePower>() != null
+            ? TargetType.RandomEnemy
+            : TargetType.AnyEnemy;
+
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
     protected override IEnumerable<IHoverTip> ExtraHoverTips => [HoverTipFactory.FromKeyword(ArisKeywords.Shock)];
     protected override IEnumerable<DynamicVar> CanonicalVars =>
@@ -29,13 +34,24 @@ public class Shock() : StS2ArisCard(0, CardType.Attack, CardRarity.Token, Target
 
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        ArgumentNullException.ThrowIfNull(play.Target);
-        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCardCompat(this, play).Targeting(play.Target).Execute(choiceContext);
-        await PowerCmd.Apply<ShockPower>(choiceContext, play.Target, DynamicVars["ShockPower"].IntValue, Owner.Creature, this);
+        var target = play.Target;
+        if (target == null && CombatState != null)
+        {
+            target = Owner.RunState.Rng.CombatTargets.NextItem(CombatState.HittableEnemies);
+        }
+
+        if (target == null)
+        {
+            return;
+        }
+
+        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCardCompat(this, play).Targeting(target).Execute(choiceContext);
+        await PowerCmd.Apply<ShockPower>(choiceContext, target, DynamicVars["ShockPower"].IntValue, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()
     {
+        DynamicVars.Damage.UpgradeValueBy(1m);
         DynamicVars["ShockPower"].UpgradeValueBy(1m);
     }
 

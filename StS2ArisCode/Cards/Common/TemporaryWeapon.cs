@@ -57,6 +57,7 @@ public class TemporaryWeapon() : ArisQuestCard<TemporaryWeapon>(1, CardType.Atta
             reward.FinalizeUpgradeInternal();
         }
 
+        CopyEnchantmentToReward(reward);
         return reward;
     }
 

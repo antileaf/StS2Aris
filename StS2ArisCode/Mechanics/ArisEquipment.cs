@@ -38,17 +38,17 @@ public static class ArisEquipment
             return;
         }
 
-        var currentJob = GetCurrentJob(owner);
-        var changed = currentJob == null || currentJob.GetType() != nextJob.GetType();
+        var previousJob = GetCurrentJob(owner);
+        var changed = previousJob == null || previousJob.GetType() != nextJob.GetType();
 
-        if (currentJob != null)
+        if (previousJob != null)
         {
-            if (currentJob.EquipmentCard != null)
+            if (previousJob.EquipmentCard != null)
             {
-                await ReturnEquipmentCard(currentJob.EquipmentCard, PileType.Discard);
+                await ReturnEquipmentCard(previousJob.EquipmentCard, PileType.Discard);
             }
 
-            await PowerCmd.Remove(currentJob);
+            await PowerCmd.Remove(previousJob);
         }
 
         nextJob.EquipmentCard = equipmentCard;
@@ -58,7 +58,7 @@ public static class ArisEquipment
 
         if (changed)
         {
-            await OnJobChanged(choiceContext, owner);
+            await ArisHook.OnJobChanged(choiceContext, owner, previousJob, nextJob, equipmentCard);
         }
     }
 
@@ -89,14 +89,6 @@ public static class ArisEquipment
         }
     }
 
-    private static async Task OnJobChanged(PlayerChoiceContext choiceContext, Player player)
-    {
-        foreach (var power in player.Creature.Powers.OfType<WeaponMasterPower>())
-        {
-            await CardPileCmd.Draw(choiceContext, power.Amount, player);
-        }
-    }
-
     private static void HoldPlayedEquipmentCard(CardModel equipmentCard)
     {
         if (equipmentCard.Pile?.Type == PileType.Play)
@@ -117,8 +109,13 @@ public static class ArisEquipment
         var combatState = equipmentCard.Owner.Creature.CombatState;
         if (combatState != null)
         {
-            var replacement = combatState.CloneCard(equipmentCard);
-            var result = await CardPileCmd.AddGeneratedCardToCombat(replacement, pileType, equipmentCard.Owner);
+            var returningCard = equipmentCard;
+            if (returningCard.HasBeenRemovedFromState || !combatState.ContainsCard(returningCard))
+            {
+                returningCard = combatState.CloneCard(equipmentCard);
+            }
+
+            var result = await CardPileCmd.Add(returningCard, pileType, clonedBy: equipmentCard);
             if (pileType != PileType.Hand)
             {
                 CardCmd.PreviewCardPileAdd(result);

@@ -61,6 +61,8 @@ public sealed class ReplicaRestSiteOption(Player owner, ItemCopyBug itemCopyBug)
             {
                 addedResults.Add(addedResult.Value);
             }
+
+            await BingoBoard.AdvanceBoardsForCompletedQuest(Owner, rewardTarget);
         }
 
         if (addedResults.Count > 0)

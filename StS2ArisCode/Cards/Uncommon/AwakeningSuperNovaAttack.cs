@@ -55,7 +55,7 @@ public class AwakeningSuperNovaAttack() : StS2ArisCard(0, CardType.Attack, CardR
                         }
                         else if (resolvedHits > 0)
                         {
-                            await Cmd.CustomScaledWait(0.3f, 0.5f);
+                            await Cmd.CustomScaledWait(0.1f, 0.16f);
                         }
 
                         resolvedHits++;

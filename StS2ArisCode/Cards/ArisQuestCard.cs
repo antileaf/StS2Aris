@@ -3,6 +3,7 @@ using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Saves.Runs;
+using StS2Aris.StS2ArisCode.Utils;
 
 namespace StS2Aris.StS2ArisCode.Cards;
 
@@ -91,7 +92,13 @@ public abstract class ArisQuestCard<TReward>(int cost, CardType type, CardRarity
             reward.FinalizeUpgradeInternal();
         }
 
+        CopyEnchantmentToReward(reward);
         return reward;
+    }
+
+    protected void CopyEnchantmentToReward(CardModel reward)
+    {
+        ArisQuestUtils.TryCopyEnchantment(this, reward);
     }
 
     protected async Task CompleteQuest()
@@ -104,6 +111,10 @@ public abstract class ArisQuestCard<TReward>(int cost, CardType type, CardRarity
         await BeforeQuestComplete();
         PlayerCmd.CompleteQuest(this);
         await ApplyQuestReward();
+        if (this is not BingoBoard)
+        {
+            await BingoBoard.AdvanceBoardsForCompletedQuest(Owner, this);
+        }
     }
 
     protected virtual async Task ApplyQuestReward()

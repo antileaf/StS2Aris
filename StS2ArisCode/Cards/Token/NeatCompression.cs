@@ -29,12 +29,12 @@ public class NeatCompression() : StS2ArisCard(0, CardType.Skill, CardRarity.Toke
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
         await CreatureCmd.TriggerAnim(base.Owner.Creature, "PowerUp", base.Owner.Character.PowerUpAnimDelay);
-        await PowerCmd.Apply<ForbiddenGrimoirePower>(choiceContext, base.Owner.Creature, 1m, base.Owner.Creature, this);
+        await PowerCmd.Apply<NeatCompressionPower>(choiceContext, base.Owner.Creature, 1m, base.Owner.Creature, this);
 
         if (IsUpgraded)
         {
             var upgradeTarget = PileType.Deck.GetPile(Owner).Cards
-                .Where(static card => card.IsUpgradable)
+                .Where(card => card.IsUpgradable && card.Id != Id)
                 .ToList()
                 .TakeRandom(1, Owner.RunState.Rng.CombatCardSelection)
                 .FirstOrDefault();
@@ -54,4 +54,3 @@ public class NeatCompression() : StS2ArisCard(0, CardType.Skill, CardRarity.Toke
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 }
-

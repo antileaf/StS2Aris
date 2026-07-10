@@ -1,5 +1,5 @@
 {
   "OPTION_STS2ARIS_REPLICA.name": "아이템 복사 버그",
-  "OPTION_STS2ARIS_REPLICA.description": "[gold]덱[/gold]에 있는 모든 [gold]퀘스트[/gold] 카드의 [gold]보상[/gold] 카드를 받습니다.",
+  "OPTION_STS2ARIS_REPLICA.description": "[gold]덱[/gold]에 있는 모든 [gold]퀘스트[/gold] 카드의 [gold]보상[/gold]을 받습니다.",
   "OPTION_STS2ARIS_REPLICA.descriptionDisabled": "[gold]덱[/gold]에 다른 [gold]퀘스트[/gold] 카드가 없습니다."
 }

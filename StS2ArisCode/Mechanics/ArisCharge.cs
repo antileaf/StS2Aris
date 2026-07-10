@@ -14,11 +14,16 @@ namespace StS2Aris.StS2ArisCode.Mechanics;
 public static class ArisCharge
 {
     private static readonly SpireField<CardModel, int> ChargeSpentField = new(() => 0);
+    private static readonly SpireField<CardModel, bool> EnergyWasEmptyBeforeSpendField = new(() => false);
     public static int OverloadsThisCombat { get; private set; }
 
     public static int Get(Player player) => player.Creature.GetPower<ChargePower>()?.Amount ?? 0;
 
     public static int GetSpent(CardModel card) => ChargeSpentField.Get(card);
+
+    public static bool WasEnergyEmptyBeforeSpend(CardModel card) => EnergyWasEmptyBeforeSpendField.Get(card);
+
+    public static void SetEnergyWasEmptyBeforeSpend(CardModel card, bool value) => EnergyWasEmptyBeforeSpendField.Set(card, value);
 
     public static int GetExpectedSpent(CardModel card)
     {
@@ -73,6 +78,16 @@ public static class ArisCharge
         OverloadsThisCombat++;
     }
 
+    public static async Task NotifyOverload(PlayerChoiceContext choiceContext, Player? player, CardModel? cardSource)
+    {
+        NotifyOverload();
+
+        if (player?.Creature.GetPower<CounterStopPower>() is { } counterStopPower)
+        {
+            await counterStopPower.OnOverloadTriggered(choiceContext, cardSource);
+        }
+    }
+
     public static bool CanSpendCharge(CardModel card) => card is not IArisOutputCard && !card.Keywords.Contains(ArisKeywords.Output);
 
     public static bool HasEnoughResourcesFor(PlayerCombatState state, Player player, CardModel card, out UnplayableReason reason)
@@ -112,9 +127,12 @@ public static class ArisCharge
         if (player == null || state == null || combatState == null)
         {
             ChargeSpentField.Set(card, 0);
+            EnergyWasEmptyBeforeSpendField.Set(card, false);
             card.LastStarsSpent = 0;
             return (0, 0);
         }
+
+        EnergyWasEmptyBeforeSpendField.Set(card, state.Energy <= 0);
 
         bool canSpendCharge = CanSpendCharge(card);
         int totalEnergyCost = GetEnergyAmountToSpend(card, includeChargeForX: canSpendCharge);

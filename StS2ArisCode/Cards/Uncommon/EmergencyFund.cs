@@ -28,7 +28,7 @@ public class EmergencyFund() : ArisQuestCard<EmergencyFund>(1, CardType.Skill, C
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new BlockVar(9, ValueProp.Move),
-        new DynamicVar("Gold", 100m)
+        new DynamicVar("Gold", 150m)
     ];
 
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)

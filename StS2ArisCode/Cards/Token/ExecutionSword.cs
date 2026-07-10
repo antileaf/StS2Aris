@@ -33,7 +33,7 @@ public class ExecutionSword() : StS2ArisCard(2, CardType.Attack, CardRarity.Toke
 
     private static decimal CalculateGoldDamage(CardModel card, Creature? _)
     {
-        return Math.Floor(Math.Max(card.Owner?.Gold ?? 0, 0) / 10m);
+        return Math.Floor(Math.Max(card.Owner?.Gold ?? 0, 0) / 8m);
     }
 }
 
