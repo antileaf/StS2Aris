@@ -11,7 +11,7 @@ using StS2Aris.StS2ArisCode.Utils;
 
 namespace StS2Aris.StS2ArisCode.RestSites;
 
-public sealed class ReplicaRestSiteOption(Player owner, ItemCopyBug itemCopyBug) : CustomRestSiteOption(owner)
+public sealed class ReplicaRestSiteOption(Player owner) : CustomRestSiteOption(owner)
 {
     private static readonly string IconAssetPath = "option_replica.png".CharacterUiPath();
 
@@ -21,7 +21,7 @@ public sealed class ReplicaRestSiteOption(Player owner, ItemCopyBug itemCopyBug)
 
     public override IEnumerable<string> AssetPaths => [IconAssetPath];
 
-    public override bool IsEnabled => HasValidTarget(Owner, itemCopyBug);
+    public override bool IsEnabled => GetItemCopyBugs(Owner).Any() && HasValidTarget(Owner);
 
     public override LocString Description => new("rest_site_ui", IsEnabled
         ? "OPTION_STS2ARIS_REPLICA.description"
@@ -34,35 +34,53 @@ public sealed class ReplicaRestSiteOption(Player owner, ItemCopyBug itemCopyBug)
             return false;
         }
 
-        if (itemCopyBug.QuestRemaining <= 0)
-        {
-            itemCopyBug.QuestRemaining = itemCopyBug.QuestGoal;
-        }
-
-        itemCopyBug.QuestRemaining = int.Max(0, itemCopyBug.QuestRemaining - 1);
-        if (itemCopyBug.QuestRemaining > 0)
-        {
-            return true;
-        }
-
-        var rewardTargets = GetRewardTargets(Owner, itemCopyBug).ToList();
-        if (rewardTargets.Count == 0)
+        var itemCopyBugs = GetItemCopyBugs(Owner).ToList();
+        var rewardTargets = GetRewardTargets(Owner).ToList();
+        if (itemCopyBugs.Count == 0 || rewardTargets.Count == 0)
         {
             return false;
         }
 
-        await CardPileCmd.RemoveFromDeck(itemCopyBug, showPreview: false);
-        var addedResults = new List<CardPileAddResult>();
-        foreach (var rewardTarget in rewardTargets)
+        var completedCopies = new List<ItemCopyBug>();
+        foreach (var itemCopyBug in itemCopyBugs)
         {
-            ArisQuestProgress.MarkCompleted(rewardTarget);
-            var addedResult = await ArisQuestUtils.ApplyReplicaRewardFor(rewardTarget, itemCopyBug.IsUpgraded);
-            if (addedResult.HasValue)
+            if (itemCopyBug.QuestRemaining <= 0)
             {
-                addedResults.Add(addedResult.Value);
+                itemCopyBug.QuestRemaining = itemCopyBug.QuestGoal;
             }
 
-            await BingoBoard.AdvanceBoardsForCompletedQuest(Owner, rewardTarget);
+            itemCopyBug.QuestRemaining = int.Max(0, itemCopyBug.QuestRemaining - 1);
+            if (itemCopyBug.QuestRemaining == 0)
+            {
+                completedCopies.Add(itemCopyBug);
+            }
+        }
+
+        if (completedCopies.Count == 0)
+        {
+            return true;
+        }
+
+        var rewardUpgradeFlags = completedCopies.Select(static card => card.IsUpgraded).ToList();
+        foreach (var completedCopy in completedCopies)
+        {
+            await CardPileCmd.RemoveFromDeck(completedCopy, showPreview: false);
+        }
+
+        var addedResults = new List<CardPileAddResult>();
+        foreach (var forceUpgrade in rewardUpgradeFlags)
+        {
+            foreach (var rewardTarget in rewardTargets)
+            {
+                ArisQuestProgress.MarkCompleted(rewardTarget);
+                var addedResult = await ArisQuestUtils.ApplyReplicaRewardFor(rewardTarget, forceUpgrade);
+                if (addedResult.HasValue)
+                {
+                    addedResults.Add(addedResult.Value);
+                }
+
+                await BingoBoard.AdvanceBoardsForCompletedQuest(Owner, rewardTarget);
+            }
         }
 
         if (addedResults.Count > 0)
@@ -72,18 +90,23 @@ public sealed class ReplicaRestSiteOption(Player owner, ItemCopyBug itemCopyBug)
         return true;
     }
 
-    public static bool HasValidTarget(Player player, ItemCopyBug itemCopyBug)
+    public static bool HasValidTarget(Player player)
     {
-        return GetRewardTargets(player, itemCopyBug).Any();
+        return GetRewardTargets(player).Any();
     }
 
-    private static IEnumerable<CardModel> GetRewardTargets(Player player, ItemCopyBug itemCopyBug)
+    private static IEnumerable<ItemCopyBug> GetItemCopyBugs(Player player)
     {
-        return PileType.Deck.GetPile(player).Cards.Where(card => IsValidTarget(card, itemCopyBug));
+        return PileType.Deck.GetPile(player).Cards.OfType<ItemCopyBug>();
     }
 
-    private static bool IsValidTarget(CardModel card, ItemCopyBug itemCopyBug)
+    private static IEnumerable<CardModel> GetRewardTargets(Player player)
     {
-        return card != itemCopyBug && ArisQuestUtils.HasSelectableReplicaReward(card);
+        return PileType.Deck.GetPile(player).Cards.Where(IsValidTarget);
+    }
+
+    private static bool IsValidTarget(CardModel card)
+    {
+        return card is not ItemCopyBug && ArisQuestUtils.HasSelectableReplicaReward(card);
     }
 }

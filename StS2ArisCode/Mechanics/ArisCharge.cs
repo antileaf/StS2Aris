@@ -7,6 +7,7 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Hooks;
 using MegaCrit.Sts2.Core.Models;
 using StS2Aris.StS2ArisCode.Keywords;
+using StS2Aris.StS2ArisCode.Hooks;
 using StS2Aris.StS2ArisCode.Powers;
 
 namespace StS2Aris.StS2ArisCode.Mechanics;
@@ -85,6 +86,11 @@ public static class ArisCharge
         if (player?.Creature.GetPower<CounterStopPower>() is { } counterStopPower)
         {
             await counterStopPower.OnOverloadTriggered(choiceContext, cardSource);
+        }
+
+        if (player != null)
+        {
+            await ArisHook.OnOverloadTriggered(choiceContext, player, cardSource);
         }
     }
 

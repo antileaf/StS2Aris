@@ -12,7 +12,7 @@ public sealed class WeaponMasterPower : StS2ArisPower, IOnJobChanged
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.Counter;
 
-    public async Task OnJobChanged(PlayerChoiceContext choiceContext, Player player, ArisJobPower? previousJob, ArisJobPower currentJob, CardModel? source)
+    public async Task OnJobChanged(PlayerChoiceContext choiceContext, Player player, ArisJobPower? previousJob, ArisJobPower? currentJob, CardModel? source)
     {
         if (player.Creature != Owner)
         {

@@ -14,7 +14,7 @@ public class ThrowEquipment() : StS2ArisCard(1, CardType.Attack, CardRarity.Unco
 {
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new DamageVar(8, ValueProp.Move),
+        new DamageVar(7, ValueProp.Move),
         new CalculationBaseVar(0m),
         new CalculationExtraVar(1m),
         new CalculatedVar("CalculatedHits").WithMultiplier((card, _) =>

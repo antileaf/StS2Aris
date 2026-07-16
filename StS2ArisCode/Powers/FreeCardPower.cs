@@ -1,6 +1,9 @@
+using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
+using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Powers;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Models;
 
 namespace StS2Aris.StS2ArisCode.Powers;
@@ -27,6 +30,17 @@ public sealed class FreeCardPower : StS2ArisPower
         if (cardPlay.Card.Owner.Creature == Owner && cardPlay.Card.Pile?.Type is PileType.Hand or PileType.Play)
         {
             await PowerCmd.Decrement(this);
+        }
+    }
+
+    public override async Task AfterSideTurnEnd(
+        PlayerChoiceContext choiceContext,
+        CombatSide side,
+        IEnumerable<Creature> participants)
+    {
+        if (participants.Contains(Owner))
+        {
+            await PowerCmd.Remove(this);
         }
     }
 }

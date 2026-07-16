@@ -16,5 +16,5 @@
   "STS2ARIS-REWARD.title": "奖励",
   "STS2ARIS-REWARD.description": "无法通过通常方式获得，只能通过完成[gold]任务[/gold]获得的牌。",
   "STS2ARIS-QUEST.title": "任务",
-  "STS2ARIS-QUEST.description": "达成条件后，变化为对应的[gold]奖励[/gold]牌。"
+  "STS2ARIS-QUEST.description": "达成条件后，变化为对应的[gold]奖励[/gold]。"
 }

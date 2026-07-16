@@ -28,6 +28,9 @@ public static class ArisHook
     public static Task OnClassChanged(PlayerChoiceContext choiceContext, Player player, CardModel? source)
         => Dispatch<IOnClassChanged>(choiceContext, player, model => model.OnClassChanged(choiceContext, player, source));
 
-    public static Task OnJobChanged(PlayerChoiceContext choiceContext, Player player, ArisJobPower? previousJob, ArisJobPower currentJob, CardModel? source)
+    public static Task OnJobChanged(PlayerChoiceContext choiceContext, Player player, ArisJobPower? previousJob, ArisJobPower? currentJob, CardModel? source)
         => Dispatch<IOnJobChanged>(choiceContext, player, model => model.OnJobChanged(choiceContext, player, previousJob, currentJob, source));
+
+    public static Task OnOverloadTriggered(PlayerChoiceContext choiceContext, Player player, CardModel? source)
+        => Dispatch<IOnOverloadTriggered>(choiceContext, player, model => model.OnOverloadTriggered(choiceContext, player, source));
 }

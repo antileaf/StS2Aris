@@ -16,5 +16,5 @@
   "STS2ARIS-REWARD.title": "報酬",
   "STS2ARIS-REWARD.description": "通常の方法では入手できず、[gold]クエスト[/gold]を完了すると獲得できるカード。",
   "STS2ARIS-QUEST.title": "クエスト",
-  "STS2ARIS-QUEST.description": "条件を満たすと[gold]報酬[/gold]カードに変化する。"
+  "STS2ARIS-QUEST.description": "条件を満たすと[gold]報酬[/gold]に変化する。"
 }

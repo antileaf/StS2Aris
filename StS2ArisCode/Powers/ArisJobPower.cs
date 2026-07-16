@@ -8,6 +8,7 @@ using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Powers;
 using BaseLib.Patches.Localization;
+using StS2Aris.StS2ArisCode.Formatters;
 
 namespace StS2Aris.StS2ArisCode.Powers;
 
@@ -49,6 +50,11 @@ public abstract class ArisJobPower : StS2ArisPower, IAddDumbVariablesToPowerDesc
         return Task.CompletedTask;
     }
 
+    public virtual Task OnUnequipped(PlayerChoiceContext choiceContext, PileType resultPileType)
+    {
+        return Task.CompletedTask;
+    }
+
     public virtual Task OnLevelUpChanged(PlayerChoiceContext choiceContext)
     {
         return Task.CompletedTask;
@@ -57,5 +63,6 @@ public abstract class ArisJobPower : StS2ArisPower, IAddDumbVariablesToPowerDesc
     public virtual void AddDumbVariablesToPowerDescription(LocString description)
     {
         description.Add("StrengthAmount", EquipmentStrengthAmount * EffectApplications);
+        description.Add("chargeIcon", ChargeIconFormatter.Icon);
     }
 }

@@ -6,6 +6,7 @@ using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
+using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.CardPools;
@@ -19,8 +20,11 @@ namespace StS2Aris.StS2ArisCode.Cards;
 [Pool(typeof(TokenCardPool))]
 public class Shock() : StS2ArisCard(0, CardType.Attack, CardRarity.Token, TargetType.AnyEnemy)
 {
+    private bool IsUncontrollable =>
+        IsMutable && Owner?.Creature.GetPower<UncontrollablePower>() != null;
+
     public override TargetType TargetType =>
-        IsMutable && Owner?.Creature.GetPower<UncontrollablePower>() != null
+        IsUncontrollable
             ? TargetType.RandomEnemy
             : TargetType.AnyEnemy;
 
@@ -53,6 +57,16 @@ public class Shock() : StS2ArisCard(0, CardType.Attack, CardRarity.Token, Target
     {
         DynamicVars.Damage.UpgradeValueBy(1m);
         DynamicVars["ShockPower"].UpgradeValueBy(1m);
+    }
+
+    protected override void AddExtraArgsToDescription(LocString description)
+    {
+        base.AddExtraArgsToDescription(description);
+        var key = IsUncontrollable ? "randomDescription" : "normalDescription";
+        var shockDescription = new LocString("cards", $"{Id.Entry}.{key}");
+        DynamicVars.AddTo(shockDescription);
+        base.AddExtraArgsToDescription(shockDescription);
+        description.Add("ShockDescription", shockDescription.GetFormattedText());
     }
 
     public static async Task<CardModel?> CreateInHand(Player owner, ICombatState combatState, bool upgraded = false)

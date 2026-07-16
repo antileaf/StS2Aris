@@ -27,7 +27,7 @@ public class DesperateStrike() : StS2ArisCard(1, CardType.Attack, CardRarity.Com
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new DamageVar(11, ValueProp.Move)
+        new DamageVar(12, ValueProp.Move)
     ];
 
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)

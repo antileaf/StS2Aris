@@ -15,6 +15,8 @@ public static class ArisChargeTurnCleanupPatch
     {
         ArisCharge.ResetOverloadCount();
         GameScenario.ResetChronicleCount();
+        HeroSword.ResetCombatCounters();
+        LuminousNovaShot.ResetCombatDamageBonuses();
     }
 
     [HarmonyPatch(nameof(CombatManager.EndPlayerTurnPhaseTwoInternal))]
@@ -31,6 +33,12 @@ public static class ArisChargeTurnCleanupPatch
         {
             if (player.Creature.GetPower<AuxiliaryPower>() != null)
             {
+                continue;
+            }
+
+            if (player.Creature.GetPower<ChargeRetentionPower>() is { } retentionPower)
+            {
+                retentionPower.RemoveInternal();
                 continue;
             }
 

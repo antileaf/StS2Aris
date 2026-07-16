@@ -26,12 +26,14 @@ public class ItemCopyBug() : ArisQuestCard<QuestClear>(-2, CardType.Skill, CardR
 
     public override bool TryModifyRestSiteOptions(Player player, ICollection<RestSiteOption> options)
     {
-        if (player != Owner || Pile?.Type != PileType.Deck || !ReplicaRestSiteOption.HasValidTarget(player, this))
+        if (player != Owner || Pile?.Type != PileType.Deck ||
+            options.Any(static option => option is ReplicaRestSiteOption) ||
+            !ReplicaRestSiteOption.HasValidTarget(player))
         {
             return false;
         }
 
-        options.Add(new ReplicaRestSiteOption(player, this));
+        options.Add(new ReplicaRestSiteOption(player));
         return true;
     }
 

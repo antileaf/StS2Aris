@@ -7,5 +7,5 @@ namespace StS2Aris.StS2ArisCode.Hooks;
 
 public interface IOnJobChanged
 {
-    Task OnJobChanged(PlayerChoiceContext choiceContext, Player player, ArisJobPower? previousJob, ArisJobPower currentJob, CardModel? source);
+    Task OnJobChanged(PlayerChoiceContext choiceContext, Player player, ArisJobPower? previousJob, ArisJobPower? currentJob, CardModel? source);
 }

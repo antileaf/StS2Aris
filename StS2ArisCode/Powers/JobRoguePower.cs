@@ -1,6 +1,7 @@
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models.Powers;
 
@@ -10,6 +11,8 @@ public sealed class JobRoguePower : ArisJobPower
 {
     protected override IEnumerable<DynamicVar> CanonicalVars => [new DynamicVar("Amount", 1m)];
     public override string AnimationSuffix => "Rogue";
+
+    private decimal ShockAmount => Amount + LevelBonus;
 
     public override async Task AfterCardPlayed(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
@@ -29,8 +32,20 @@ public sealed class JobRoguePower : ArisJobPower
         var target = player.RunState.Rng.CombatTargets.NextItem(targets);
         if (target != null)
         {
-            await PowerCmd.Apply<ShockPower>(choiceContext, target, Amount + LevelBonus, Owner, EquipmentCard);
+            await PowerCmd.Apply<ShockPower>(choiceContext, target, ShockAmount, Owner, EquipmentCard);
         }
+    }
+
+    public override Task OnLevelUpChanged(PlayerChoiceContext choiceContext)
+    {
+        InvokeDisplayAmountChanged();
+        return Task.CompletedTask;
+    }
+
+    public override void AddDumbVariablesToPowerDescription(LocString description)
+    {
+        base.AddDumbVariablesToPowerDescription(description);
+        description.Add("Amount", ShockAmount);
     }
 
     public override async Task OnClassChange(PlayerChoiceContext choiceContext, CardPlay play)

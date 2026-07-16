@@ -43,6 +43,8 @@ public static class ArisEquipment
 
         if (previousJob != null)
         {
+            await previousJob.OnUnequipped(choiceContext, PileType.Discard);
+
             if (previousJob.EquipmentCard != null)
             {
                 await ReturnEquipmentCard(previousJob.EquipmentCard, PileType.Discard);
@@ -70,6 +72,8 @@ public static class ArisEquipment
             return;
         }
 
+        await currentJob.OnUnequipped(choiceContext, pileType);
+        await ArisHook.OnJobChanged(choiceContext, player, currentJob, null, currentJob.EquipmentCard);
         await PowerCmd.Remove(currentJob);
         if (currentJob.EquipmentCard != null)
         {
