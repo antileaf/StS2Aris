@@ -2,10 +2,12 @@ using HarmonyLib;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
+using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Cards;
 using MegaCrit.Sts2.Core.Models.Relics;
 using StS2Aris.StS2ArisCode.Mechanics;
+using ArisBingoBoard = StS2Aris.StS2ArisCode.Cards.BingoBoard;
 using ArisCharacter = StS2Aris.StS2ArisCode.Character.StS2Aris;
 
 namespace StS2Aris.StS2ArisCode.Patches;
@@ -18,6 +20,11 @@ public static class ArisQuestCompletePatch
         public static void Postfix(CardModel questCard)
         {
             ArisQuestProgress.MarkCompleted(questCard);
+
+            if (questCard.Owner.Character is ArisCharacter && questCard.Type == CardType.Quest)
+            {
+                TaskHelper.RunSafely(ArisBingoBoard.AdvanceBoardsForCompletedQuest(questCard.Owner, questCard));
+            }
         }
     }
 
@@ -43,6 +50,7 @@ public static class ArisQuestCompletePatch
             if (eggCard != null)
             {
                 ArisQuestProgress.MarkCompletedQuestType(player, eggCard.Id.Entry);
+                TaskHelper.RunSafely(ArisBingoBoard.AdvanceBoardsForCompletedQuest(player, eggCard));
             }
 
             ArisQuestProgress.MarkCompleted(player, eggCount);

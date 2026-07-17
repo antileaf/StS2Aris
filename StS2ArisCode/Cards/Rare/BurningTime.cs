@@ -12,7 +12,10 @@ namespace StS2Aris.StS2ArisCode.Cards;
 [Pool(typeof(StS2ArisCardPool))]
 public class BurningTime() : StS2ArisCard(3, CardType.Skill, CardRarity.Rare, TargetType.Self), IArisOutputCard, IOverload
 {
-    public override IEnumerable<CardKeyword> CanonicalKeywords => [ArisKeywords.Output, CardKeyword.Exhaust];
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [
+        ArisKeywords.Output,
+        CardKeyword.Exhaust
+    ];
 
     protected override IEnumerable<IHoverTip> ExtraHoverTips =>
     [

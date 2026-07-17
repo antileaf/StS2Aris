@@ -1,15 +1,11 @@
 ﻿using BaseLib.Utils;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
-using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
-using MegaCrit.Sts2.Core.Models.Powers;
-using MegaCrit.Sts2.Core.ValueProps;
 using StS2Aris.StS2ArisCode.Character;
-using StS2Aris.StS2ArisCode.Keywords;
 using StS2Aris.StS2ArisCode.Powers;
 
 namespace StS2Aris.StS2ArisCode.Cards;
@@ -18,31 +14,26 @@ public class NanoMachine() : StS2ArisCard(1, CardType.Skill, CardRarity.Rare, Ta
 {
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new DynamicVar("Magic", 2m)
+        new PowerVar<NanoMachinePower>(9m)
+    ];
+
+    protected override IEnumerable<IHoverTip> ExtraHoverTips => [
+        HoverTipFactory.Static(StaticHoverTip.Block)
     ];
 
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        var existing = Owner.Creature.GetPower<NanoMachinePower>();
-        if (existing != null)
-        {
-            existing.DelayHpLossTurn();
-            return;
-        }
-
-        var power = await PowerCmd.Apply<NanoMachinePower>(choiceContext, Owner.Creature, 1, Owner.Creature, this);
-        if (power != null)
-        {
-            power.SetAmount(0, silent: true);
-            power.LossDivisor = DynamicVars["Magic"].IntValue;
-        }
+        await PowerCmd.Apply<NanoMachinePower>(
+            choiceContext,
+            Owner.Creature,
+            DynamicVars["NanoMachinePower"].BaseValue,
+            Owner.Creature,
+            this);
     }
-
-    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 
     protected override void OnUpgrade()
     {
-        EnergyCost.UpgradeBy(-1);
+        DynamicVars["NanoMachinePower"].UpgradeValueBy(3m);
     }
 }
 

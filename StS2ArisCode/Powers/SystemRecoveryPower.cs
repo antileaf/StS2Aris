@@ -93,10 +93,23 @@ public sealed class SystemRecoveryPower : StS2ArisPower, IAddDumbVariablesToPowe
         }
     }
 
+    public void QueueRecoveryCheck()
+    {
+        if (!_triggeredThisTurn && !_turnEnding && !Owner.IsDead)
+        {
+            _triggerPending = true;
+        }
+    }
+
     private async Task TriggerRecovery(PlayerChoiceContext choiceContext)
     {
         _triggerPending = false;
-        if (_triggeredThisTurn || _turnEnding || Owner.IsDead || Owner.Player == null)
+        var player = Owner.Player;
+        if (_triggeredThisTurn
+            || _turnEnding
+            || Owner.IsDead
+            || player?.PlayerCombatState == null
+            || player.PlayerCombatState.Hand.Cards.Count > HandThreshold)
         {
             return;
         }
@@ -107,7 +120,7 @@ public sealed class SystemRecoveryPower : StS2ArisPower, IAddDumbVariablesToPowe
         await CreatureCmd.Damage(choiceContext, Owner, SelfDamage, ValueProp.Unpowered, Owner);
         if (!Owner.IsDead)
         {
-            await CardPileCmd.Draw(choiceContext, Amount, Owner.Player);
+            await CardPileCmd.Draw(choiceContext, Amount, player);
         }
     }
 

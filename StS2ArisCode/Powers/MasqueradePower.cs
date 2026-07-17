@@ -64,7 +64,7 @@ public sealed class MasqueradePower : StS2ArisPower
             return;
         }
 
-        await CardPileCmd.GiveToAnotherPlayer(selected, to, PileType.Hand);
+        await CardPileCmdCompat.GiveToAnotherPlayer(selected, to, PileType.Hand);
     }
 
     private static Player NextPlayer(List<Player> players, Player player)

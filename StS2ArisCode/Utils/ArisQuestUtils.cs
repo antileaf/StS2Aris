@@ -22,6 +22,7 @@ public static class ArisQuestUtils
             Grinding grinding => CreateReward<ExecutionSword>(grinding, forceUpgrade),
             RaidAddiction raidAddiction => CreateReward<RaidersLeader>(raidAddiction, forceUpgrade),
             ByrdonisEgg byrdonisEgg => CreateReward<ByrdSwoop>(byrdonisEgg, forceUpgrade),
+            Dowsing dowsing => CreateReward<Abundance>(dowsing, forceUpgrade),
             _ => null
         };
     }
@@ -57,7 +58,7 @@ public static class ArisQuestUtils
 
     public static bool HasSelectableReplicaReward(CardModel quest)
     {
-        return quest is DailyQuest or Diet or Grinding or RaidAddiction or LanternKey or SpoilsMap or ByrdonisEgg or LibrarianStrike;
+        return quest is DailyQuest or Diet or Grinding or RaidAddiction or LanternKey or SpoilsMap or ByrdonisEgg or LibrarianStrike or Dowsing;
     }
 
     public static void TryCopyEnchantment(CardModel source, CardModel reward)

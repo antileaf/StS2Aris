@@ -12,6 +12,7 @@ using MegaCrit.Sts2.Core.ValueProps;
 using StS2Aris.StS2ArisCode.Character;
 using StS2Aris.StS2ArisCode.CardModels;
 using StS2Aris.StS2ArisCode.Keywords;
+using StS2Aris.StS2ArisCode.Mechanics;
 using StS2Aris.StS2ArisCode.Powers;
 
 namespace StS2Aris.StS2ArisCode.Cards;
@@ -19,7 +20,6 @@ namespace StS2Aris.StS2ArisCode.Cards;
 public class PrismaticBeams() : StS2ArisCard(1, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy), IOverload
 {
     private decimal _temporaryDamageBonus;
-    private bool _returnToHandAfterPlay;
 
     protected override IEnumerable<IHoverTip> ExtraHoverTips =>
     [
@@ -34,7 +34,6 @@ public class PrismaticBeams() : StS2ArisCard(1, CardType.Attack, CardRarity.Unco
 
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        _returnToHandAfterPlay = false;
         if (play.Target == null)
             return;
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCardCompat(this, play).Targeting(play.Target).Execute(choiceContext);
@@ -45,17 +44,8 @@ public class PrismaticBeams() : StS2ArisCard(1, CardType.Attack, CardRarity.Unco
         var increase = DynamicVars["Magic"].BaseValue;
         DynamicVars.Damage.BaseValue += increase;
         _temporaryDamageBonus += increase;
-        _returnToHandAfterPlay = true;
         Owner.PlayerCombatState?.RecalculateCardValues();
         return Task.CompletedTask;
-    }
-
-    protected override (PileType, CardPilePosition) GetResultPileTypeAndPositionForCardPlay()
-    {
-        var (pileType, position) = base.GetResultPileTypeAndPositionForCardPlay();
-        return _returnToHandAfterPlay && pileType == PileType.Discard
-            ? (PileType.Hand, CardPilePosition.Bottom)
-            : (pileType, position);
     }
 
     public override Task AfterSideTurnEnd(
@@ -79,5 +69,3 @@ public class PrismaticBeams() : StS2ArisCard(1, CardType.Attack, CardRarity.Unco
         DynamicVars["Magic"].UpgradeValueBy(1m);
     }
 }
-
-

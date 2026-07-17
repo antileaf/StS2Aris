@@ -13,7 +13,10 @@ namespace StS2Aris.StS2ArisCode.Cards;
 [Pool(typeof(StS2ArisCardPool))]
 public class FinalRelease() : StS2ArisCard(1, CardType.Skill, CardRarity.Rare, TargetType.Self)
 {
-    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [
+        CardKeyword.Exhaust,
+        CardKeyword.Retain
+    ];
 
     protected override IEnumerable<IHoverTip> ExtraHoverTips =>
     [
@@ -54,6 +57,6 @@ public class FinalRelease() : StS2ArisCard(1, CardType.Skill, CardRarity.Rare, T
     
     protected override void OnUpgrade()
     {
-        AddKeyword(CardKeyword.Retain);
+        EnergyCost.UpgradeBy(-1);
     }
 }

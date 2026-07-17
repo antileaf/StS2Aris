@@ -22,7 +22,7 @@ public class ThresholdBreak() : StS2ArisCard(0, CardType.Skill, CardRarity.Uncom
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new HpLossVar(5),
-        new PowerVar<ChargePower>(2m)
+        new PowerVar<ChargePower>(3m)
     ];
 
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)

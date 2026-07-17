@@ -20,7 +20,7 @@ public class BalanceBroken() : StS2ArisCard(3, CardType.Attack, CardRarity.Rare,
     protected override IEnumerable<IHoverTip> ExtraHoverTips => [HoverTipFactory.FromKeyword(ArisKeywords.Overload)];
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new DamageVar(26, ValueProp.Move)
+        new DamageVar(24, ValueProp.Move)
     ];
 
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
@@ -35,10 +35,14 @@ public class BalanceBroken() : StS2ArisCard(3, CardType.Attack, CardRarity.Rare,
     {
         if (player == Owner && Pile?.IsCombatPile == true)
         {
-            EnergyCost.AddThisTurn(-1, reduceOnly: true);
+            EnergyCost.AddUntilPlayed(-1, reduceOnly: true);
         }
 
         return Task.CompletedTask;
     }
+    
+    protected override void OnUpgrade()
+    {
+        DynamicVars.Damage.UpgradeValueBy(5m);
+    }
 }
-

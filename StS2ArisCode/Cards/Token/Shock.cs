@@ -10,6 +10,7 @@ using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.CardPools;
+using MegaCrit.Sts2.Core.Models.Enchantments;
 using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.ValueProps;
 using StS2Aris.StS2ArisCode.Character;
@@ -51,6 +52,10 @@ public class Shock() : StS2ArisCard(0, CardType.Attack, CardRarity.Token, Target
 
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCardCompat(this, play).Targeting(target).Execute(choiceContext);
         await PowerCmd.Apply<ShockPower>(choiceContext, target, DynamicVars["ShockPower"].IntValue, Owner.Creature, this);
+        if (play.Target == null && Enchantment is Inky inky && target.IsAlive)
+        {
+            await PowerCmd.Apply<WeakPower>(choiceContext, target, inky.DynamicVars.Weak.BaseValue, Owner.Creature, this);
+        }
     }
 
     protected override void OnUpgrade()

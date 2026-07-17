@@ -42,13 +42,12 @@ public class Diet() : ArisQuestCard<NeatCompression>(0, CardType.Skill, CardRari
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
         var amount = DynamicVars["Magic"].IntValue;
-        var minSelection = Math.Min(amount, PileType.Hand.GetPile(Owner).Cards.Count);
         var selected = await CardSelectCmd.FromHand(
             choiceContext,
             Owner,
-            new CardSelectorPrefs(CardSelectorPrefs.ExhaustSelectionPrompt, minSelection, amount)
+            new CardSelectorPrefs(CardSelectorPrefs.ExhaustSelectionPrompt, 0, amount)
             {
-                Cancelable = false
+                Cancelable = true
             },
             null,
             this);
@@ -112,5 +111,6 @@ public class Diet() : ArisQuestCard<NeatCompression>(0, CardType.Skill, CardRari
 
     protected override void OnUpgrade()
     {
+        DynamicVars["Magic"].UpgradeValueBy(1m);
     }
 }

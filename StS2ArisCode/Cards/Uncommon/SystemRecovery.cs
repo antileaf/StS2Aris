@@ -19,12 +19,13 @@ public class SystemRecovery() : StS2ArisCard(1, CardType.Power, CardRarity.Uncom
 
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        await PowerCmd.Apply<SystemRecoveryPower>(
+        var power = await PowerCmd.Apply<SystemRecoveryPower>(
             choiceContext,
             Owner.Creature,
             DynamicVars["SystemRecoveryPower"].BaseValue,
             Owner.Creature,
             this);
+        power?.QueueRecoveryCheck();
     }
 
     protected override void OnUpgrade()

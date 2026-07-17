@@ -29,9 +29,9 @@ public class LuminousNovaShot() : StS2ArisCard(1, CardType.Attack, CardRarity.To
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new DamageVar(6m, ValueProp.Move),
+        new DamageVar(7m, ValueProp.Move),
         new PowerVar<ChargePower>(1m),
-        new DynamicVar("Increase", 3m)
+        new DynamicVar("Increase", 4m)
     ];
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];

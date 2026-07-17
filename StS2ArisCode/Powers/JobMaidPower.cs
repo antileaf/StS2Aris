@@ -20,10 +20,6 @@ public sealed class JobMaidPower : ArisJobPower
 
     public override string AnimationSuffix => "Maid";
 
-    public override decimal ModifyDamageMultiplicative(Creature? target, decimal amount, ValueProp props, Creature? dealer, CardModel? cardSource, CardPlay? cardPlay)
-    {
-        return ModifyDamageMultiplicativeCompat(target, amount, props, dealer, cardSource, cardPlay);
-    }
 
     public decimal ModifyDamageMultiplicativeCompat(Creature? target, decimal amount, ValueProp props, Creature? dealer, CardModel? cardSource, CardPlay? cardPlay)
     {
