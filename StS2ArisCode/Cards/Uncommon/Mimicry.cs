@@ -3,9 +3,11 @@ using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Factories;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
 using StS2Aris.StS2ArisCode.Character;
+using StS2Aris.StS2ArisCode.Keywords;
 using StS2Aris.StS2ArisCode.Mechanics;
 
 namespace StS2Aris.StS2ArisCode.Cards;
@@ -14,6 +16,9 @@ namespace StS2Aris.StS2ArisCode.Cards;
 public class Mimicry() : StS2ArisCard(1, CardType.Skill, CardRarity.Uncommon, TargetType.AnyAlly)
 {
     public override CardMultiplayerConstraint MultiplayerConstraint => CardMultiplayerConstraint.MultiplayerOnly;
+
+    protected override IEnumerable<IHoverTip> ExtraHoverTips => [
+        HoverTipFactory.FromKeyword(ArisKeywords.Equipment)];
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 

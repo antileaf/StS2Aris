@@ -54,7 +54,8 @@ public static class ArisCharge
 
     public static bool IsOverloadState(Player? player) => player?.PlayerCombatState?.Energy <= 0;
 
-    public static bool IsOverloadAvailable(Player player) => IsOverloadState(player);
+    public static bool IsOverloadAvailable(Player? player) =>
+        IsOverloadState(player) || player?.Creature.GetPower<JobKeiPower>() != null;
 
     public static bool WillBeOverloadAfterSpending(CardModel card)
     {
@@ -63,6 +64,11 @@ public static class ArisCharge
         if (player == null || state == null)
         {
             return false;
+        }
+
+        if (player.Creature.GetPower<JobKeiPower>() != null)
+        {
+            return true;
         }
 
         int energySpent = Math.Min(GetEnergyAmountToSpend(card, includeChargeForX: CanSpendCharge(card)), state.Energy);

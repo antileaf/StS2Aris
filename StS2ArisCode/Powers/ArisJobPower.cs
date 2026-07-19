@@ -18,7 +18,7 @@ public abstract class ArisJobPower : StS2ArisPower, IAddDumbVariablesToPowerDesc
     public abstract string AnimationSuffix { get; }
 
     public override PowerType Type => PowerType.Buff;
-    public override PowerStackType StackType => PowerStackType.Counter;
+    public override PowerStackType StackType => PowerStackType.Single;
 
     protected override IEnumerable<IHoverTip> ExtraHoverTips
     {
@@ -33,7 +33,7 @@ public abstract class ArisJobPower : StS2ArisPower, IAddDumbVariablesToPowerDesc
 
     protected int EffectApplications => Math.Max(1, Amount + LevelUpAmount);
     protected int LevelBonus => EffectApplications - 1;
-    protected Player? PlayerOwner => Owner.Player;
+    protected Player? PlayerOwner => Owner?.Player;
     protected decimal EquipmentStrengthAmount =>
         EquipmentCard?.DynamicVars.TryGetValue("StrengthPower", out var strength) == true
             ? strength.BaseValue

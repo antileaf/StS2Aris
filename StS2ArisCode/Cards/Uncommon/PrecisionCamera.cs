@@ -35,7 +35,7 @@ public class PrecisionCamera() : StS2ArisCard(0, CardType.Skill, CardRarity.Unco
         if (CombatState == null)
             return;
 
-        if (!ArisCharge.IsOverloadState(Owner))
+        if (!ArisCharge.IsOverloadAvailable(Owner))
         {
             foreach (var opponent in CombatState.GetOpponentsOf(Owner.Creature))
                 await PowerCmd.Apply<VulnerablePower>(choiceContext, opponent, DynamicVars["Magic"].IntValue, Owner.Creature, this);

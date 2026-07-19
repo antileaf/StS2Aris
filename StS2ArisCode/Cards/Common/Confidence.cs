@@ -25,6 +25,7 @@ public class Confidence() : StS2ArisCard(0, CardType.Attack, CardRarity.Common, 
         ArgumentNullException.ThrowIfNull(play.Target);
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
             .FromCardCompat(this, play)
+            .WithHitFx("vfx/vfx_attack_blunt")
             .Targeting(play.Target)
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);

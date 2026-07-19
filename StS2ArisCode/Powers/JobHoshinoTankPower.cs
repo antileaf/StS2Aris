@@ -2,6 +2,7 @@ using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Localization;
 using StS2Aris.StS2ArisCode.Mechanics;
 
 namespace StS2Aris.StS2ArisCode.Powers;
@@ -12,27 +13,48 @@ public sealed class JobHoshinoTankPower : ArisJobPower
 
     public override async Task OnClassChange(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        if (PlayerOwner == null || EquipmentCard == null)
+        var equipment = EquipmentCard;
+        var player = equipment?.Owner;
+        if (equipment == null || player == null)
         {
             return;
         }
 
         await HoshinoReflection.ApplyExpert(
             choiceContext,
-            PlayerOwner,
-            EquipmentCard.DynamicVars["ExpertAmount"].BaseValue,
-            Owner,
-            EquipmentCard);
+            player,
+            equipment.DynamicVars["ExpertAmount"].BaseValue,
+            player.Creature,
+            equipment);
     }
 
-    public override async Task BeforeSideTurnStart(PlayerChoiceContext choiceContext, CombatSide side, IReadOnlyList<Creature> participants, ICombatState combatState)
+    public override async Task AfterSideTurnEnd(
+        PlayerChoiceContext choiceContext,
+        CombatSide side,
+        IEnumerable<Creature> participants)
     {
-        if (side != CombatSide.Player || !participants.Contains(Owner) || Owner.IsDead || PlayerOwner == null)
+        var player = PlayerOwner;
+        if (side != CombatSide.Player || !participants.Contains(Owner) || Owner.IsDead || player == null)
         {
             return;
         }
 
         FlashJob();
-        await HoshinoReflection.Reload(choiceContext, PlayerOwner);
+        for (var i = 0; i < EffectApplications; i++)
+        {
+            await HoshinoReflection.Reload(choiceContext, player);
+        }
+    }
+
+    public override Task OnLevelUpChanged(PlayerChoiceContext choiceContext)
+    {
+        InvokeDisplayAmountChanged();
+        return Task.CompletedTask;
+    }
+
+    public override void AddDumbVariablesToPowerDescription(LocString description)
+    {
+        base.AddDumbVariablesToPowerDescription(description);
+        description.Add("Reloads", EffectApplications);
     }
 }

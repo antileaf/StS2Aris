@@ -27,7 +27,7 @@ public class BFStrike() : StS2ArisCard(2, CardType.Attack, CardRarity.Common, Ta
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
         ArgumentNullException.ThrowIfNull(play.Target);
-        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).WithHitCount(DynamicVars["Magic"].IntValue).FromCardCompat(this, play).Targeting(play.Target).Execute(choiceContext);
+        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).WithHitCount(DynamicVars["Magic"].IntValue).FromCardCompat(this, play).WithHitFx("vfx/vfx_attack_blunt").Targeting(play.Target).Execute(choiceContext);
     }
 
     protected override void OnUpgrade()

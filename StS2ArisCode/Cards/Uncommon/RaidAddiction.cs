@@ -23,7 +23,10 @@ public class RaidAddiction() : ArisQuestCard<RaidersLeader>(2, CardType.Attack, 
     [
         HoverTipFactory.FromKeyword(ArisKeywords.Quest),
         HoverTipFactory.FromKeyword(ArisKeywords.Reward),
-        HoverTipFactory.FromCard<RaidersLeader>(IsUpgraded)
+        HoverTipFactory.FromCard<RaidersLeader>(IsUpgraded),
+        HoverTipFactory.FromKeyword(ArisKeywords.Shock),
+        HoverTipFactory.FromPower<VulnerablePower>(),
+        HoverTipFactory.FromPower<WeakPower>()
     ];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
@@ -34,7 +37,7 @@ public class RaidAddiction() : ArisQuestCard<RaidersLeader>(2, CardType.Attack, 
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
         ArgumentNullException.ThrowIfNull(play.Target);
-        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCardCompat(this, play).Targeting(play.Target).Execute(choiceContext);
+        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCardCompat(this, play).WithHitFx("vfx/vfx_heavy_blunt").Targeting(play.Target).Execute(choiceContext);
     }
 
     public override async Task AfterCombatVictory(CombatRoom room)

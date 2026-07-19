@@ -18,7 +18,15 @@ public class Masquerade() : StS2ArisCard(1, CardType.Power, CardRarity.Rare, Tar
 
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        await PowerCmd.Apply<MasqueradePower>(choiceContext, Owner.Creature, DynamicVars["MasqueradePower"].BaseValue, Owner.Creature, this);
+        var allies = CombatState?.Players
+            .Where(player => player.Creature is { IsAlive: true, IsDead: false })
+            .Select(player => player.Creature);
+        await PowerCmd.Apply<MasqueradePower>(
+            choiceContext,
+            allies,
+            DynamicVars["MasqueradePower"].BaseValue,
+            Owner.Creature,
+            this);
     }
     
     protected override void OnUpgrade()

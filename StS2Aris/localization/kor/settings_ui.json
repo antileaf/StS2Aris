@@ -1,0 +1,12 @@
+{
+  "STS2ARIS.mod_title": "아리스 모드 설정",
+  "STS2ARIS-AUDIO_SETTINGS.title": "오디오 설정",
+  "STS2ARIS-ATTACK_SFX_VOLUME_PERCENT.title": "공격 효과음 음량",
+  "STS2ARIS-ATTACK_SFX_VOLUME_PERCENT.hover.title": "공격 효과음 음량",
+  "STS2ARIS-ATTACK_SFX_VOLUME_PERCENT.hover.desc": "아리스 전용 공격 효과음의 음량을 조절합니다.",
+  "STS2ARIS-ATTACK_SFX_VOLUME_PERCENT.sliderFormat": "{0:0}%",
+  "STS2ARIS-EVENT_SETTINGS.title": "이벤트 설정",
+  "STS2ARIS-FORCE_CLASS_ALTAR_FIRST_EVENT.title": "첫 이벤트를 전직의 제단으로 고정",
+  "STS2ARIS-FORCE_CLASS_ALTAR_FIRST_EVENT.hover.title": "첫 이벤트를 전직의 제단으로 고정",
+  "STS2ARIS-FORCE_CLASS_ALTAR_FIRST_EVENT.hover.desc": "가능하면 아리스의 첫 ?방 이벤트를 전직의 제단으로 변경합니다."
+}

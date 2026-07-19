@@ -2,17 +2,15 @@ using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization;
-using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models.Powers;
 
 namespace StS2Aris.StS2ArisCode.Powers;
 
 public sealed class JobRoguePower : ArisJobPower
 {
-    protected override IEnumerable<DynamicVar> CanonicalVars => [new DynamicVar("Amount", 1m)];
     public override string AnimationSuffix => "Rogue";
 
-    private decimal ShockAmount => Amount + LevelBonus;
+    private decimal ShockAmount => EffectApplications;
 
     public override async Task AfterCardPlayed(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {

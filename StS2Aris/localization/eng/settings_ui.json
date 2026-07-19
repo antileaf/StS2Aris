@@ -1,0 +1,12 @@
+{
+  "STS2ARIS.mod_title": "Aris Mod Settings",
+  "STS2ARIS-AUDIO_SETTINGS.title": "Audio Settings",
+  "STS2ARIS-ATTACK_SFX_VOLUME_PERCENT.title": "Attack SFX Volume",
+  "STS2ARIS-ATTACK_SFX_VOLUME_PERCENT.hover.title": "Attack SFX Volume",
+  "STS2ARIS-ATTACK_SFX_VOLUME_PERCENT.hover.desc": "Adjusts the volume of Aris's attack sound effects.",
+  "STS2ARIS-ATTACK_SFX_VOLUME_PERCENT.sliderFormat": "{0:0}%",
+  "STS2ARIS-EVENT_SETTINGS.title": "Event Settings",
+  "STS2ARIS-FORCE_CLASS_ALTAR_FIRST_EVENT.title": "Force Class Altar First",
+  "STS2ARIS-FORCE_CLASS_ALTAR_FIRST_EVENT.hover.title": "Force Class Altar First",
+  "STS2ARIS-FORCE_CLASS_ALTAR_FIRST_EVENT.hover.desc": "Whenever possible, replaces Aris's first ? Room event with the Class Altar."
+}

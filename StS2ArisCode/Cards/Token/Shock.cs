@@ -50,7 +50,11 @@ public class Shock() : StS2ArisCard(0, CardType.Attack, CardRarity.Token, Target
             return;
         }
 
-        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCardCompat(this, play).Targeting(target).Execute(choiceContext);
+        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCardCompat(this, play)
+            .WithHitFx("vfx/vfx_attack_lightning")
+            .Targeting(target)
+            .Execute(choiceContext);
+        
         await PowerCmd.Apply<ShockPower>(choiceContext, target, DynamicVars["ShockPower"].IntValue, Owner.Creature, this);
         if (play.Target == null && Enchantment is Inky inky && target.IsAlive)
         {
@@ -60,7 +64,6 @@ public class Shock() : StS2ArisCard(0, CardType.Attack, CardRarity.Token, Target
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(1m);
         DynamicVars["ShockPower"].UpgradeValueBy(1m);
     }
 

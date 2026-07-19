@@ -7,13 +7,17 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using MegaCrit.Sts2.Core.Map;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.Nodes.Rooms;
 using MegaCrit.Sts2.Core.Nodes.Vfx;
+using MegaCrit.Sts2.Core.Rooms;
 using MegaCrit.Sts2.Core.ValueProps;
 using StS2Aris.StS2ArisCode.CardModels;
 using StS2Aris.StS2ArisCode.Character;
+using StS2Aris.StS2ArisCode.Config;
+using StS2Aris.StS2ArisCode.Events;
 using StS2Aris.StS2ArisCode.Keywords;
 using StS2Aris.StS2ArisCode.Powers;
 
@@ -49,5 +53,25 @@ public class SuperNova() : StS2ArisEquipmentCard(1, CardType.Attack, CardRarity.
     public CardModel GetTranscendenceTransformedCard()
     {
         return ModelDb.Card<AtrahasisSuperNova>();
+    }
+
+    public override EventModel ModifyNextEvent(EventModel currentEvent)
+    {
+        if (!ArisModConfig.ForceClassAltarFirstEvent)
+        {
+            return currentEvent;
+        }
+
+        var runState = Owner.RunState;
+        bool hasVisitedNormalEvent = runState.MapPointHistory
+            .SelectMany(actHistory => actHistory)
+            .Any(entry => entry.MapPointType != MapPointType.Ancient && entry.HasRoomOfType(RoomType.Event));
+        if (hasVisitedNormalEvent)
+        {
+            return currentEvent;
+        }
+
+        ClassAltar classAltar = ModelDb.Event<ClassAltar>();
+        return classAltar.IsAllowed(runState) ? classAltar : currentEvent;
     }
 }

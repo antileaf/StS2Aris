@@ -36,7 +36,7 @@ public class HoshinoTank() : StS2ArisEquipmentCard(1, CardType.Skill, CardRarity
         }
     }
 
-    protected override IEnumerable<DynamicVar> CanonicalVars => [new DynamicVar("ExpertAmount", 5m)];
+    protected override IEnumerable<DynamicVar> CanonicalVars => [new DynamicVar("ExpertAmount", 4m)];
 
     public override ArisJobPower CreateJobPower()
     {
@@ -45,6 +45,6 @@ public class HoshinoTank() : StS2ArisEquipmentCard(1, CardType.Skill, CardRarity
 
     protected override void OnUpgrade()
     {
-        DynamicVars["ExpertAmount"].UpgradeValueBy(3m);
+        DynamicVars["ExpertAmount"].UpgradeValueBy(1m);
     }
 }

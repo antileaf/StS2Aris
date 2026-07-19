@@ -1,7 +1,10 @@
+using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Characters;
+using MegaCrit.Sts2.Core.Nodes.CommonUi;
 using StS2Aris.StS2ArisCode.Cards;
+using ArisCharacter = StS2Aris.StS2ArisCode.Character.StS2Aris;
 
 namespace StS2Aris.StS2ArisCode.Mechanics;
 
@@ -14,6 +17,9 @@ public static class MimicryEquipmentRegistry
         [nameof(Defect)] = typeof(TrueForm),
         [nameof(Necrobinder)] = typeof(WizardHat),
         [nameof(Regent)] = typeof(StarThrone),
+        ["StS2Aris"] = typeof(SuperNova),
+        ["STS2ARIS-ST_S2_ARIS"] = typeof(SuperNova),
+        ["StS2Aris.StS2ArisCode.Character.StS2Aris"] = typeof(SuperNova),
         ["Rabbit"] = typeof(UsagiFlap),
         ["StS2Rabbit"] = typeof(UsagiFlap),
         ["Kei"] = typeof(LuminousNova),
@@ -35,9 +41,18 @@ public static class MimicryEquipmentRegistry
 
     public static CardModel? CreateEquipmentFor(Player sourcePlayer, Player owner)
     {
-        if (!TryGetEquipmentType(sourcePlayer.Character, out var type))
+        var equippedCard = sourcePlayer.Character is ArisCharacter
+            ? ArisEquipment.GetCurrentJob(sourcePlayer)?.EquipmentCard
+            : null;
+        var type = equippedCard?.GetType();
+        if (type == null)
         {
-            return null;
+            if (!TryGetEquipmentType(sourcePlayer.Character, out var registeredType))
+            {
+                return null;
+            }
+
+            type = registeredType;
         }
 
         var canonical = ModelDb.GetByIdOrNull<CardModel>(ModelDb.GetId(type));
@@ -46,7 +61,13 @@ public static class MimicryEquipmentRegistry
             return null;
         }
 
-        return owner.Creature.CombatState?.CreateCard(canonical, owner) ?? owner.RunState.CreateCard(canonical, owner);
+        var copy = owner.Creature.CombatState?.CreateCard(canonical, owner) ?? owner.RunState.CreateCard(canonical, owner);
+        if (equippedCard?.IsUpgraded == true)
+        {
+            CardCmd.Upgrade(copy, CardPreviewStyle.None);
+        }
+
+        return copy;
     }
 
     private static bool TryGetEquipmentType(CharacterModel character, out Type type)

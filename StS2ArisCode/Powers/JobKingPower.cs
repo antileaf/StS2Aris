@@ -12,6 +12,8 @@ public sealed class JobKingPower : ArisJobPower, IOnOverloadTriggered
 {
     public override string AnimationSuffix => "Regent";
 
+    private int ForgeAmount => (int)((EquipmentCard?.DynamicVars.Forge.BaseValue ?? 5m) * EffectApplications);
+
     public override async Task OnClassChange(PlayerChoiceContext choiceContext, CardPlay play)
     {
         var equipment = EquipmentCard;
@@ -35,12 +37,18 @@ public sealed class JobKingPower : ArisJobPower, IOnOverloadTriggered
         }
 
         FlashJob();
-        await ForgeCmd.Forge(equipment.DynamicVars.Forge.IntValue, player, equipment);
+        await ForgeCmd.Forge(ForgeAmount, player, equipment);
+    }
+
+    public override Task OnLevelUpChanged(PlayerChoiceContext choiceContext)
+    {
+        InvokeDisplayAmountChanged();
+        return Task.CompletedTask;
     }
 
     public override void AddDumbVariablesToPowerDescription(LocString description)
     {
         base.AddDumbVariablesToPowerDescription(description);
-        description.Add("Forge", EquipmentCard?.DynamicVars.Forge.BaseValue ?? 5m);
+        description.Add("Forge", ForgeAmount);
     }
 }

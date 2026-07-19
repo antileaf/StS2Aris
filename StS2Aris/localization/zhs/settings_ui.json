@@ -1,0 +1,12 @@
+{
+  "STS2ARIS.mod_title": "爱丽丝模组设置",
+  "STS2ARIS-AUDIO_SETTINGS.title": "音频设置",
+  "STS2ARIS-ATTACK_SFX_VOLUME_PERCENT.title": "攻击音效音量",
+  "STS2ARIS-ATTACK_SFX_VOLUME_PERCENT.hover.title": "攻击音效音量",
+  "STS2ARIS-ATTACK_SFX_VOLUME_PERCENT.hover.desc": "调整爱丽丝专属攻击音效的音量。",
+  "STS2ARIS-ATTACK_SFX_VOLUME_PERCENT.sliderFormat": "{0:0}%",
+  "STS2ARIS-EVENT_SETTINGS.title": "事件设置",
+  "STS2ARIS-FORCE_CLASS_ALTAR_FIRST_EVENT.title": "将首次事件固定为转职祭坛",
+  "STS2ARIS-FORCE_CLASS_ALTAR_FIRST_EVENT.hover.title": "将首次事件固定为转职祭坛",
+  "STS2ARIS-FORCE_CLASS_ALTAR_FIRST_EVENT.hover.desc": "条件允许时，将爱丽丝遇到的第一个？房间事件替换为转职祭坛。"
+}

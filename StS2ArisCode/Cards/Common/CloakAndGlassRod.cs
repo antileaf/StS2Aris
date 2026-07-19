@@ -16,7 +16,9 @@ namespace StS2Aris.StS2ArisCode.Cards;
 [Pool(typeof(StS2ArisCardPool))]
 public class CloakAndGlassRod() : StS2ArisCard(1, CardType.Skill, CardRarity.Common, TargetType.Self)
 {
-    protected override IEnumerable<IHoverTip> ExtraHoverTips => [HoverTipFactory.FromCard<Shock>(IsUpgraded)];
+    protected override IEnumerable<IHoverTip> ExtraHoverTips => [
+        HoverTipFactory.FromKeyword(ArisKeywords.Shock),
+        HoverTipFactory.FromCard<Shock>(IsUpgraded)];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [

@@ -1,0 +1,12 @@
+{
+  "STS2ARIS.mod_title": "アリスMOD設定",
+  "STS2ARIS-AUDIO_SETTINGS.title": "オーディオ設定",
+  "STS2ARIS-ATTACK_SFX_VOLUME_PERCENT.title": "攻撃効果音の音量",
+  "STS2ARIS-ATTACK_SFX_VOLUME_PERCENT.hover.title": "攻撃効果音の音量",
+  "STS2ARIS-ATTACK_SFX_VOLUME_PERCENT.hover.desc": "アリス専用の攻撃効果音の音量を調整します。",
+  "STS2ARIS-ATTACK_SFX_VOLUME_PERCENT.sliderFormat": "{0:0}%",
+  "STS2ARIS-EVENT_SETTINGS.title": "イベント設定",
+  "STS2ARIS-FORCE_CLASS_ALTAR_FIRST_EVENT.title": "最初のイベントを転職の祭壇に固定",
+  "STS2ARIS-FORCE_CLASS_ALTAR_FIRST_EVENT.hover.title": "最初のイベントを転職の祭壇に固定",
+  "STS2ARIS-FORCE_CLASS_ALTAR_FIRST_EVENT.hover.desc": "可能な場合、アリスが最初に訪れる？部屋のイベントを転職の祭壇に変更します。"
+}

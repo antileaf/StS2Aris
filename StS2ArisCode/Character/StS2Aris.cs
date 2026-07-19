@@ -62,6 +62,7 @@ public class StS2Aris : PlaceholderCharacterModel
 
     public override float AttackAnimDelay => 0.15f;
     public override float CastAnimDelay => 0.25f;
+    public override string CharacterSelectSfx => "Aris_light.mp3".SfxPath();
 
 	public override string CustomIconPath => "res://StS2Aris/scenes/icon_aris.tscn";
     public override string CustomIconTexturePath => "character_icon_aris.png".CharacterUiPath();
@@ -77,6 +78,21 @@ public class StS2Aris : PlaceholderCharacterModel
     {
         return NodeFactory<NCreatureVisuals>.CreateFromScene(CustomVisualPath);
     }
+    
+    
+    public override string CustomArmPointingTexturePath =>
+        "multiplayer_hand_aris_point.png".CharacterUiPath();
+
+    public override string CustomArmRockTexturePath =>
+        "multiplayer_hand_aris_rock.png".CharacterUiPath();
+
+    public override string CustomArmPaperTexturePath =>
+        "multiplayer_hand_aris_paper.png".CharacterUiPath();
+
+    public override string CustomArmScissorsTexturePath =>
+        "multiplayer_hand_aris_scissor.png".CharacterUiPath();
+
+    
 
     public override CreatureAnimator GenerateAnimator(MegaSprite controller)
     {
@@ -133,6 +149,8 @@ public class StS2Aris : PlaceholderCharacterModel
             AddJobActionState("Cast", "cast", suffix);
             AddJobActionState("Hit", "hurt", suffix);
         }
+
+        AddJobActionState("Attack2", "attack2", "AOEDPS");
 
         animator.AddAnyState("Idle", idle);
         animator.AddAnyState("Attack", attack);

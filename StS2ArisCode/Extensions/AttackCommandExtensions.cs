@@ -2,6 +2,7 @@ using System.Reflection;
 using MegaCrit.Sts2.Core.Commands.Builders;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Models;
+using StS2Aris;
 
 namespace StS2Aris.StS2ArisCode.Extensions;
 
@@ -32,5 +33,18 @@ public static class AttackCommandExtensions
         }
 
         throw new MissingMethodException(typeof(AttackCommand).FullName, nameof(AttackCommand.FromCard));
+    }
+
+    public static AttackCommand WithArisHitFx(this AttackCommand command, string? vfx = null, string? sfx = null, string? tmpSfx = null)
+    {
+        command.WithHitFx(vfx, sfx: null, tmpSfx);
+        if (sfx == null)
+            return command;
+
+        return command.BeforeDamage(() =>
+        {
+            StS2ArisMain.PlayAttackSfx(sfx);
+            return Task.CompletedTask;
+        });
     }
 }

@@ -7,7 +7,6 @@ using StS2Aris.StS2ArisCode.Powers;
 
 namespace StS2Aris.StS2ArisCode.Cards;
 
-[Pool(typeof(TokenCardPool))]
 public class UsagiFlap() : StS2ArisEquipmentCard(1, CardType.Skill, CardRarity.Token, TargetType.Self)
 {
     protected override IEnumerable<IHoverTip> ExtraHoverTips =>

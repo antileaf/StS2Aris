@@ -7,6 +7,7 @@ using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.CardPools;
+using MegaCrit.Sts2.Core.Nodes.Vfx;
 using MegaCrit.Sts2.Core.ValueProps;
 using StS2Aris.StS2ArisCode.Character;
 using StS2Aris.StS2ArisCode.Keywords;
@@ -23,7 +24,10 @@ public class ExecutionSword() : StS2ArisCard(2, CardType.Attack, CardRarity.Toke
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
         ArgumentNullException.ThrowIfNull(play.Target);
-        await DamageCmd.Attack(DynamicVars.CalculatedDamage).FromCardCompat(this, play).Targeting(play.Target).Execute(choiceContext);
+        await DamageCmd.Attack(DynamicVars.CalculatedDamage).FromCardCompat(this, play)
+            .Targeting(play.Target)
+            .WithHitVfxNode(NBigSlashImpactVfx.Create)
+            .Execute(choiceContext);
     }
 
     protected override void OnUpgrade()
@@ -36,5 +40,4 @@ public class ExecutionSword() : StS2ArisCard(2, CardType.Attack, CardRarity.Toke
         return Math.Floor(Math.Max(card.Owner?.Gold ?? 0, 0) / 8m);
     }
 }
-
 

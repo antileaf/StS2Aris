@@ -4,93 +4,107 @@ size: 2048,2048
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
-Alice_Defend_idol
-  rotate: false
-  xy: 607, 1209
-  size: 200, 300
-  orig: 200, 300
-  offset: 0, 0
-  index: -1
-Alice
-  rotate: false
-  xy: 1, 987
-  size: 200, 300
-  orig: 200, 300
-  offset: 0, 0
-  index: -1
-Alice_Defend_Crowbar
-  rotate: false
-  xy: 1813, 1
-  size: 200, 300
-  orig: 200, 300
-  offset: 0, 0
-  index: -1
-idol
+Alice_maid
   rotate: false
   xy: 405, 685
   size: 200, 300
   orig: 200, 300
   offset: 0, 0
   index: -1
-Alice_Defend_necromancer
+Alice_Defend_maid
   rotate: false
-  xy: 405, 1289
+  xy: 1, 685
   size: 200, 300
   orig: 200, 300
   offset: 0, 0
   index: -1
-Alice_Defend
+Alice_Defend_idol
   rotate: false
-  xy: 405, 987
+  xy: 1005, 303
   size: 200, 300
   orig: 200, 300
   offset: 0, 0
   index: -1
-Kei
-  rotate: false
-  xy: 203, 1289
-  size: 200, 300
-  orig: 200, 300
-  offset: 0, 0
-  index: -1
-Alice_Defend_rogue
-  rotate: false
-  xy: 607, 907
-  size: 200, 300
-  orig: 200, 300
-  offset: 0, 0
-  index: -1
-Kei_Defend
-  rotate: false
-  xy: 203, 987
-  size: 200, 300
-  orig: 200, 300
-  offset: 0, 0
-  index: -1
-Alice_dead
+Alice
   rotate: false
   xy: 1, 1289
   size: 200, 300
   orig: 200, 300
   offset: 0, 0
   index: -1
+Alice_Defend_Crowbar
+  rotate: false
+  xy: 1611, 1
+  size: 200, 300
+  orig: 200, 300
+  offset: 0, 0
+  index: -1
+idol
+  rotate: false
+  xy: 405, 1289
+  size: 200, 300
+  orig: 200, 300
+  offset: 0, 0
+  index: -1
+Alice_Defend_necromancer
+  rotate: false
+  xy: 405, 987
+  size: 200, 300
+  orig: 200, 300
+  offset: 0, 0
+  index: -1
+Alice_Defend
+  rotate: false
+  xy: 1409, 303
+  size: 200, 300
+  orig: 200, 300
+  offset: 0, 0
+  index: -1
+Kei
+  rotate: false
+  xy: 1207, 303
+  size: 200, 300
+  orig: 200, 300
+  offset: 0, 0
+  index: -1
+Alice_Defend_rogue
+  rotate: false
+  xy: 803, 1
+  size: 200, 300
+  orig: 200, 300
+  offset: 0, 0
+  index: -1
+Kei_Defend
+  rotate: false
+  xy: 1207, 1
+  size: 200, 300
+  orig: 200, 300
+  offset: 0, 0
+  index: -1
+Alice_dead
+  rotate: false
+  xy: 1813, 303
+  size: 200, 300
+  orig: 200, 300
+  offset: 0, 0
+  index: -1
 Regent
   rotate: false
-  xy: 1005, 1
+  xy: 203, 987
   size: 200, 300
   orig: 200, 300
   offset: 0, 0
   index: -1
 Alice_dead_1
   rotate: false
-  xy: 803, 303
+  xy: 203, 685
   size: 200, 300
   orig: 200, 300
   offset: 0, 0
   index: -1
 Alice_Defend_regent
   rotate: false
-  xy: 1409, 303
+  xy: 203, 1289
   size: 200, 300
   orig: 200, 300
   offset: 0, 0
@@ -104,28 +118,14 @@ Alice_dead_2
   index: -1
 Alice_dead_3
   rotate: false
-  xy: 1207, 303
-  size: 200, 300
-  orig: 200, 300
-  offset: 0, 0
-  index: -1
-Alice_maid
-  rotate: false
-  xy: 607, 605
-  size: 200, 300
-  orig: 200, 300
-  offset: 0, 0
-  index: -1
-Alice_Defend_maid
-  rotate: false
-  xy: 203, 685
+  xy: 203, 383
   size: 200, 300
   orig: 200, 300
   offset: 0, 0
   index: -1
 Crowbar2
   rotate: false
-  xy: 1409, 1
+  xy: 1, 987
   size: 200, 300
   orig: 200, 300
   offset: 0, 0
@@ -153,7 +153,7 @@ sword
   index: -1
 rogue
   rotate: false
-  xy: 1, 685
+  xy: 1005, 1
   size: 200, 300
   orig: 200, 300
   offset: 0, 0
@@ -167,28 +167,28 @@ WizardHat
   index: -1
 Devil
   rotate: false
-  xy: 203, 383
+  xy: 607, 907
   size: 200, 300
   orig: 200, 300
   offset: 0, 0
   index: -1
 monkStaff
   rotate: false
-  xy: 803, 1
+  xy: 1611, 303
   size: 200, 300
   orig: 200, 300
   offset: 0, 0
   index: -1
 GuardianThonsDefend
   rotate: false
-  xy: 1005, 303
+  xy: 1813, 1
   size: 200, 300
   orig: 200, 300
   offset: 0, 0
   index: -1
 GuardianThons
   rotate: false
-  xy: 1813, 303
+  xy: 1, 383
   size: 200, 300
   orig: 200, 300
   offset: 0, 0
@@ -202,28 +202,28 @@ eye
   index: -1
 Necromancer
   rotate: false
-  xy: 1611, 1
+  xy: 803, 303
   size: 200, 300
   orig: 200, 300
   offset: 0, 0
   index: -1
 Defect
   rotate: false
-  xy: 1207, 1
+  xy: 607, 1209
   size: 200, 300
   orig: 200, 300
   offset: 0, 0
   index: -1
 Rabbit
   rotate: false
-  xy: 1, 383
+  xy: 607, 605
   size: 200, 300
   orig: 200, 300
   offset: 0, 0
   index: -1
 Hoshino
   rotate: false
-  xy: 1611, 303
+  xy: 1409, 1
   size: 200, 300
   orig: 200, 300
   offset: 0, 0

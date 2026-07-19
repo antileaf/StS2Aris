@@ -34,7 +34,8 @@ public class Thunder() : StS2ArisCard(3, CardType.Attack, CardRarity.Rare, Targe
     {
         if (play.Target == null)
             return;
-        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCardCompat(this, play).Targeting(play.Target).Execute(choiceContext);
+        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCardCompat(this, play)
+            .WithHitFx("vfx/vfx_attack_lightning").Targeting(play.Target).Execute(choiceContext);
     }
 
     public async Task OnOverload(PlayerChoiceContext choiceContext, CardPlay play)

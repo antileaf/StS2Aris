@@ -7,11 +7,15 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.CardPools;
 using MegaCrit.Sts2.Core.Entities.Players;
+using MegaCrit.Sts2.Core.Helpers;
+using MegaCrit.Sts2.Core.Nodes.Rooms;
 using MegaCrit.Sts2.Core.ValueProps;
 using StS2Aris.StS2ArisCode.CardModels;
 using StS2Aris.StS2ArisCode.Keywords;
+using StS2Aris.StS2ArisCode.Mechanics;
 using StS2Aris.StS2ArisCode.Powers;
 using StS2Aris.StS2ArisCode.Utils;
+using StS2Aris.StS2ArisCode.Vfx;
 
 namespace StS2Aris.StS2ArisCode.Cards;
 
@@ -20,6 +24,12 @@ public class LuminousNovaShot() : StS2ArisCard(1, CardType.Attack, CardRarity.To
 {
     private static readonly Dictionary<Player, decimal> CombatDamageBonuses = new();
     private decimal _appliedCombatDamageBonus;
+
+    protected override IEnumerable<string> ExtraRunAssetPaths =>
+    [
+        NEnergyProjectionVfx.OrbAtlasPath,
+        NEnergyProjectionVfx.ImpactScenePath
+    ];
 
     protected override IEnumerable<IHoverTip> ExtraHoverTips =>
     [
@@ -43,9 +53,24 @@ public class LuminousNovaShot() : StS2ArisCard(1, CardType.Attack, CardRarity.To
             return;
         }
 
-        await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
+        var attack = DamageCmd.Attack(DynamicVars.Damage.BaseValue)
             .FromCardCompat(this, play)
-            .Targeting(play.Target)
+            .Targeting(play.Target);
+        if (ArisEquipment.IsSuperNovaEquipped(play.Player))
+        {
+            attack.WithAttackerAnim("Attack2", play.Player.Character.AttackAnimDelay);
+        }
+
+        await attack
+            .BeforeDamage(async () =>
+            {
+                StS2ArisMain.PlayAttackSfx("Aris_laser.mp3".SfxPath());
+                NEnergyProjectionVfx? projectile = NEnergyProjectionVfx.Create(play.Player.Creature, play.Target);
+                if (projectile != null)
+                    NCombatRoom.Instance?.CombatVfxContainer.AddChildSafely(projectile);
+
+                await Cmd.Wait(NEnergyProjectionVfx.TravelDuration);
+            })
             .Execute(choiceContext);
         await PowerCmd.Apply<ChargePower>(
             choiceContext,

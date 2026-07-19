@@ -24,7 +24,7 @@ public class EnergyDischarge() : StS2ArisCard(0, CardType.Attack, CardRarity.Unc
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
         if (CombatState != null)
-            await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCardCompat(this, play).TargetingAllOpponents(CombatState).Execute(choiceContext);
+            await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCardCompat(this, play).WithHitFx("vfx/vfx_dramatic_entrance_fullscreen").TargetingAllOpponents(CombatState).Execute(choiceContext);
 
         if (Owner.PlayerCombatState != null)
         {

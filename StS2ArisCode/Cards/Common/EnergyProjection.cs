@@ -3,21 +3,30 @@ using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Powers;
+using MegaCrit.Sts2.Core.Nodes.Rooms;
 using MegaCrit.Sts2.Core.ValueProps;
 using StS2Aris.StS2ArisCode.CardModels;
 using StS2Aris.StS2ArisCode.Character;
 using StS2Aris.StS2ArisCode.Keywords;
 using StS2Aris.StS2ArisCode.Mechanics;
 using StS2Aris.StS2ArisCode.Powers;
+using StS2Aris.StS2ArisCode.Vfx;
 
 namespace StS2Aris.StS2ArisCode.Cards;
 [Pool(typeof(StS2ArisCardPool))]
 public class EnergyProjection() : StS2ArisCard(1, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy), IOverload
 {
+    protected override IEnumerable<string> ExtraRunAssetPaths =>
+    [
+        NEnergyProjectionVfx.OrbAtlasPath,
+        NEnergyProjectionVfx.ImpactScenePath
+    ];
+
     protected override IEnumerable<IHoverTip> ExtraHoverTips => [HoverTipFactory.FromKeyword(ArisKeywords.Overload)];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
@@ -29,7 +38,25 @@ public class EnergyProjection() : StS2ArisCard(1, CardType.Attack, CardRarity.Co
     {
         if (play.Target == null)
             return;
-        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCardCompat(this, play).Targeting(play.Target).Execute(choiceContext);
+
+        var attack = DamageCmd.Attack(DynamicVars.Damage.BaseValue)
+            .FromCardCompat(this, play)
+            .Targeting(play.Target);
+
+        if (ArisEquipment.IsSuperNovaEquipped(play.Player))
+            attack.WithAttackerAnim("Attack2", play.Player.Character.AttackAnimDelay);
+
+        await attack
+            .BeforeDamage(async () =>
+            {
+                StS2ArisMain.PlayAttackSfx("Aris_laser.mp3".SfxPath());
+                NEnergyProjectionVfx? projectile = NEnergyProjectionVfx.Create(play.Player.Creature, play.Target);
+                if (projectile != null)
+                    NCombatRoom.Instance?.CombatVfxContainer.AddChildSafely(projectile);
+
+                await Cmd.Wait(NEnergyProjectionVfx.TravelDuration);
+            })
+            .Execute(choiceContext);
     }
 
     public Task OnOverload(PlayerChoiceContext choiceContext, CardPlay play)

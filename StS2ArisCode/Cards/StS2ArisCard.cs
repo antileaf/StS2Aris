@@ -41,7 +41,7 @@ public abstract class StS2ArisCard(int cost, CardType type, CardRarity rarity, T
 
     private async Task OnArisPlayWrapper(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        bool overloaded = ArisCharge.IsOverloadState(Owner);
+        bool overloaded = ArisCharge.IsOverloadAvailable(Owner);
         await RunArisPlayOnce(choiceContext, play, overloaded);
     }
 

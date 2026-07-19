@@ -29,7 +29,7 @@ public sealed class JobHeroPower : ArisJobPower
             .FromCardCompat(equipment, play)
             .TargetingRandomOpponents(combatState)
             .WithHitCount(HeroSword.GetClassChangeHits(equipment.Owner))
-            .WithHitFx("vfx/vfx_attack_slash");
+            .WithHitFx("vfx/vfx_flying_slash");
         await attack.Execute(choiceContext);
 
         if (equipment.Enchantment is not Inky inky)

@@ -24,6 +24,11 @@ public static class ArisEquipment
         return GetCurrentJob(player)?.AnimationSuffix;
     }
 
+    public static bool IsSuperNovaEquipped(Player player)
+    {
+        return GetCurrentJob(player) is JobAoePower or JobAtrahasisSuperNovaPower;
+    }
+
     public static bool ShouldTriggerClassChange(Player player, ArisJobPower nextJob)
     {
         var currentJob = GetCurrentJob(player);
@@ -99,7 +104,11 @@ public static class ArisEquipment
         {
             var cardNode = NCard.FindOnTable(equipmentCard);
             equipmentCard.RemoveFromCurrentPile();
-            cardNode?.QueueFreeSafely();
+            if (cardNode != null)
+            {
+                cardNode.GetParent()?.RemoveChildSafely(cardNode);
+                cardNode.QueueFreeSafelyNoPool();
+            }
         }
     }
 

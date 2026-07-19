@@ -6,13 +6,16 @@ using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
 using StS2Aris.StS2ArisCode.Character;
+using StS2Aris.StS2ArisCode.Keywords;
 
 namespace StS2Aris.StS2ArisCode.Cards;
 
 [Pool(typeof(StS2ArisCardPool))]
 public class CurrentAmplification() : StS2ArisCard(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
 {
-    protected override IEnumerable<IHoverTip> ExtraHoverTips => [HoverTipFactory.FromCard<Shock>(true)];
+    protected override IEnumerable<IHoverTip> ExtraHoverTips => [
+        HoverTipFactory.FromKeyword(ArisKeywords.Shock),
+        HoverTipFactory.FromCard<Shock>(true)];
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 

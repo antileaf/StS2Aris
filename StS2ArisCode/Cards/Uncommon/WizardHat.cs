@@ -24,6 +24,7 @@ public class WizardHat() : StS2ArisEquipmentCard(1, CardType.Skill, CardRarity.U
         HoverTipFactory.FromKeyword(ArisKeywords.Equipment),
         HoverTipFactory.FromKeyword(ArisKeywords.ClassChange),
         HoverTipFactory.FromKeyword(ArisKeywords.Job),
+        HoverTipFactory.Static(StaticHoverTip.Block),
         HoverTipFactory.FromCard<Soul>()
     ];
 

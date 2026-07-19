@@ -18,14 +18,16 @@ public class StaticStrike() : StS2ArisCard(1, CardType.Attack, CardRarity.Common
 {
     protected override HashSet<CardTag> CanonicalTags => [CardTag.Strike];
 
-    protected override IEnumerable<IHoverTip> ExtraHoverTips => [HoverTipFactory.FromCard<Shock>(IsUpgraded)];
+    protected override IEnumerable<IHoverTip> ExtraHoverTips => [
+        HoverTipFactory.FromKeyword(ArisKeywords.Shock),
+        HoverTipFactory.FromCard<Shock>(IsUpgraded)];
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(8, ValueProp.Move)];
 
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
         ArgumentNullException.ThrowIfNull(play.Target);
-        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCardCompat(this, play).Targeting(play.Target).Execute(choiceContext);
+        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCardCompat(this, play).WithHitFx("vfx/vfx_attack_blunt").Targeting(play.Target).Execute(choiceContext);
         var combatState = Owner.Creature.CombatState;
         if (combatState == null)
             return;
@@ -34,5 +36,6 @@ public class StaticStrike() : StS2ArisCard(1, CardType.Attack, CardRarity.Common
     
     protected override void OnUpgrade()
     {
+        DynamicVars.Damage.UpgradeValueBy(1m);
     }
 }

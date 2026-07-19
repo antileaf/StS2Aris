@@ -108,8 +108,9 @@ public sealed class JobAoePower : ArisJobPower
             .Execute(choiceContext);
     }
 
-    public override Task OnLevelUpChanged(PlayerChoiceContext choiceContext)
+    public override async Task OnLevelUpChanged(PlayerChoiceContext choiceContext)
     {
-        return RefreshStrength(choiceContext);
+        await RefreshStrength(choiceContext);
+        InvokeDisplayAmountChanged();
     }
 }

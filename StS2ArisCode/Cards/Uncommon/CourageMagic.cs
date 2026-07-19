@@ -37,4 +37,9 @@ public class CourageMagic() : StS2ArisCard(1, CardType.Skill, CardRarity.Uncommo
             await PowerCmd.Apply<ChargeRetentionPower>(choiceContext, target, 1m, Owner.Creature, this);
         }
     }
+    
+    protected override void OnUpgrade()
+    {
+        DynamicVars["ChargePower"].UpgradeValueBy(1m);
+    }
 }

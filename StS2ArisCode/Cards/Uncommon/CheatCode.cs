@@ -28,7 +28,7 @@ public class CheatCode() : StS2ArisCard(2, CardType.Attack, CardRarity.Uncommon,
     {
         if (play.Target == null)
             return;
-        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCardCompat(this, play).Targeting(play.Target).Execute(choiceContext);
+        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCardCompat(this, play).WithHitFx("vfx/vfx_heavy_blunt").Targeting(play.Target).Execute(choiceContext);
     }
 
     public async Task OnOverload(PlayerChoiceContext choiceContext, CardPlay play)

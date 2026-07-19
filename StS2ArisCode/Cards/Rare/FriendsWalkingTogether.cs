@@ -5,6 +5,7 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using StS2Aris.StS2ArisCode.Character;
+using StS2Aris.StS2ArisCode.Keywords;
 using StS2Aris.StS2ArisCode.Powers;
 
 namespace StS2Aris.StS2ArisCode.Cards;
@@ -14,7 +15,9 @@ public class FriendsWalkingTogether() : StS2ArisCard(2, CardType.Power, CardRari
 {
     protected override IEnumerable<IHoverTip> ExtraHoverTips =>
     [
-        HoverTipFactory.FromCard<LuminousNovaShot>()
+        HoverTipFactory.FromCard<LuminousNovaShot>(),
+        HoverTipFactory.FromKeyword(ArisKeywords.Overload),
+        ArisHoverTips.ChargePower()
     ];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>

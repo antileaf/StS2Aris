@@ -16,7 +16,9 @@ namespace StS2Aris.StS2ArisCode.Cards;
 [Pool(typeof(StS2ArisCardPool))]
 public class Firewall() : StS2ArisCard(2, CardType.Skill, CardRarity.Uncommon, TargetType.AllEnemies)
 {
-    protected override IEnumerable<IHoverTip> ExtraHoverTips => [HoverTipFactory.FromKeyword(ArisKeywords.Shock)];
+    protected override IEnumerable<IHoverTip> ExtraHoverTips => [
+        HoverTipFactory.FromPower<WeakPower>(),
+        HoverTipFactory.FromKeyword(ArisKeywords.Shock)];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [

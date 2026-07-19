@@ -6,6 +6,7 @@ using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
 using StS2Aris.StS2ArisCode.Character;
+using StS2Aris.StS2ArisCode.Keywords;
 using StS2Aris.StS2ArisCode.Powers;
 
 namespace StS2Aris.StS2ArisCode.Cards;
@@ -15,7 +16,8 @@ public class AutoHunt() : StS2ArisCard(3, CardType.Power, CardRarity.Rare, Targe
 {
     
     protected override IEnumerable<IHoverTip> ExtraHoverTips => [
-        HoverTipFactory.FromCard<LevelUp>()
+        HoverTipFactory.FromCard<LevelUp>(),
+        HoverTipFactory.FromKeyword(ArisKeywords.Job)
     ];
 
 

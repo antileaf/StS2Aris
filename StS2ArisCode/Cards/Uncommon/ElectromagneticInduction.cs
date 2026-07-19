@@ -15,8 +15,7 @@ public class ElectromagneticInduction() : StS2ArisCard(0, CardType.Skill, CardRa
 {
     protected override IEnumerable<IHoverTip> ExtraHoverTips =>
     [
-        HoverTipFactory.FromKeyword(ArisKeywords.Shock),
-        HoverTipFactory.FromPower<ElectromagneticInductionPower>()
+        HoverTipFactory.FromKeyword(ArisKeywords.Shock)
     ];
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [new PowerVar<ShockPower>(2m)];

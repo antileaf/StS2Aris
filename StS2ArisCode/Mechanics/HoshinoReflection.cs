@@ -13,6 +13,8 @@ public static class HoshinoReflection
 {
     private const string ExpertPowerTypeName = "StS2Hoshino.StS2HoshinoCode.Powers.ExpertPower";
     private const string HoshinoKeywordsTypeName = "StS2Hoshino.StS2HoshinoCode.Keywords.HoshinoKeywords";
+    private const string HoshinoMainTypeName = "StS2Hoshino.StS2HoshinoMain";
+    private const string HoshinoStrikeSfxPath = "res://StS2Hoshino/audio/shotgunfire.mp3";
 
     public static async Task ApplyExpert(PlayerChoiceContext choiceContext, Player player, decimal amount, Creature? applier, CardModel? cardSource)
     {
@@ -52,6 +54,26 @@ public static class HoshinoReflection
         var keywordsType = FindType(HoshinoKeywordsTypeName);
         var field = keywordsType?.GetField(fieldName, BindingFlags.Public | BindingFlags.Static);
         return field?.GetValue(null) is CardKeyword keyword ? keyword : null;
+    }
+
+    public static bool PlayStrikeSfx()
+    {
+        Type? mainType = FindType(HoshinoMainTypeName);
+        MethodInfo? method = mainType?.GetMethod("PlaySfx", BindingFlags.Public | BindingFlags.Static);
+        if (method == null)
+        {
+            return false;
+        }
+
+        try
+        {
+            method.Invoke(null, [HoshinoStrikeSfxPath, 1f]);
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
     }
 
     private static Type? FindType(string fullNameOrName)

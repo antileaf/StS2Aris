@@ -38,6 +38,7 @@ public class Bzzzzz() : StS2ArisCard(1, CardType.Attack, CardRarity.Uncommon, Ta
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
             .WithHitCount(DynamicVars["Magic"].IntValue)
             .FromCardCompat(this, play)
+            .WithHitFx("vfx/vfx_attack_lightning")
             .Targeting(play.Target)
             .Execute(choiceContext);
     }
