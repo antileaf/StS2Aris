@@ -8,5 +8,5 @@
   "STS2ARIS-EVENT_SETTINGS.title": "事件设置",
   "STS2ARIS-FORCE_CLASS_ALTAR_FIRST_EVENT.title": "将首次事件固定为转职祭坛",
   "STS2ARIS-FORCE_CLASS_ALTAR_FIRST_EVENT.hover.title": "将首次事件固定为转职祭坛",
-  "STS2ARIS-FORCE_CLASS_ALTAR_FIRST_EVENT.hover.desc": "条件允许时，将爱丽丝遇到的第一个？房间事件替换为转职祭坛。"
+  "STS2ARIS-FORCE_CLASS_ALTAR_FIRST_EVENT.hover.desc": "将爱丽丝遇到的第一个？房间事件替换为转职祭坛。"
 }

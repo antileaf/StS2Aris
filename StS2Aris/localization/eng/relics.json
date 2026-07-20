@@ -9,7 +9,7 @@
   "STS2ARIS-H_P_POTION.description": "The first time you take damage during your turn each combat, [gold]Upgrade[/gold] all cards in your [gold]Hand[/gold].",
   "STS2ARIS-H_P_POTION.flavor": "Now with apple flavor.",
   "STS2ARIS-BATTERY.title": "Battery",
-  "STS2ARIS-BATTERY.description": "The first time [gold]Shock[/gold] is applied to an enemy without Shock, apply [blue]{ShockAmount}[/blue] additional Shock.",
+  "STS2ARIS-BATTERY.description": "The first time [gold]Shock[/gold] is applied to an enemy without [gold]Shock[/gold], apply [blue]{ShockAmount}[/blue] additional [gold]Shock[/gold].",
   "STS2ARIS-BATTERY.flavor": "\"Aris does not eat batteries!\"",
   "STS2ARIS-GAME_MANUAL.title": "Returning Player Guide",
   "STS2ARIS-GAME_MANUAL.description": "Upon pickup, receive [blue]{Cards}[/blue] Card Rewards containing only [gold]Quest[/gold] cards.",

@@ -9,7 +9,7 @@
   "STS2ARIS-H_P_POTION.description": "每场战斗中，第一次在你的回合受到伤害时，[gold]升级[/gold][gold]手牌[/gold]中的所有牌。",
   "STS2ARIS-H_P_POTION.flavor": "添加了苹果口味。",
   "STS2ARIS-BATTERY.title": "电池",
-  "STS2ARIS-BATTERY.description": "第一次对没有[gold]感电[/gold]的敌人施加感电时，额外施加[blue]{ShockAmount}[/blue]层感电。",
+  "STS2ARIS-BATTERY.description": "第一次对没有[gold]感电[/gold]的敌人施加[gold]感电[/gold]时，额外施加[blue]{ShockAmount}[/blue]层[gold]感电[/gold]。",
   "STS2ARIS-BATTERY.flavor": "“爱丽丝不吃电池！”",
   "STS2ARIS-GAME_MANUAL.title": "回归玩家指南",
   "STS2ARIS-GAME_MANUAL.description": "拾取时，获得[blue]{Cards}[/blue]次仅包含[gold]任务[/gold]牌的卡牌奖励。",

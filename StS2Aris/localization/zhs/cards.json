@@ -118,7 +118,7 @@
   "STS2ARIS-LIGHT_SWORD.title": "光之剑",
   "STS2ARIS-LIGHT_SWORD.description": "获得{ChargePower:chargeIcon()}。\n[gold]过载[/gold]：抽{Cards:diff()}张牌。",
   "STS2ARIS-BURNING_TIME.title": "燃烧时间",
-  "STS2ARIS-BURNING_TIME.description": "[gold]输出[/gold]。\n[gold]过载[/gold]：当前[gold]手牌[/gold]中的所有牌本回合可以免费打出。",
+  "STS2ARIS-BURNING_TIME.description": "[gold]过载[/gold]：当前[gold]手牌[/gold]中的所有牌本回合可以免费打出。",
   "STS2ARIS-ABI_ESHUH_FORM.title": "阿比·埃舒赫形态",
   "STS2ARIS-ABI_ESHUH_FORM.description": "每回合开始时，获得{ChargePower:chargeIcon()}。\n攻击牌造成的伤害增加等同于你的{chargeIcon}。",
   "STS2ARIS-THUNDER.title": "雷霆",
@@ -271,5 +271,5 @@
   "STS2ARIS-AUTO_HUNT.title": "我独自升级",
   "STS2ARIS-AUTO_HUNT.description": "你的回合开始时，使用[gold]升级！[/gold]。",
   "STS2ARIS-COURAGE_MAGIC.title": "勇气魔法",
-  "STS2ARIS-COURAGE_MAGIC.description": "除你以外的所有队友获得{ChargePower:chargeIcon()}。本回合结束时，他们的{ChargePower:chargeIcon()}不会消失。"
+  "STS2ARIS-COURAGE_MAGIC.description": "除你以外的所有队友获得{ChargePower:chargeIcon()}。本回合结束时，他们的{chargeIcon}不会消失。"
 }

@@ -252,7 +252,7 @@
     "STS2ARIS-AUTO_HUNT.title":  "나혼자 레벨업",
     "STS2ARIS-AUTO_HUNT.description":  "내 턴 시작 시, [gold]레벨 업[/gold]을 사용합니다.",
     "STS2ARIS-COURAGE_MAGIC.title":  "용기의 마법",
-    "STS2ARIS-COURAGE_MAGIC.description":  "자신을 제외한 모든 아군이 {ChargePower:chargeIcon()}을 얻고 이번 턴이 끝나도 {ChargePower:chargeIcon()}이 사라지지 않습니다.",
+    "STS2ARIS-COURAGE_MAGIC.description":  "자신을 제외한 모든 아군이 {ChargePower:chargeIcon()}을 얻고 이번 턴이 끝나도 {chargeIcon}이 사라지지 않습니다.",
     "STS2ARIS-MIMICRY.title":  "생각 훔치기",
     "STS2ARIS-MIMICRY.description":  "다른 플레이어의 [gold]장비[/gold] 카드를 [gold]손[/gold]으로 가져옵니다.\n그 캐릭터의 무작위 카드를 {Cards:diff()}장 [gold]손[/gold]으로 가져옵니다.",
     "STS2ARIS-STAR_THRONE.title":  "별의 왕좌",

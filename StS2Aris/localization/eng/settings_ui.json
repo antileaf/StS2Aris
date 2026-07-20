@@ -8,5 +8,5 @@
   "STS2ARIS-EVENT_SETTINGS.title": "Event Settings",
   "STS2ARIS-FORCE_CLASS_ALTAR_FIRST_EVENT.title": "Force Class Altar First",
   "STS2ARIS-FORCE_CLASS_ALTAR_FIRST_EVENT.hover.title": "Force Class Altar First",
-  "STS2ARIS-FORCE_CLASS_ALTAR_FIRST_EVENT.hover.desc": "Whenever possible, replaces Aris's first ? Room event with the Class Altar."
+  "STS2ARIS-FORCE_CLASS_ALTAR_FIRST_EVENT.hover.desc": "Replaces Aris's first ? Room event with the Class Altar."
 }

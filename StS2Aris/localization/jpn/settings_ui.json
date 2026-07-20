@@ -8,5 +8,5 @@
   "STS2ARIS-EVENT_SETTINGS.title": "イベント設定",
   "STS2ARIS-FORCE_CLASS_ALTAR_FIRST_EVENT.title": "最初のイベントを転職の祭壇に固定",
   "STS2ARIS-FORCE_CLASS_ALTAR_FIRST_EVENT.hover.title": "最初のイベントを転職の祭壇に固定",
-  "STS2ARIS-FORCE_CLASS_ALTAR_FIRST_EVENT.hover.desc": "可能な場合、アリスが最初に訪れる？部屋のイベントを転職の祭壇に変更します。"
+  "STS2ARIS-FORCE_CLASS_ALTAR_FIRST_EVENT.hover.desc": "アリスが最初に訪れる？部屋のイベントを転職の祭壇に変更します。"
 }
