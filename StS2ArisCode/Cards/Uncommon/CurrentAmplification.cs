@@ -17,9 +17,9 @@ public class CurrentAmplification() : StS2ArisCard(1, CardType.Skill, CardRarity
         HoverTipFactory.FromKeyword(ArisKeywords.Shock),
         HoverTipFactory.FromCard<Shock>(true)];
 
-    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [];
 
-    protected override IEnumerable<DynamicVar> CanonicalVars => [new CardsVar(2)];
+    protected override IEnumerable<DynamicVar> CanonicalVars => [new CardsVar(1)];
 
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
@@ -40,6 +40,6 @@ public class CurrentAmplification() : StS2ArisCard(1, CardType.Skill, CardRarity
 
     protected override void OnUpgrade()
     {
-        RemoveKeyword(CardKeyword.Exhaust);
+        DynamicVars.Cards.UpgradeValueBy(1m);
     }
 }

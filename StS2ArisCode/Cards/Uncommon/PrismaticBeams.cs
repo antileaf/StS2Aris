@@ -21,13 +21,13 @@ using StS2Aris.StS2ArisCode.CardModels;
 using StS2Aris.StS2ArisCode.Keywords;
 using StS2Aris.StS2ArisCode.Mechanics;
 using StS2Aris.StS2ArisCode.Powers;
+using StS2Aris.StS2ArisCode.Utils;
 
 namespace StS2Aris.StS2ArisCode.Cards;
 [Pool(typeof(StS2ArisCardPool))]
 public class PrismaticBeams() : StS2ArisCard(1, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy), IOverload
 {
     private const string BeamScenePath = "res://scenes/vfx/monsters/kin_priest_beam_vfx.tscn";
-    private const string BeamSfx = "event:/sfx/enemy/enemy_attacks/the_kin_priest/the_kin_priest_soul_beam";
     private const float BeamDamageDelay = 0.18f;
     private const float BeamCleanupDelay = 0.8f;
     private const int MaxBeamUseCount = 5;
@@ -53,6 +53,7 @@ public class PrismaticBeams() : StS2ArisCard(1, CardType.Attack, CardRarity.Unco
     {
         if (play.Target == null)
             return;
+        var player = play.GetPlayer();
 
         _beamUseCount = Math.Min(_beamUseCount + 1, MaxBeamUseCount);
         float beamThicknessScale = 1f + (_beamUseCount - 1) * BeamScalePerUse;
@@ -62,7 +63,7 @@ public class PrismaticBeams() : StS2ArisCard(1, CardType.Attack, CardRarity.Unco
             .Targeting(play.Target)
             .BeforeDamage(async () =>
             {
-                NCreature? sourceNode = NCombatRoom.Instance?.GetCreatureNode(play.Player.Creature);
+                NCreature? sourceNode = NCombatRoom.Instance?.GetCreatureNode(player.Creature);
                 NCreature? targetNode = NCombatRoom.Instance?.GetCreatureNode(play.Target);
                 if (sourceNode == null || targetNode == null)
                     return;
@@ -76,7 +77,7 @@ public class PrismaticBeams() : StS2ArisCard(1, CardType.Attack, CardRarity.Unco
 
                 await beam.AwaitProcessFrame();
                 FireStraightBeam(beam);
-                SfxCmd.Play(BeamSfx);
+                StS2ArisMain.PlayAttackSfx("Aris_laser2.mp3".SfxPath());
                 beam.GetTree().CreateTimer(BeamCleanupDelay).Timeout += () => beam.QueueFreeSafely();
                 await Cmd.Wait(BeamDamageDelay);
             })

@@ -52,20 +52,21 @@ public class LuminousNovaShot() : StS2ArisCard(1, CardType.Attack, CardRarity.To
         {
             return;
         }
+        var player = play.GetPlayer();
 
         var attack = DamageCmd.Attack(DynamicVars.Damage.BaseValue)
             .FromCardCompat(this, play)
             .Targeting(play.Target);
-        if (ArisEquipment.IsSuperNovaEquipped(play.Player))
+        if (ArisEquipment.IsSuperNovaEquipped(player))
         {
-            attack.WithAttackerAnim("Attack2", play.Player.Character.AttackAnimDelay);
+            attack.WithAttackerAnim("Attack2", player.Character.AttackAnimDelay);
         }
 
         await attack
             .BeforeDamage(async () =>
             {
                 StS2ArisMain.PlayAttackSfx("Aris_laser.mp3".SfxPath());
-                NEnergyProjectionVfx? projectile = NEnergyProjectionVfx.Create(play.Player.Creature, play.Target);
+                NEnergyProjectionVfx? projectile = NEnergyProjectionVfx.Create(player.Creature, play.Target);
                 if (projectile != null)
                     NCombatRoom.Instance?.CombatVfxContainer.AddChildSafely(projectile);
 

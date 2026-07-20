@@ -9,6 +9,7 @@ using MegaCrit.Sts2.Core.Entities.Relics;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Rooms;
+using StS2Aris.StS2ArisCode.Utils;
 
 namespace StS2Aris.StS2ArisCode.Relics;
 public class StartingEquipment : StS2ArisRelic
@@ -36,7 +37,7 @@ public class StartingEquipment : StS2ArisRelic
 
     public override async Task AfterCardPlayed(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        if (_usedThisCombat || cardPlay.Player != Owner || cardPlay.PlayIndex > 0
+        if (_usedThisCombat || cardPlay.GetPlayer() != Owner || cardPlay.PlayIndex > 0
             || cardPlay.Card is not IArisEquipmentCard)
         {
             return;

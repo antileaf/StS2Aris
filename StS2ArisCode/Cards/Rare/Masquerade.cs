@@ -18,7 +18,12 @@ public class Masquerade() : StS2ArisCard(1, CardType.Power, CardRarity.Rare, Tar
 
     protected override async Task OnArisPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        var allies = CombatState?.Players
+        if (CombatState == null)
+        {
+            return;
+        }
+
+        var allies = CombatState.Players
             .Where(player => player.Creature is { IsAlive: true, IsDead: false })
             .Select(player => player.Creature);
         await PowerCmd.Apply<MasqueradePower>(

@@ -15,7 +15,7 @@ public partial class NEnergyProjectionVfx : Node2D
 {
     public const string OrbAtlasPath = "res://animations/monsters/kin_priest/kin_priest.png";
     public const string ImpactScenePath = "res://scenes/vfx/monsters/kin_priest_grenade_vfx.tscn";
-    public const float TravelDuration = 0.1f;
+    public const float TravelDuration = 0.06f;
     public const float FastDuration = 0.03f;
 
     private static readonly Rect2 OrbRegion = new(833f, 279f, 58f, 58f);

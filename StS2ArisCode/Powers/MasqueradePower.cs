@@ -13,6 +13,7 @@ using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Nodes.Cards;
 using MegaCrit.Sts2.Core.Nodes.Combat;
 using MegaCrit.Sts2.Core.Nodes.Rooms;
+using StS2Aris.StS2ArisCode.Utils;
 
 namespace StS2Aris.StS2ArisCode.Powers;
 
@@ -79,7 +80,7 @@ public sealed class MasqueradePower : StS2ArisPower
         // The Ball transfers a card from the play area. Moving there first also removes the
         // selected-hand holder before ownership changes, keeping both players' hands consistent.
         await CardPileCmd.Add(card, PileType.Play);
-        await CardPileCmd.GiveToAnotherPlayer(card, player, PileType.Hand);
+        await CardPileCmdCompat.GiveToAnotherPlayer(card, player, PileType.Hand);
 
         EnsureLocalHandNode(card, player);
     }

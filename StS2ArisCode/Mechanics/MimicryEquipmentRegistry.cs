@@ -20,8 +20,6 @@ public static class MimicryEquipmentRegistry
         ["StS2Aris"] = typeof(SuperNova),
         ["STS2ARIS-ST_S2_ARIS"] = typeof(SuperNova),
         ["StS2Aris.StS2ArisCode.Character.StS2Aris"] = typeof(SuperNova),
-        ["Rabbit"] = typeof(UsagiFlap),
-        ["StS2Rabbit"] = typeof(UsagiFlap),
         ["Kei"] = typeof(LuminousNova),
         ["StS2Kei"] = typeof(LuminousNova),
         ["StS2Hoshino"] = typeof(HoshinoTank),

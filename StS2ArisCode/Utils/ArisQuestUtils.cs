@@ -11,6 +11,9 @@ namespace StS2Aris.StS2ArisCode.Utils;
 
 public static class ArisQuestUtils
 {
+    private const string DowsingTypeName = "MegaCrit.Sts2.Core.Models.Cards.Dowsing";
+    private const string AbundanceTypeName = "MegaCrit.Sts2.Core.Models.Cards.Abundance";
+
     public static int CountCompletedQuests(MegaCrit.Sts2.Core.Entities.Players.Player? player) => ArisQuestProgress.CountCompletedQuests(player);
 
     public static CardModel? CreateRewardFor(CardModel quest, bool forceUpgrade = false)
@@ -22,7 +25,8 @@ public static class ArisQuestUtils
             Grinding grinding => CreateReward<ExecutionSword>(grinding, forceUpgrade),
             RaidAddiction raidAddiction => CreateReward<RaidersLeader>(raidAddiction, forceUpgrade),
             ByrdonisEgg byrdonisEgg => CreateReward<ByrdSwoop>(byrdonisEgg, forceUpgrade),
-            Dowsing dowsing => CreateReward<Abundance>(dowsing, forceUpgrade),
+            CardModel dowsing when IsCardType(dowsing, DowsingTypeName) =>
+                CreateRewardByTypeName(dowsing, AbundanceTypeName, forceUpgrade),
             _ => null
         };
     }
@@ -58,7 +62,8 @@ public static class ArisQuestUtils
 
     public static bool HasSelectableReplicaReward(CardModel quest)
     {
-        return quest is DailyQuest or Diet or Grinding or RaidAddiction or LanternKey or SpoilsMap or ByrdonisEgg or LibrarianStrike or Dowsing;
+        return quest is DailyQuest or Diet or Grinding or RaidAddiction or LanternKey or SpoilsMap or ByrdonisEgg or LibrarianStrike
+               || IsCardType(quest, DowsingTypeName);
     }
 
     public static void TryCopyEnchantment(CardModel source, CardModel reward)
@@ -83,5 +88,29 @@ public static class ArisQuestUtils
 
         TryCopyEnchantment(quest, reward);
         return reward;
+    }
+
+    private static CardModel? CreateRewardByTypeName(CardModel quest, string rewardTypeName, bool forceUpgrade)
+    {
+        CardModel? canonicalReward = ModelDb.AllCards.FirstOrDefault(card => IsCardType(card, rewardTypeName));
+        if (canonicalReward == null)
+        {
+            return null;
+        }
+
+        CardModel reward = quest.Owner.RunState.CreateCard(canonicalReward, quest.Owner);
+        if (forceUpgrade || quest.IsUpgraded)
+        {
+            reward.UpgradeInternal();
+            reward.FinalizeUpgradeInternal();
+        }
+
+        TryCopyEnchantment(quest, reward);
+        return reward;
+    }
+
+    private static bool IsCardType(CardModel card, string fullTypeName)
+    {
+        return card.GetType().FullName == fullTypeName;
     }
 }

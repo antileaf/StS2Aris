@@ -18,6 +18,8 @@ namespace StS2Aris.StS2ArisCode.Cards;
 [Pool(typeof(StS2ArisCardPool))]
 public class Thunder() : StS2ArisCard(3, CardType.Attack, CardRarity.Rare, TargetType.AnyEnemy), IOverload
 {
+    private const string LightningEvokeSfx = "event:/sfx/characters/defect/defect_lightning_evoke";
+
     protected override IEnumerable<IHoverTip> ExtraHoverTips =>
     [
         HoverTipFactory.FromKeyword(ArisKeywords.Overload),
@@ -35,7 +37,9 @@ public class Thunder() : StS2ArisCard(3, CardType.Attack, CardRarity.Rare, Targe
         if (play.Target == null)
             return;
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCardCompat(this, play)
-            .WithHitFx("vfx/vfx_attack_lightning").Targeting(play.Target).Execute(choiceContext);
+            .WithHitFx("vfx/vfx_attack_lightning", sfx: LightningEvokeSfx)
+            .Targeting(play.Target)
+            .Execute(choiceContext);
     }
 
     public async Task OnOverload(PlayerChoiceContext choiceContext, CardPlay play)
@@ -48,5 +52,4 @@ public class Thunder() : StS2ArisCard(3, CardType.Attack, CardRarity.Rare, Targe
         DynamicVars.Damage.UpgradeValueBy(6m);
     }
 }
-
 

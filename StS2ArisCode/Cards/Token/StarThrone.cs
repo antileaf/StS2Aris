@@ -33,7 +33,7 @@ public class StarThrone() : StS2ArisEquipmentCard(1, CardType.Skill, CardRarity.
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new StarsVar(3),
-        new ForgeVar(5)
+        new ForgeVar(7)
     ];
 
     public override ArisJobPower CreateJobPower()

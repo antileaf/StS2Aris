@@ -18,6 +18,7 @@ using StS2Aris.StS2ArisCode.Character;
 using StS2Aris.StS2ArisCode.Keywords;
 using StS2Aris.StS2ArisCode.Mechanics;
 using StS2Aris.StS2ArisCode.Powers;
+using StS2Aris.StS2ArisCode.Utils;
 using StS2Aris.StS2ArisCode.Vfx;
 
 namespace StS2Aris.StS2ArisCode.Cards;
@@ -39,16 +40,17 @@ public class ArisStrike() : StS2ArisCard(1, CardType.Attack, CardRarity.Basic, T
     {
         ArgumentNullException.ThrowIfNull(play.Target);
         Creature target = play.Target;
+        var player = play.GetPlayer();
 
         var attack = DamageCmd.Attack(DynamicVars.Damage.BaseValue)
             .FromCardCompat(this, play)
             .Targeting(target);
 
-        switch (ArisEquipment.GetCurrentJob(play.Player))
+        switch (ArisEquipment.GetCurrentJob(player))
         {
             case JobAoePower:
             case JobAtrahasisSuperNovaPower:
-                ConfigureEnergyProjection(attack, play, target);
+                ConfigureEnergyProjection(attack, player, target);
                 break;
             case JobWarriorPower:
             case JobHeroPower:
@@ -57,7 +59,7 @@ public class ArisStrike() : StS2ArisCard(1, CardType.Attack, CardRarity.Basic, T
                 break;
             case JobRoguePower:
                 attack.WithHitVfxNode(target =>
-                    NShivThrowVfx.Create(play.Player.Creature, target, Colors.Green));
+                    NShivThrowVfx.Create(player.Creature, target, Colors.Green));
                 break;
             case JobKingPower:
                 attack.BeforeDamage(() => PlaySmallMagicMissile(target));
@@ -77,13 +79,16 @@ public class ArisStrike() : StS2ArisCard(1, CardType.Attack, CardRarity.Basic, T
         await attack.Execute(choiceContext);
     }
 
-    private static void ConfigureEnergyProjection(AttackCommand attack, CardPlay play, Creature target)
+    private static void ConfigureEnergyProjection(
+        AttackCommand attack,
+        MegaCrit.Sts2.Core.Entities.Players.Player player,
+        Creature target)
     {
-        attack.WithAttackerAnim("Attack2", play.Player.Character.AttackAnimDelay)
+        attack.WithAttackerAnim("Attack2", player.Character.AttackAnimDelay)
             .BeforeDamage(async () =>
             {
                 StS2ArisMain.PlayAttackSfx("Aris_laser.mp3".SfxPath());
-                NEnergyProjectionVfx? projectile = NEnergyProjectionVfx.Create(play.Player.Creature, target);
+                NEnergyProjectionVfx? projectile = NEnergyProjectionVfx.Create(player.Creature, target);
                 if (projectile != null)
                 {
                     NCombatRoom.Instance?.CombatVfxContainer.AddChildSafely(projectile);

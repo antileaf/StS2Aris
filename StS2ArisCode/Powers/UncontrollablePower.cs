@@ -16,36 +16,49 @@ public sealed class UncontrollablePower : StS2ArisPower
 
     public override Task AfterPowerAmountChanged(PlayerChoiceContext choiceContext, PowerModel power, decimal amount, Creature? applier, CardModel? cardSource)
     {
-        if (power == this && amount > 0)
+        if (power is not UncontrollablePower || power.Owner != Owner || amount <= 0)
         {
-            ApplyReplayToExistingShocks((int)amount);
+            return Task.CompletedTask;
+        }
+
+        foreach (var card in Owner.Player?.PlayerCombatState?.AllCards ?? Array.Empty<CardModel>())
+        {
+            TryAddReplays(card, (int)amount);
         }
 
         return Task.CompletedTask;
     }
 
-    public override Task AfterCardGeneratedForCombat(CardModel card, Player? creator)
+    public override Task AfterCardEnteredCombat(CardModel card)
     {
-        if (creator?.Creature == Owner && card is Shock)
+        if (card.IsClone)
         {
-            card.BaseReplayCount += Amount;
-            Flash();
+            return Task.CompletedTask;
+        }
+
+        TryAddReplays(card, Amount);
+        return Task.CompletedTask;
+    }
+
+    public override Task AfterRemoved(Creature oldOwner)
+    {
+        foreach (var card in oldOwner.Player?.PlayerCombatState?.AllCards ?? Array.Empty<CardModel>())
+        {
+            if (card is Shock shock)
+            {
+                shock.BaseReplayCount -= Amount;
+            }
         }
 
         return Task.CompletedTask;
     }
 
-    private void ApplyReplayToExistingShocks(int amount)
+    private void TryAddReplays(CardModel card, int amount)
     {
-        var player = Owner.Player;
-        if (player?.PlayerCombatState == null || amount <= 0)
-        {
-            return;
-        }
-
-        foreach (var shock in player.PlayerCombatState.AllCards.OfType<Shock>())
+        if (card.Owner == Owner.Player && card is Shock shock)
         {
             shock.BaseReplayCount += amount;
+            Flash();
         }
     }
 }

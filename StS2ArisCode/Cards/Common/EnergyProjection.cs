@@ -15,6 +15,7 @@ using StS2Aris.StS2ArisCode.Character;
 using StS2Aris.StS2ArisCode.Keywords;
 using StS2Aris.StS2ArisCode.Mechanics;
 using StS2Aris.StS2ArisCode.Powers;
+using StS2Aris.StS2ArisCode.Utils;
 using StS2Aris.StS2ArisCode.Vfx;
 
 namespace StS2Aris.StS2ArisCode.Cards;
@@ -38,19 +39,20 @@ public class EnergyProjection() : StS2ArisCard(1, CardType.Attack, CardRarity.Co
     {
         if (play.Target == null)
             return;
+        var player = play.GetPlayer();
 
         var attack = DamageCmd.Attack(DynamicVars.Damage.BaseValue)
             .FromCardCompat(this, play)
             .Targeting(play.Target);
 
-        if (ArisEquipment.IsSuperNovaEquipped(play.Player))
-            attack.WithAttackerAnim("Attack2", play.Player.Character.AttackAnimDelay);
+        if (ArisEquipment.IsSuperNovaEquipped(player))
+            attack.WithAttackerAnim("Attack2", player.Character.AttackAnimDelay);
 
         await attack
             .BeforeDamage(async () =>
             {
                 StS2ArisMain.PlayAttackSfx("Aris_laser.mp3".SfxPath());
-                NEnergyProjectionVfx? projectile = NEnergyProjectionVfx.Create(play.Player.Creature, play.Target);
+                NEnergyProjectionVfx? projectile = NEnergyProjectionVfx.Create(player.Creature, play.Target);
                 if (projectile != null)
                     NCombatRoom.Instance?.CombatVfxContainer.AddChildSafely(projectile);
 
