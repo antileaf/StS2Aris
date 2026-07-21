@@ -54,11 +54,21 @@ public class DailyQuest() : ArisQuestCard<DailyQuest>(1, CardType.Attack, CardRa
         }
     }
 
+    public override async Task<CardPileAddResult?> ApplyReplicaReward(bool forceUpgrade)
+    {
+        await CreatureCmd.Heal(Owner.Creature, DynamicVars["Magic"].BaseValue);
+        if (forceUpgrade || IsUpgraded)
+        {
+            await PlayerCmd.GainGold(50m, Owner);
+        }
+
+        return await CardPileCmd.Add(CreateRewardCard(), PileType.Deck);
+    }
+
     protected override void OnUpgrade()
     {
         DynamicVars.Damage.UpgradeValueBy(9m);
     }
 }
-
 
 

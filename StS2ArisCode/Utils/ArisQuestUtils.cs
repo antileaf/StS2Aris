@@ -5,7 +5,6 @@ using MegaCrit.Sts2.Core.Models.Cards;
 using MegaCrit.Sts2.Core.Models.Relics;
 using StS2Aris.StS2ArisCode.Cards;
 using StS2Aris.StS2ArisCode.Mechanics;
-using DailyQuest = StS2Aris.StS2ArisCode.Cards.DailyQuest;
 
 namespace StS2Aris.StS2ArisCode.Utils;
 
@@ -16,53 +15,34 @@ public static class ArisQuestUtils
 
     public static int CountCompletedQuests(MegaCrit.Sts2.Core.Entities.Players.Player? player) => ArisQuestProgress.CountCompletedQuests(player);
 
-    public static CardModel? CreateRewardFor(CardModel quest, bool forceUpgrade = false)
-    {
-        return quest switch
-        {
-            DailyQuest dailyQuest => CreateReward<DailyQuest>(dailyQuest, false),
-            Diet diet => CreateReward<NeatCompression>(diet, forceUpgrade),
-            Grinding grinding => CreateReward<ExecutionSword>(grinding, forceUpgrade),
-            RaidAddiction raidAddiction => CreateReward<RaidersLeader>(raidAddiction, forceUpgrade),
-            ByrdonisEgg byrdonisEgg => CreateReward<ByrdSwoop>(byrdonisEgg, forceUpgrade),
-            CardModel dowsing when IsCardType(dowsing, DowsingTypeName) =>
-                CreateRewardByTypeName(dowsing, AbundanceTypeName, forceUpgrade),
-            _ => null
-        };
-    }
-
     public static async Task<CardPileAddResult?> ApplyReplicaRewardFor(CardModel quest, bool forceUpgrade = false)
     {
+        if (quest is IArisReplicaReward arisReward)
+        {
+            return await arisReward.ApplyReplicaReward(forceUpgrade);
+        }
+
         switch (quest)
         {
-            case DailyQuest dailyQuest:
-                await CreatureCmd.Heal(dailyQuest.Owner.Creature, dailyQuest.DynamicVars["Magic"].BaseValue);
-                if (forceUpgrade || dailyQuest.IsUpgraded)
-                {
-                    await PlayerCmd.GainGold(50m, dailyQuest.Owner);
-                }
-
-                return await CardPileCmd.Add(CreateReward<DailyQuest>(dailyQuest, false), PileType.Deck);
             case LanternKey:
                 await RelicCmd.Obtain<HistoryCourse>(quest.Owner);
                 return null;
             case SpoilsMap:
                 await PlayerCmd.GainGold(600m, quest.Owner);
                 return null;
-            case LibrarianStrike librarianStrike:
-                librarianStrike.ApplyReplicaReward(forceUpgrade);
-                return null;
+            case ByrdonisEgg byrdonisEgg:
+                return await CardPileCmd.Add(CreateReward<ByrdSwoop>(byrdonisEgg, forceUpgrade), PileType.Deck);
+            case CardModel dowsing when IsCardType(dowsing, DowsingTypeName):
+                CardModel? reward = CreateRewardByTypeName(dowsing, AbundanceTypeName, forceUpgrade);
+                return reward == null ? null : await CardPileCmd.Add(reward, PileType.Deck);
         }
 
-        var reward = CreateRewardFor(quest, forceUpgrade);
-        return reward == null
-            ? null
-            : await CardPileCmd.Add(reward, PileType.Deck);
+        return null;
     }
 
     public static bool HasSelectableReplicaReward(CardModel quest)
     {
-        return quest is DailyQuest or Diet or Grinding or RaidAddiction or LanternKey or SpoilsMap or ByrdonisEgg or LibrarianStrike
+        return quest is IArisReplicaReward or LanternKey or SpoilsMap or ByrdonisEgg
                || IsCardType(quest, DowsingTypeName);
     }
 

@@ -16,7 +16,7 @@ using StS2Aris.StS2ArisCode.Mechanics;
 namespace StS2Aris.StS2ArisCode.Cards;
 
 [Pool(typeof(StS2ArisCardPool))]
-public class LibrarianStrike() : StS2ArisCard(0, CardType.Attack, CardRarity.Rare, TargetType.AnyEnemy), IArisQuestProgressCard
+public class LibrarianStrike() : StS2ArisCard(0, CardType.Attack, CardRarity.Rare, TargetType.AnyEnemy), IArisQuestProgressCard, IArisReplicaReward
 {
     private const int QuestGoalValue = 3;
     private int _permanentDamageBonus;
@@ -102,7 +102,7 @@ public class LibrarianStrike() : StS2ArisCard(0, CardType.Attack, CardRarity.Rar
         DynamicVars["PermanentDamage"].UpgradeValueBy(2m);
     }
 
-    public void ApplyReplicaReward(bool forceUpgrade)
+    public Task<CardPileAddResult?> ApplyReplicaReward(bool forceUpgrade)
     {
         var damageBonus = DynamicVars["PermanentDamage"].IntValue;
         if (forceUpgrade && !IsUpgraded)
@@ -113,6 +113,7 @@ public class LibrarianStrike() : StS2ArisCard(0, CardType.Attack, CardRarity.Rar
         PermanentDamageBonus += damageBonus;
         ApplyPermanentDamageBonus();
         CardCmd.Preview(this, 1.5f);
+        return Task.FromResult<CardPileAddResult?>(null);
     }
 
     private async Task AdvanceQuest()

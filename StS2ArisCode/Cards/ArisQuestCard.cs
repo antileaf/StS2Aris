@@ -8,7 +8,7 @@ using StS2Aris.StS2ArisCode.Utils;
 namespace StS2Aris.StS2ArisCode.Cards;
 
 public abstract class ArisQuestCard<TReward>(int cost, CardType type, CardRarity rarity, TargetType target)
-    : StS2ArisCard(cost, type, rarity, target), IArisQuestProgressCard where TReward : CardModel
+    : StS2ArisCard(cost, type, rarity, target), IArisQuestProgressCard, IArisReplicaReward where TReward : CardModel
 {
     private int _questRemaining;
 
@@ -99,6 +99,35 @@ public abstract class ArisQuestCard<TReward>(int cost, CardType type, CardRarity
     protected void CopyEnchantmentToReward(CardModel reward)
     {
         ArisQuestUtils.TryCopyEnchantment(this, reward);
+    }
+
+    public virtual async Task<CardPileAddResult?> ApplyReplicaReward(bool forceUpgrade)
+    {
+        return await CardPileCmd.Add(CreateReplicaRewardCard(forceUpgrade), PileType.Deck);
+    }
+
+    protected CardModel CreateReplicaRewardCard(bool forceUpgrade)
+    {
+        CardModel reward = CreateRewardCard();
+        if (forceUpgrade && !reward.IsUpgraded && reward.IsUpgradable)
+        {
+            reward.UpgradeInternal();
+            reward.FinalizeUpgradeInternal();
+        }
+
+        return reward;
+    }
+
+    protected decimal GetReplicaRewardValue(string dynamicVarName, bool forceUpgrade)
+    {
+        if (!forceUpgrade || IsUpgraded || !IsUpgradable)
+        {
+            return DynamicVars[dynamicVarName].BaseValue;
+        }
+
+        CardModel upgradedCopy = (CardModel)MutableClone();
+        upgradedCopy.UpgradeInternal();
+        return upgradedCopy.DynamicVars[dynamicVarName].BaseValue;
     }
 
     protected async Task CompleteQuest()

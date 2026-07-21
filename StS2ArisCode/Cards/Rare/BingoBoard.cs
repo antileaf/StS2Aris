@@ -63,6 +63,12 @@ public class BingoBoard() : ArisQuestCard<BingoBoard>(1, CardType.Power, CardRar
         await CardCmd.Transform(this, CreateRewardCard());
     }
 
+    public override async Task<CardPileAddResult?> ApplyReplicaReward(bool forceUpgrade)
+    {
+        await CreatureCmd.GainMaxHp(Owner.Creature, GetReplicaRewardValue("MaxHp", forceUpgrade));
+        return await CardPileCmd.Add(CreateReplicaRewardCard(forceUpgrade), PileType.Deck);
+    }
+
     protected override void OnUpgrade()
     {
         DynamicVars.Dexterity.UpgradeValueBy(1m);

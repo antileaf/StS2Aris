@@ -50,6 +50,12 @@ public class EmergencyFund() : ArisQuestCard<EmergencyFund>(1, CardType.Skill, C
         await CardPileCmd.RemoveFromDeck(this);
     }
 
+    public override async Task<CardPileAddResult?> ApplyReplicaReward(bool forceUpgrade)
+    {
+        await PlayerCmd.GainGold(GetReplicaRewardValue("Gold", forceUpgrade), Owner);
+        return null;
+    }
+
     protected override void OnUpgrade()
     {
         DynamicVars.Block.UpgradeValueBy(3m);
