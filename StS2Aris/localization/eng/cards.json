@@ -260,7 +260,7 @@
   "STS2ARIS-HOSHINO_TANK.title": "Tank Equipment",
   "STS2ARIS-HOSHINO_TANK.description": "[gold]Equipment[/gold]: Tank.\n[gold]Class Change[/gold]: Gain {ExpertAmount:diff()} [gold]Expertise[/gold].\n[gold]Job Effect[/gold]: At the end of your turn, [gold]Reload[/gold].",
   "STS2ARIS-MASQUERADE.title": "Masquerade",
-  "STS2ARIS-MASQUERADE.description": "At the start of each ally's turn, they draw {Cards:diff()} card, then give 1 card in hand to the next ally.",
+  "STS2ARIS-MASQUERADE.description": "At the start of each ally's turn, they draw {Cards:diff()} card, then give 1 card in [gold]hand[/gold] to the next ally.",
   "STS2ARIS-MASQUERADE.selectionScreenPrompt": "Choose a card to give to the next ally.",
   "STS2ARIS-SYSTEM_RECOVERY.title": "System Recovery",
   "STS2ARIS-SYSTEM_RECOVERY.description": "The first time each turn your [gold]Hand[/gold] falls to 2 or fewer cards, take {SelfDamage:diff()} damage and draw {SystemRecoveryPower:diff()} cards.",

@@ -7,6 +7,7 @@ using MegaCrit.Sts2.Core.Nodes.CommonUi;
 using MegaCrit.Sts2.Core.Rewards;
 using MegaCrit.Sts2.Core.Runs;
 using StS2Aris.StS2ArisCode.Cards;
+using StS2Aris.StS2ArisCode.Utils;
 
 namespace StS2Aris.StS2ArisCode.Relics;
 
@@ -58,6 +59,6 @@ public abstract class ClassAltarRelic : StS2ArisRelic
             return options;
         }
 
-        return options.WithCardPools(options.CardPools.Union([pool]));
+        return CardCreationOptionsCompat.WithCardPools(options, options.CardPools.Union([pool]));
     }
 }

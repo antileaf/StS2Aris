@@ -260,7 +260,7 @@
     "STS2ARIS-HOSHINO_TANK.title":  "탱커 장비",
     "STS2ARIS-HOSHINO_TANK.description":  "[gold]장비[/gold]: 탱커.\n[gold]클래스체인지[/gold]: [gold]숙련[/gold]을 {ExpertAmount:diff()} 얻습니다.\n[gold]직업 효과[/gold]: 내 턴 종료 시, [gold]장전[/gold]합니다.",
     "STS2ARIS-MASQUERADE.title":  "가면무도회",
-    "STS2ARIS-MASQUERADE.description":  "모든 아군이 턴 시작 시, 카드를 {Cards:diff()}장 뽑고, 그 후 손에 있는 카드를 1장 다음 아군에게 줍니다.",
+    "STS2ARIS-MASQUERADE.description":  "모든 아군이 턴 시작 시, 카드를 {Cards:diff()}장 뽑고, 그 후 [gold]손[/gold]에 있는 카드를 1장 다음 아군에게 줍니다.",
     "STS2ARIS-MASQUERADE.selectionScreenPrompt":  "아군에게 줄 카드를 선택하세요.",
     "STS2ARIS-SYSTEM_RECOVERY.title":  "시스템 복구",
     "STS2ARIS-SYSTEM_RECOVERY.description":  "매 턴마다 처음으로 [gold]손[/gold]이 2장 이하가 되면 피해를 {SelfDamage:diff()} 받고 카드를 {SystemRecoveryPower:diff()}장 뽑습니다.",

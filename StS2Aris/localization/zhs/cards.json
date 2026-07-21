@@ -256,7 +256,7 @@
   "STS2ARIS-STAR_THRONE.title": "星之王座",
   "STS2ARIS-STAR_THRONE.description": "[gold]装备[/gold]：公主。\n[gold]转职[/gold]：获得{Stars:starIcons()}。\n[gold]职业效果[/gold]：每当触发[gold]过载[/gold]时，[gold]锻造[/gold] {Forge:diff()}。",
   "STS2ARIS-MASQUERADE.title": "假面舞会",
-  "STS2ARIS-MASQUERADE.description": "所有队友在回合开始时抽{Cards:diff()}张牌，然后将手牌中的1张牌交给下一名队友。",
+  "STS2ARIS-MASQUERADE.description": "所有队友在回合开始时抽{Cards:diff()}张牌，然后将[gold]手牌[/gold]中的1张牌交给下一名队友。",
   "STS2ARIS-MASQUERADE.selectionScreenPrompt": "选择1张要交给下一名队友的牌。",
   "STS2ARIS-SYSTEM_RECOVERY.title": "系统恢复",
   "STS2ARIS-SYSTEM_RECOVERY.description": "每回合第一次[gold]手牌[/gold]降至2张或更少时，受到{SelfDamage:diff()}点伤害并抽{SystemRecoveryPower:diff()}张牌。",
