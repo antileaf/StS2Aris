@@ -7,6 +7,7 @@ using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Extensions;
 using MegaCrit.Sts2.Core.Factories;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
@@ -1135,6 +1136,17 @@ public class GameScenario() : StS2ArisCard(1, CardType.Skill, CardRarity.Token, 
         var line = new LocString("cards", $"{Id.Entry}.description.{key}");
         DynamicVars.AddTo(line);
         base.AddExtraArgsToDescription(line);
+
+        string energyPrefix = EnergyIconHelper.GetPrefix(this);
+        line.Add("energyPrefix", energyPrefix);
+        foreach (object variable in line.Variables.Values)
+        {
+            if (variable is EnergyVar energyVar)
+            {
+                energyVar.ColorPrefix = energyPrefix;
+            }
+        }
+
         return line;
     }
 
