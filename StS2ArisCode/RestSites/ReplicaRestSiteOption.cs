@@ -73,13 +73,13 @@ public sealed class ReplicaRestSiteOption(Player owner) : CustomRestSiteOption(o
             foreach (var rewardTarget in rewardTargets)
             {
                 ArisQuestProgress.MarkCompleted(rewardTarget);
+                await BingoBoard.AdvanceBoardsForCompletedQuest(Owner, rewardTarget);
+
                 var addedResult = await ArisQuestUtils.ApplyReplicaRewardFor(rewardTarget, forceUpgrade);
                 if (addedResult.HasValue)
                 {
                     addedResults.Add(addedResult.Value);
                 }
-
-                await BingoBoard.AdvanceBoardsForCompletedQuest(Owner, rewardTarget);
             }
         }
 

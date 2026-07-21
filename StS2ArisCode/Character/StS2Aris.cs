@@ -1,4 +1,5 @@
 using BaseLib.Abstracts;
+using BaseLib.Patches.UI;
 using BaseLib.Utils.NodeFactories;
 using Godot;
 using MegaCrit.Sts2.Core.Animation;
@@ -60,6 +61,13 @@ public class StS2Aris : PlaceholderCharacterModel
         "res://StS2Aris/etc/kreon_bold_shared.tres"
     ];
 
+    public override RelicIconData CustomYummyCookie => new(
+        "yummy_cookie_aris.png".BigRelicImagePath(),
+        "yummy_cookie_aris.png".RelicImagePath(),
+        "yummy_cookie_aris_outline.png".RelicImagePath()
+    );
+
+    
     public override float AttackAnimDelay => 0.15f;
     public override float CastAnimDelay => 0.25f;
     public override string CharacterSelectSfx => "Aris_light.mp3".SfxPath();

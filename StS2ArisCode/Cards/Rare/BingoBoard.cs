@@ -19,6 +19,7 @@ public class BingoBoard() : ArisQuestCard<BingoBoard>(1, CardType.Power, CardRar
 {
     private const char QuestTypeSeparator = '|';
     private string _completedQuestTypes = "";
+    private bool _isCompleting;
 
     public override int QuestGoal => 3;
 
@@ -59,8 +60,15 @@ public class BingoBoard() : ArisQuestCard<BingoBoard>(1, CardType.Power, CardRar
 
     protected override async Task ApplyQuestReward()
     {
-        await CreatureCmd.GainMaxHp(Owner.Creature, DynamicVars.MaxHp.BaseValue);
-        await CardCmd.Transform(this, CreateRewardCard());
+        try
+        {
+            await CreatureCmd.GainMaxHp(Owner.Creature, DynamicVars.MaxHp.BaseValue);
+            await CardCmd.Transform(this, CreateRewardCard());
+        }
+        finally
+        {
+            _isCompleting = false;
+        }
     }
 
     public override async Task<CardPileAddResult?> ApplyReplicaReward(bool forceUpgrade)
@@ -78,6 +86,12 @@ public class BingoBoard() : ArisQuestCard<BingoBoard>(1, CardType.Power, CardRar
     private async Task CompleteIfSatisfied()
     {
         await CompleteQuestIf(QuestProgressCurrent >= QuestProgressGoal);
+    }
+
+    protected override async Task BeforeQuestComplete()
+    {
+        _isCompleting = true;
+        await AdvanceBoardsForCompletedQuest(Owner, this);
     }
 
     private bool TryRecordQuest(CardModel questCard)
@@ -108,7 +122,10 @@ public class BingoBoard() : ArisQuestCard<BingoBoard>(1, CardType.Power, CardRar
     {
         foreach (var board in PileType.Deck.GetPile(player).Cards.OfType<BingoBoard>().ToList())
         {
-            if (board.TryRecordQuest(questCard))
+            if (board.Pile?.Type == PileType.Deck
+                && !board.HasBeenRemovedFromState
+                && !board._isCompleting
+                && board.TryRecordQuest(questCard))
             {
                 await board.CompleteIfSatisfied();
             }
