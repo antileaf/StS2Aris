@@ -15,11 +15,27 @@ namespace StS2Aris.StS2ArisCode.Powers;
 public sealed class JobMaidPower : ArisJobPower
 {
     private const string DamagePercentKey = "DamagePercent";
+    private readonly HashSet<CardModel> _boostedCards = [];
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [new DynamicVar(DamagePercentKey, 50m)];
 
     public override string AnimationSuffix => "Maid";
 
+    public override Task BeforeCardPlayed(CardPlay cardPlay)
+    {
+        if (ShouldBoostPlayedCard(cardPlay))
+        {
+            _boostedCards.Add(cardPlay.Card);
+        }
+
+        return Task.CompletedTask;
+    }
+
+    public override Task AfterCardPlayed(PlayerChoiceContext choiceContext, CardPlay cardPlay)
+    {
+        _boostedCards.Remove(cardPlay.Card);
+        return Task.CompletedTask;
+    }
 
     public decimal ModifyDamageMultiplicativeCompat(Creature? target, decimal amount, ValueProp props, Creature? dealer, CardModel? cardSource, CardPlay? cardPlay)
     {
@@ -38,27 +54,27 @@ public sealed class JobMaidPower : ArisJobPower
         }
 
         var attacksInHand = hand.Cards.Count(static card => card.Type == CardType.Attack);
-        int effectiveAttackCount;
-        if (cardPlay == null)
-        {
-            if (!hand.Cards.Contains(attackCard))
-            {
-                return 1m;
-            }
-
-            effectiveAttackCount = attacksInHand;
-        }
-        else
+        if (cardPlay != null)
         {
             if (cardPlay.IsAutoPlay || cardPlay.Card != attackCard)
             {
                 return 1m;
             }
 
-            effectiveAttackCount = attacksInHand + 1;
+            return attacksInHand + 1 == 1 ? GetDamageMultiplier() : 1m;
         }
 
-        return effectiveAttackCount == 1 ? 1m + 0.5m * EffectApplications : 1m;
+        if (_boostedCards.Contains(attackCard))
+        {
+            return GetDamageMultiplier();
+        }
+
+        if (!hand.Cards.Contains(attackCard))
+        {
+            return 1m;
+        }
+
+        return attacksInHand == 1 ? GetDamageMultiplier() : 1m;
     }
 
     public override Task AfterPowerAmountChanged(PlayerChoiceContext choiceContext, PowerModel power, decimal amount, Creature? applier, CardModel? cardSource)
@@ -119,5 +135,23 @@ public sealed class JobMaidPower : ArisJobPower
         }
 
         InvokeDisplayAmountChanged();
+    }
+
+    private bool ShouldBoostPlayedCard(CardPlay cardPlay)
+    {
+        var player = PlayerOwner;
+        var hand = player?.PlayerCombatState?.Hand;
+        return player != null
+               && ArisEquipment.GetCurrentJob(player) == this
+               && hand != null
+               && !cardPlay.IsAutoPlay
+               && cardPlay.Card.Owner == player
+               && cardPlay.Card.Type == CardType.Attack
+               && hand.Cards.All(static card => card.Type != CardType.Attack);
+    }
+
+    private decimal GetDamageMultiplier()
+    {
+        return 1m + 0.5m * EffectApplications;
     }
 }
