@@ -3,7 +3,6 @@ using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
-using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
@@ -72,16 +71,18 @@ public class LibrarianStrike() : StS2ArisCard(0, CardType.Attack, CardRarity.Rar
             .Execute(choiceContext);
     }
 
-    public override bool TryModifyCardBeingAddedToDeck(CardModel card, out CardModel? newCard)
+    public override async Task AfterCardChangedPiles(CardModel card, PileType oldPileType, AbstractModel? clonedBy)
     {
-        newCard = null;
-        if (Pile?.Type != PileType.Deck || Owner != card.Owner || card == this || card.Id == Id)
+        if (Pile?.Type != PileType.Deck
+            || card.Pile?.Type != PileType.Deck
+            || Owner != card.Owner
+            || card == this
+            || card.Id == Id)
         {
-            return false;
+            return;
         }
 
-        TaskHelper.RunSafely(AdvanceQuest());
-        return false;
+        await AdvanceQuest();
     }
 
     public override void AfterCreated()

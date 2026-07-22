@@ -17,11 +17,13 @@ namespace StS2Aris.StS2ArisCode.Cards;
 [Pool(typeof(StS2ArisCardPool))]
 public class Grinding() : ArisQuestCard<ExecutionSword>(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
 {
+    internal const int RequiredGold = 500;
+
     public override int QuestGoal => 1;
 
     public override int QuestProgressCurrent => Math.Clamp((int)Owner.Gold, 0, QuestProgressGoal);
 
-    public override int QuestProgressGoal => 500;
+    public override int QuestProgressGoal => RequiredGold;
 
     protected override IEnumerable<IHoverTip> ExtraHoverTips =>
     [
@@ -42,7 +44,15 @@ public class Grinding() : ArisQuestCard<ExecutionSword>(1, CardType.Skill, CardR
 
     public override async Task AfterGoldGained(Player player)
     {
-        await CompleteQuestIf(player == Owner && player.Gold >= 500m);
+        await CompleteQuestIf(player == Owner && player.Gold >= RequiredGold);
+    }
+
+    public override async Task AfterCardChangedPiles(CardModel card, PileType oldPileType, AbstractModel? clonedBy)
+    {
+        if (card == this && Pile?.Type == PileType.Deck && Owner.Gold >= RequiredGold)
+        {
+            await CompleteQuestIf(true);
+        }
     }
 
     protected override void OnUpgrade()

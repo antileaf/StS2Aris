@@ -25,9 +25,10 @@ public static class CardCreationOptionsCompat
             throw new MissingMethodException(typeof(CardCreationOptions).FullName, "WithCardPools");
         }
 
+        CardPoolModel[] materializedPools = pools.Distinct().ToArray();
         object?[] arguments = WithCardPoolsMethod.GetParameters().Length == 1
-            ? [pools]
-            : [pools, options.CardPoolFilter];
+            ? [materializedPools]
+            : [materializedPools, options.CardPoolFilter];
 
         try
         {

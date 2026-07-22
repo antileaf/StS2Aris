@@ -6,6 +6,7 @@ using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Relics;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
+using MegaCrit.Sts2.Core.Models.Cards;
 using MegaCrit.Sts2.Core.Rewards;
 using MegaCrit.Sts2.Core.Runs;
 using StS2Aris.StS2ArisCode.Cards;
@@ -26,7 +27,8 @@ public class GameManual : StS2ArisRelic
     {
         CardCreationOptions options = CardCreationOptions.ForNonCombatWithUniformOdds(
             ModelDb.AllCardPools,
-            card => card.Type == CardType.Quest || card is StS2ArisCard { IsArisQuest: true });
+            card => (card.Type == CardType.Quest || card is StS2ArisCard { IsArisQuest: true })
+                    && (card is not SpoilsMap || Owner.RunState.CurrentActIndex == 0));
         List<Reward> rewards = [];
         for (int i = 0; i < DynamicVars.Cards.IntValue; i++)
         {

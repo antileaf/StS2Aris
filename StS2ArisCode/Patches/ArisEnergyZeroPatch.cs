@@ -1,23 +1,32 @@
 using HarmonyLib;
+using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Players;
-using MegaCrit.Sts2.Core.Helpers;
 using StS2Aris.StS2ArisCode.Powers;
 
 namespace StS2Aris.StS2ArisCode.Patches;
 
-[HarmonyPatch(typeof(PlayerCombatState), nameof(PlayerCombatState.LoseEnergy))]
+[HarmonyPatch(typeof(PlayerCmd), nameof(PlayerCmd.LoseEnergy))]
 public static class ArisEnergyZeroPatch
 {
-    public static void Prefix(PlayerCombatState __instance, out int __state)
+    public static void Prefix(Player player, out int __state)
     {
-        __state = __instance.Energy;
+        __state = player.PlayerCombatState?.Energy ?? 0;
     }
 
-    public static void Postfix(PlayerCombatState __instance, Player ____player, int __state)
+    public static void Postfix(Player player, int __state, ref Task __result)
     {
-        if (__state > 0 && __instance.Energy == 0)
+        if (__state > 0)
         {
-            TaskHelper.RunSafely(EmergencyPowerPower.OnEnergyBecameZero(____player));
+            __result = TriggerAfterEnergyLoss(__result, player);
+        }
+    }
+
+    private static async Task TriggerAfterEnergyLoss(Task originalTask, Player player)
+    {
+        await originalTask;
+        if (player.PlayerCombatState?.Energy == 0)
+        {
+            await EmergencyPowerPower.OnEnergyBecameZero(player);
         }
     }
 }
