@@ -17,7 +17,7 @@
   "STS2ARIS-SELF_REPAIR.description": "Gain {Block:diff()} [gold]Block[/gold].\n[gold]Overload[/gold]: Gain {Block:diff()} additional [gold]Block[/gold].",
   "STS2ARIS-OUCH.title": "Ouch!",
   "STS2ARIS-OUCH.description": "Take {HpLoss:diff()} damage.\nDraw {Cards:diff()} cards.\nIncrease this card’s damage by {Increase:diff()} for this combat.",
-  "STS2ARIS-HAILING_LIGHT.title": "O Light!",
+  "STS2ARIS-HAILING_LIGHT.title": "Hailing Light!",
   "STS2ARIS-HAILING_LIGHT.description": "[gold]Output[/gold].\nGain {ChargePower:chargeIcon()}.",
   "STS2ARIS-REACTIVE_ARMOUR.title": "Reactive Armour",
   "STS2ARIS-REACTIVE_ARMOUR.description": "Gain {Magic:diff()} [gold]Repair[/gold].\nWhenever you take damage during your turn, return this card from your [gold]Discard Pile[/gold] to your [gold]Hand[/gold].",
