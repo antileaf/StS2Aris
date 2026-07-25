@@ -58,7 +58,7 @@ public sealed class MomoiAppearPower : StS2ArisPower
 
     private static async Task<CardModel?> ChooseScenario(PlayerChoiceContext choiceContext, IReadOnlyList<CardModel> choices, MegaCrit.Sts2.Core.Entities.Players.Player player)
     {
-        if (choices.Count <= 4)
+        if (choices.Count <= 3)
         {
             return await CardSelectCmd.FromChooseACardScreen(choiceContext, choices, player);
         }
